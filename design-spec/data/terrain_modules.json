@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "coordinateSystem": "screen world +x right +y down; terrain tiles are built as polyline ground plus optional obstacle",
+  "modules": [
+    {
+      "id": "gentle_hills",
+      "lengthPx": 340,
+      "difficulty": 1,
+      "parameters": {
+        "amplitudePx": [
+          14,
+          32
+        ],
+        "wavelengthPx": [
+          220,
+          340
+        ]
+      },
+      "minimumSafeGapAfterPx": 70
+    },
+    {
+      "id": "rolling_waves",
+      "lengthPx": 360,
+      "difficulty": 2,
+      "parameters": {
+        "amplitudePx": [
+          24,
+          40
+        ],
+        "periods": [
+          2,
+          3
+        ]
+      },
+      "minimumSafeGapAfterPx": 110
+    },
+    {
+      "id": "steep_ramp",
+      "lengthPx": 260,
+      "difficulty": 2,
+      "parameters": {
+        "slopeDeg": [
+          14,
+          23
+        ],
+        "landingFlatPx": 90
+      },
+      "minimumSafeGapAfterPx": 150
+    },
+    {
+      "id": "sudden_dip",
+      "lengthPx": 270,
+      "difficulty": 2,
+      "parameters": {
+        "depthPx": [
+          28,
+          56
+        ],
+        "entryRampPx": 65
+      },
+      "minimumSafeGapAfterPx": 120
+    },
+    {
+      "id": "gap_jump",
+      "lengthPx": 350,
+      "difficulty": 3,
+      "parameters": {
+        "gapWidthPx": [
+          60,
+          105
+        ],
+        "takeoffFlatPx": 95,
+        "landingFlatPx": 140
+      },
+      "minimumSafeGapAfterPx": 180
+    },
+    {
+      "id": "low_ceiling",
+      "lengthPx": 300,
+      "difficulty": 3,
+      "parameters": {
+        "clearancePx": [
+          185,
+          205
+        ],
+        "tunnelLengthPx": 150
+      },
+      "minimumSafeGapAfterPx": 130
+    },
+    {
+      "id": "seesaw",
+      "lengthPx": 320,
+      "difficulty": 3,
+      "parameters": {
+        "platformLengthPx": 170,
+        "maxRotationDeg": 17,
+        "angularDamping": 0.13
+      },
+      "minimumSafeGapAfterPx": 170
+    },
+    {
+      "id": "moving_platform",
+      "lengthPx": 420,
+      "difficulty": 4,
+      "parameters": {
+        "platformWidthPx": 180,
+        "horizontalRangePx": 65,
+        "verticalRangePx": 28,
+        "periodSec": 4.8
+      },
+      "minimumSafeGapAfterPx": 180
+    },
+    {
+      "id": "spring_mushroom",
+      "lengthPx": 280,
+      "difficulty": 2,
+      "parameters": {
+        "impulseMultiplier": [
+          1.08,
+          1.2
+        ],
+        "warningMs": 850
+      },
+      "minimumSafeGapAfterPx": 140
+    },
+    {
+      "id": "magnetic_pulse",
+      "lengthPx": 360,
+      "difficulty": 4,
+      "parameters": {
+        "pulseIntervalSec": 5.5,
+        "warningMs": 900,
+        "forceScaleMin": 0.82,
+        "forceScaleMax": 1.13
+      },
+      "minimumSafeGapAfterPx": 160
+    },
+    {
+      "id": "crosswind",
+      "lengthPx": 380,
+      "difficulty": 3,
+      "parameters": {
+        "windForceMax": 0.003,
+        "warningMs": 1000,
+        "durationSec": 2.3
+      },
+      "minimumSafeGapAfterPx": 150
+    },
+    {
+      "id": "crumbling_bridge",
+      "lengthPx": 390,
+      "difficulty": 4,
+      "parameters": {
+        "segmentCount": 3,
+        "warningMs": 1000,
+        "collapseDelayMs": 1400
+      },
+      "minimumSafeGapAfterPx": 200
+    }
+  ]
+}

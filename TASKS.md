@@ -1,0 +1,11 @@
+# Tasks
+- [x] Stage 0: read complete spec, inspect reference, inventory, plan and risks
+- [x] Stage 1: implement independent Matter bodies, forces and L01
+- [x] Stage 1: controls, camera, danger, restart, pause and debug
+- [x] Stage 1: build and browser physics acceptance; record evidence
+- [ ] Stage 2: failure performance + once/run Royal Rescue + free checkpoint + atomic run save, 30 retries
+- [ ] Stage 3: twelve terrain modules; L01–05 gate, then L06–15
+- [ ] Stage 4: economy, upgrades, reward idempotency and save integration
+- [ ] Stage 5: approved sprite art, animations and warned seeded events
+- [ ] Stage 6: official SDK validation and platform bridges
+- [ ] Stage 7: complete QA, real devices and platform packaging

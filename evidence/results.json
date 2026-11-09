@@ -1,0 +1,67 @@
+[
+  {
+    "name": "idle 40 seconds / physical contact",
+    "pass": true,
+    "state": "RUNNING",
+    "relative": -3.2003360917501538,
+    "contact": 2
+  },
+  {
+    "name": "zero upgrade / no rescue L01 traversal and stable docking",
+    "pass": true,
+    "state": "CLEAR",
+    "seconds": 34.6,
+    "maxAngle": 17.051573230404266,
+    "maxOffMs": 0,
+    "x": 1185.9360618957178
+  },
+  {
+    "name": "hard brake produces independent slide",
+    "pass": true,
+    "relativeBefore": -40.66392925955256,
+    "relativeAfter": 85.33732779156347,
+    "state": "DANGER"
+  },
+  {
+    "name": "unsafe full reverse ejects / failure remains restartable",
+    "pass": true,
+    "failed": true,
+    "offMs": 666.6666666666665,
+    "restarted": "RUNNING"
+  },
+  {
+    "name": "high speed crossing does not clear",
+    "pass": true,
+    "crossed": true,
+    "state": "DANGER",
+    "speed": 307.9617525196363
+  },
+  {
+    "name": "boost energy consumption and recharge",
+    "pass": true,
+    "consumed": 0.8809523809523814,
+    "recovered": 0.9365079365079367
+  },
+  {
+    "name": "keyboard release",
+    "pass": true,
+    "x": 17.28670576888566
+  },
+  {
+    "name": "pause freezes physics",
+    "pass": true
+  },
+  {
+    "name": "restart confirmation and reset",
+    "pass": true
+  },
+  {
+    "name": "landscape pointer capture release",
+    "pass": true
+  },
+  {
+    "name": "browser runtime exceptions",
+    "pass": true,
+    "errors": []
+  }
+]

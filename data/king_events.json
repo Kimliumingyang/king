@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "globalRules": {
+    "minTimeBetweenEventsSec": 18,
+    "majorHazardBufferSec": 1.5,
+    "warnAtLeastMs": 650,
+    "noMajorEventInDockZone": true,
+    "noMajorEventDuringRescueProtection": true,
+    "sameSeedReproducible": true
+  },
+  "events": [
+    {
+      "id": "hiccup",
+      "name": "Royal Hiccup",
+      "caption": "BURP!",
+      "minLevel": 1,
+      "warningMs": 850,
+      "cooldownSec": 24,
+      "physicsEffect": {
+        "type": "king_angular_impulse",
+        "magnitudeMax": 0.006
+      },
+      "humor": "Goblet trembles and crown slips"
+    },
+    {
+      "id": "sneeze",
+      "name": "Royal Sneeze",
+      "caption": "ACHOO!",
+      "minLevel": 3,
+      "warningMs": 1200,
+      "cooldownSec": 34,
+      "physicsEffect": {
+        "type": "king_horizontal_impulse",
+        "magnitudeMax": 0.012
+      },
+      "humor": "Tissue flies off screen"
+    },
+    {
+      "id": "nap",
+      "name": "Sudden Nap",
+      "caption": "Zzz...",
+      "minLevel": 2,
+      "warningMs": 900,
+      "cooldownSec": 38,
+      "physicsEffect": {
+        "type": "king_friction_scale",
+        "factor": 0.92,
+        "durationSec": 2.3
+      },
+      "humor": "King droops and snores"
+    },
+    {
+      "id": "toast",
+      "name": "Royal Toast",
+      "caption": "CHEERS!",
+      "minLevel": 1,
+      "warningMs": 900,
+      "cooldownSec": 30,
+      "physicsEffect": {
+        "type": "king_body_shift",
+        "magnitudeMax": 0.003
+      },
+      "humor": "Wine spills onto his own cape"
+    },
+    {
+      "id": "scepter",
+      "name": "Scepter Wave",
+      "caption": "MAKE WAY!",
+      "minLevel": 5,
+      "warningMs": 1200,
+      "cooldownSec": 40,
+      "physicsEffect": {
+        "type": "king_angular_impulse",
+        "magnitudeMax": 0.009
+      },
+      "humor": "Nearby guards make a nervous face"
+    },
+    {
+      "id": "hurry",
+      "name": "Royal Complaint",
+      "caption": "FASTER, PEASANTS!",
+      "minLevel": 1,
+      "warningMs": 750,
+      "cooldownSec": 26,
+      "physicsEffect": {
+        "type": "none"
+      },
+      "humor": "Only dialogue: never forces automatic acceleration"
+    }
+  ]
+}

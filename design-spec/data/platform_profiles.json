@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "profiles": {
+    "local": {
+      "adsEnabled": false,
+      "extraAdRescue": false,
+      "saveMode": "localStorage"
+    },
+    "crazygames_basic": {
+      "adsEnabled": false,
+      "extraAdRescue": false,
+      "saveMode": "platformOrLocal",
+      "notes": "Do not depend on ads in Basic Launch"
+    },
+    "crazygames_full": {
+      "adsEnabled": "checkOfficialSdkReadiness",
+      "extraAdRescue": false,
+      "saveMode": "platformOrLocal"
+    },
+    "playgama": {
+      "adsEnabled": "checkOfficialSdkReadiness",
+      "extraAdRescue": false,
+      "saveMode": "platformOrLocal",
+      "notes": "No per-death mandatory ad to continue"
+    },
+    "gamedistribution": {
+      "adsEnabled": "checkOfficialSdkReadiness",
+      "extraAdRescue": false,
+      "saveMode": "platformOrLocal"
+    }
+  }
+}

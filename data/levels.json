@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 1,
+  "notes": "Level recipes are layout intent, not ready-made collision coordinates. Implement deterministic segment generator and manually QA each level.",
+  "levels": [
+    {
+      "id": "L01",
+      "index": 1,
+      "name": "His First Ride",
+      "world": "royal_foothills",
+      "lengthMeters": 500,
+      "seed": 8019,
+      "terrainSequence": [
+        "gentle_hills",
+        "sudden_dip",
+        "gentle_hills"
+      ],
+      "checkpointsMeters": [
+        240
+      ],
+      "dock": {
+        "xMeters": 500,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 91,
+      "timeSilverSec": 135,
+      "humorEventIntensity": 0.33499999999999996,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L02",
+      "index": 2,
+      "name": "Royal Bumps",
+      "world": "royal_foothills",
+      "lengthMeters": 570,
+      "seed": 8038,
+      "terrainSequence": [
+        "rolling_waves",
+        "spring_mushroom",
+        "gentle_hills"
+      ],
+      "checkpointsMeters": [
+        194,
+        388
+      ],
+      "dock": {
+        "xMeters": 570,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 98,
+      "timeSilverSec": 146,
+      "humorEventIntensity": 0.37,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L03",
+      "index": 3,
+      "name": "Don't Spill It",
+      "world": "royal_foothills",
+      "lengthMeters": 640,
+      "seed": 8057,
+      "terrainSequence": [
+        "steep_ramp",
+        "sudden_dip",
+        "rolling_waves"
+      ],
+      "checkpointsMeters": [
+        218,
+        435
+      ],
+      "dock": {
+        "xMeters": 640,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 106,
+      "timeSilverSec": 157,
+      "humorEventIntensity": 0.405,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L04",
+      "index": 4,
+      "name": "Mushroom Madness",
+      "world": "royal_foothills",
+      "lengthMeters": 710,
+      "seed": 8076,
+      "terrainSequence": [
+        "spring_mushroom",
+        "rolling_waves",
+        "gap_jump"
+      ],
+      "checkpointsMeters": [
+        241,
+        483
+      ],
+      "dock": {
+        "xMeters": 710,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 113,
+      "timeSilverSec": 168,
+      "humorEventIntensity": 0.44,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L05",
+      "index": 5,
+      "name": "The King's Shortcut",
+      "world": "royal_foothills",
+      "lengthMeters": 780,
+      "seed": 8095,
+      "terrainSequence": [
+        "steep_ramp",
+        "gap_jump",
+        "low_ceiling"
+      ],
+      "checkpointsMeters": [
+        265,
+        530
+      ],
+      "dock": {
+        "xMeters": 780,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 121,
+      "timeSilverSec": 179,
+      "humorEventIntensity": 0.475,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L06",
+      "index": 6,
+      "name": "Broken Royal Road",
+      "world": "wobbly_wastes",
+      "lengthMeters": 850,
+      "seed": 8114,
+      "terrainSequence": [
+        "crumbling_bridge",
+        "sudden_dip",
+        "crosswind"
+      ],
+      "checkpointsMeters": [
+        289,
+        578
+      ],
+      "dock": {
+        "xMeters": 850,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 128,
+      "timeSilverSec": 190,
+      "humorEventIntensity": 0.51,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L07",
+      "index": 7,
+      "name": "UFO School Dropout",
+      "world": "wobbly_wastes",
+      "lengthMeters": 920,
+      "seed": 8133,
+      "terrainSequence": [
+        "magnetic_pulse",
+        "seesaw",
+        "steep_ramp"
+      ],
+      "checkpointsMeters": [
+        313,
+        626
+      ],
+      "dock": {
+        "xMeters": 920,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 135,
+      "timeSilverSec": 201,
+      "humorEventIntensity": 0.545,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L08",
+      "index": 8,
+      "name": "The Great Wobble",
+      "world": "wobbly_wastes",
+      "lengthMeters": 990,
+      "seed": 8152,
+      "terrainSequence": [
+        "moving_platform",
+        "magnetic_pulse",
+        "rolling_waves"
+      ],
+      "checkpointsMeters": [
+        337,
+        673
+      ],
+      "dock": {
+        "xMeters": 990,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 143,
+      "timeSilverSec": 212,
+      "humorEventIntensity": 0.5800000000000001,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L09",
+      "index": 9,
+      "name": "Mind the Crown",
+      "world": "wobbly_wastes",
+      "lengthMeters": 1060,
+      "seed": 8171,
+      "terrainSequence": [
+        "low_ceiling",
+        "crumbling_bridge",
+        "crosswind"
+      ],
+      "checkpointsMeters": [
+        360,
+        721
+      ],
+      "dock": {
+        "xMeters": 1060,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 150,
+      "timeSilverSec": 223,
+      "humorEventIntensity": 0.615,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L10",
+      "index": 10,
+      "name": "No Royal Warranty",
+      "world": "wobbly_wastes",
+      "lengthMeters": 1130,
+      "seed": 8190,
+      "terrainSequence": [
+        "seesaw",
+        "gap_jump",
+        "magnetic_pulse",
+        "spring_mushroom"
+      ],
+      "checkpointsMeters": [
+        384,
+        768
+      ],
+      "dock": {
+        "xMeters": 1130,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 163,
+      "timeSilverSec": 243,
+      "humorEventIntensity": 0.65,
+      "hazardRecoveryMeters": 18,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L11",
+      "index": 11,
+      "name": "Moonlight Motion",
+      "world": "moonlit_citadel",
+      "lengthMeters": 1200,
+      "seed": 8209,
+      "terrainSequence": [
+        "crosswind",
+        "moving_platform",
+        "rolling_waves"
+      ],
+      "checkpointsMeters": [
+        408,
+        816
+      ],
+      "dock": {
+        "xMeters": 1200,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 165,
+      "timeSilverSec": 245,
+      "humorEventIntensity": 0.685,
+      "hazardRecoveryMeters": 14,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L12",
+      "index": 12,
+      "name": "Please Stay Seated",
+      "world": "moonlit_citadel",
+      "lengthMeters": 1270,
+      "seed": 8228,
+      "terrainSequence": [
+        "low_ceiling",
+        "magnetic_pulse",
+        "steep_ramp",
+        "sudden_dip"
+      ],
+      "checkpointsMeters": [
+        432,
+        864
+      ],
+      "dock": {
+        "xMeters": 1270,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 178,
+      "timeSilverSec": 265,
+      "humorEventIntensity": 0.72,
+      "hazardRecoveryMeters": 14,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L13",
+      "index": 13,
+      "name": "Throne or Nothing",
+      "world": "moonlit_citadel",
+      "lengthMeters": 1340,
+      "seed": 8247,
+      "terrainSequence": [
+        "crumbling_bridge",
+        "seesaw",
+        "gap_jump",
+        "steep_ramp"
+      ],
+      "checkpointsMeters": [
+        456,
+        911
+      ],
+      "dock": {
+        "xMeters": 1340,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 185,
+      "timeSilverSec": 276,
+      "humorEventIntensity": 0.7550000000000001,
+      "hazardRecoveryMeters": 14,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L14",
+      "index": 14,
+      "name": "Almost Home",
+      "world": "moonlit_citadel",
+      "lengthMeters": 1410,
+      "seed": 8266,
+      "terrainSequence": [
+        "moving_platform",
+        "crosswind",
+        "magnetic_pulse",
+        "low_ceiling",
+        "seesaw"
+      ],
+      "checkpointsMeters": [
+        479,
+        959
+      ],
+      "dock": {
+        "xMeters": 1410,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 198,
+      "timeSilverSec": 295,
+      "humorEventIntensity": 0.77,
+      "hazardRecoveryMeters": 14,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    },
+    {
+      "id": "L15",
+      "index": 15,
+      "name": "The Royal Disaster",
+      "world": "moonlit_citadel",
+      "lengthMeters": 1480,
+      "seed": 8285,
+      "terrainSequence": [
+        "rolling_waves",
+        "crumbling_bridge",
+        "magnetic_pulse",
+        "gap_jump",
+        "moving_platform",
+        "steep_ramp"
+      ],
+      "checkpointsMeters": [
+        370,
+        740,
+        1110
+      ],
+      "dock": {
+        "xMeters": 1480,
+        "safeGroundBeforeMeters": 45,
+        "radiusPx": 74,
+        "stableHoldMs": 1500
+      },
+      "timeGoldSec": 212,
+      "timeSilverSec": 315,
+      "humorEventIntensity": 0.77,
+      "hazardRecoveryMeters": 14,
+      "qaStatus": "UNTESTED - must validate with real physics"
+    }
+  ]
+}

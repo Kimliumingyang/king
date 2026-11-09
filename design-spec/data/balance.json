@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "notes": "ALL PARAMETERS ARE INITIAL DESIGN TUNING VALUES; verify in gameplay. px @ 1280x720.",
+  "pixelsPerMeter": 2.4,
+  "physics": {
+    "fixedStepHz": 60,
+    "gravityY": 1.15,
+    "ufo": {
+      "widthPx": 200,
+      "deckWidthPx": 176,
+      "mass": 4.2,
+      "linearDrag": 0.015,
+      "angularDrag": 0.11,
+      "horizontalForce": 0.026,
+      "maxSpeedPxPerSec": 300,
+      "maxPitchDeg": 32,
+      "hoverHeightPx": 82,
+      "hoverSpring": 0.00065,
+      "hoverDamping": 0.0014,
+      "pitchStabilizer": 0.0017
+    },
+    "king": {
+      "widthPx": 112,
+      "heightPx": 125,
+      "mass": 2.8,
+      "friction": 0.45,
+      "frictionStatic": 0.63,
+      "frictionAir": 0.008,
+      "ejectGraceMs": 650,
+      "edgeWarningThreshold": 0.78
+    },
+    "boost": {
+      "durationSecAtFull": 2.8,
+      "rechargeSec": 6,
+      "heightBonusPx": 62,
+      "forceMultiplier": 1.4
+    }
+  },
+  "docking": {
+    "radiusPx": 74,
+    "maxSpeedPxPerSec": 30,
+    "maxAngleDeg": 9,
+    "holdMs": 1500
+  },
+  "revive": {
+    "freeRoyalRescuePerRun": 1,
+    "checkpointRetryAlwaysFree": true,
+    "checkpointCoinLossFraction": 0.2,
+    "freeRescueInvulnerableMs": 2500,
+    "recoverAnchorMaxBacktrackMeters": 10,
+    "maxExtraAdRescuePerRun": 1,
+    "adRescueEnabledDefault": false
+  },
+  "economy": {
+    "levelClearBaseCoins": 100,
+    "increasePerLevel": 20,
+    "firstClearBonusCoins": 80,
+    "pickupCoinCapPerRun": 100,
+    "threeStarBonusCoins": 40,
+    "rewardedBonusFraction": 0.5,
+    "priceExponent": 1.65
+  },
+  "upgrades": {
+    "engine": {
+      "basePrice": 120,
+      "maxLevel": 4,
+      "bonusPerLevel": 0.05
+    },
+    "stabilizer": {
+      "basePrice": 150,
+      "maxLevel": 4,
+      "bonusPerLevel": 0.08
+    },
+    "grip": {
+      "basePrice": 180,
+      "maxLevel": 4,
+      "bonusPerLevel": 0.06
+    },
+    "battery": {
+      "basePrice": 200,
+      "maxLevel": 4,
+      "bonusPerLevel": 0.09
+    },
+    "rescue_kit": {
+      "basePrice": 250,
+      "maxLevel": 3,
+      "dangerGraceBonusSec": 0.3
+    }
+  },
+  "settings": {
+    "initialLanguage": "en",
+    "muted": false,
+    "adsEnabled": false,
+    "showTutorial": true
+  },
+  "qa": {
+    "mustBeCompletableWithoutUpgrade": true,
+    "minimumDesktopFpsTarget": 60,
+    "minimumMobileFpsTarget": 30,
+    "noForcedAds": true
+  }
+}
