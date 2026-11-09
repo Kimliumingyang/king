@@ -9,3 +9,6 @@ Measured scripted route: 34.6s at target 35px/s. Design's 80–120s timing is un
 
 ## Stage 3 supersedes prototype layout
 The general module factory replaces the L01-only coordinates above. Current physics/scale and collision clearance changes are documented precisely in QA_STAGE3.md; original data under design-spec remains unchanged. No change to once/run free rescue or always-free checkpoint policy.
+
+## Stage 4 difficulty pass
+See data/difficulty.json and QA_STAGE4.md. Base material/mass and free-revive policy unchanged; route density, gap spans and warned hazard pressure increased. Fixes to Boost in DANGER and bounded free-flight altitude control prevent the broader gaps from becoming accidental rocket/death traps. Original user spec is preserved under design-spec; runtime gap bounds now reflect 165–250px.

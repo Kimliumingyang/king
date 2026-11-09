@@ -66,8 +66,8 @@
       "difficulty": 3,
       "parameters": {
         "gapWidthPx": [
-          60,
-          105
+          165,
+          250
         ],
         "takeoffFlatPx": 95,
         "landingFlatPx": 140

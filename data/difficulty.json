@@ -1,0 +1,70 @@
+{
+  "version": 4,
+  "parameterFractionMin": 0.3,
+  "parameterLevelGrowth": 0.35,
+  "parameterRandomSpan": 0.35,
+  "extraModulesByLevel": {
+    "L03": [
+      "rolling_waves"
+    ],
+    "L04": [
+      "steep_ramp"
+    ],
+    "L05": [
+      "rolling_waves"
+    ],
+    "L06": [
+      "gap_jump"
+    ],
+    "L07": [
+      "sudden_dip"
+    ],
+    "L08": [
+      "low_ceiling"
+    ],
+    "L09": [
+      "rolling_waves"
+    ],
+    "L10": [
+      "steep_ramp"
+    ],
+    "L11": [
+      "gap_jump",
+      "spring_mushroom"
+    ],
+    "L12": [
+      "rolling_waves",
+      "seesaw"
+    ],
+    "L13": [
+      "spring_mushroom",
+      "crosswind"
+    ],
+    "L14": [
+      "gap_jump",
+      "rolling_waves",
+      "spring_mushroom"
+    ],
+    "L15": [
+      "low_ceiling",
+      "seesaw",
+      "rolling_waves",
+      "sudden_dip"
+    ]
+  },
+  "gapWidthsPx": {
+    "L04": 165,
+    "L05": 215,
+    "L06": 225,
+    "L10": 235,
+    "L11": 245,
+    "L13": 250,
+    "L14": 250,
+    "L15": 250
+  },
+  "movingPlatformGapPx": 300,
+  "springPulseForce": 0.018,
+  "springPulseMs": 220,
+  "springSurfaceHeightPx": 14,
+  "pickupOffsetPx": 90
+}

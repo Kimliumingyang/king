@@ -10,16 +10,16 @@
     "name": "zero upgrade / no rescue L01 traversal and stable docking",
     "pass": true,
     "state": "CLEAR",
-    "seconds": 86.36666666666666,
-    "maxAngle": 8.511348158048904,
+    "seconds": 86.26666666666667,
+    "maxAngle": 10.897991025490242,
     "maxOffMs": 0,
-    "x": 2982.945213953495
+    "x": 2982.776828411724
   },
   {
     "name": "hard brake produces independent slide",
     "pass": true,
-    "relativeBefore": -13.170383383629314,
-    "relativeAfter": 37.02999211632958,
+    "relativeBefore": -15.220561827221559,
+    "relativeAfter": 35.75199338643535,
     "state": "RUNNING"
   },
   {
@@ -33,8 +33,8 @@
     "name": "high speed crossing does not clear",
     "pass": true,
     "crossed": true,
-    "state": "FAIL_MENU",
-    "speed": 0
+    "state": "KING_EJECTED",
+    "crossingSpeed": 309.3903600989779
   },
   {
     "name": "boost energy consumption and recharge",
@@ -45,7 +45,7 @@
   {
     "name": "keyboard release",
     "pass": true,
-    "x": 5.481827866609564
+    "x": 6.7934994962549915
   },
   {
     "name": "pause freezes physics",

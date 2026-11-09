@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import balance from '../data/balance.json';
-import {TerrainLayout,allLevels,rules,moduleSpec,type Level,type Section} from './terrain';
+import {TerrainLayout,allLevels,rules,difficulty,moduleSpec,type Level,type Section} from './terrain';
+import type {Upgrades} from './progress';
 import stage2 from '../data/prototype_stage2.json';
 const M = (Phaser.Physics.Matter as any).Matter as any;
 export const cfg = structuredClone(balance);
@@ -10,14 +11,27 @@ export const start=-180;
 let activeLayout=new TerrainLayout(level,cfg.pixelsPerMeter);
 export function activateLevel(id:string){level=allLevels.find(l=>l.id===id)??allLevels[0];finish=level.dock.xMeters*cfg.pixelsPerMeter;activeLayout=new TerrainLayout(level,cfg.pixelsPerMeter);}
 export function ground(x:number){return activeLayout.profile(x);}
+export function tunePhysics(snapshot:Record<string,number>,boostScale=1){
+ const p=structuredClone(cfg.physics),u=p.ufo,k=p.king,b=p.boost;
+ u.horizontalForce*=1+(snapshot.engine??0)*cfg.upgrades.engine.bonusPerLevel;
+ const stability=1+(snapshot.stabilizer??0)*cfg.upgrades.stabilizer.bonusPerLevel;
+ u.pitchStabilizer*=stability;u.pitchTrimGain*=stability;u.pitchTrimMaxTorque*=stability;
+ const grip=1+(snapshot.grip??0)*cfg.upgrades.grip.bonusPerLevel;k.friction*=grip;k.frictionStatic*=grip;
+ b.durationSecAtFull*=1+(snapshot.battery??0)*cfg.upgrades.battery.bonusPerLevel;
+ b.heightBonusPx*=boostScale;b.forceMultiplier=1+(b.forceMultiplier-1)*boostScale;
+ k.ejectGraceMs+=(snapshot.rescue_kit??0)*cfg.upgrades.rescue_kit.dangerGraceBonusSec*1000;
+ return p;
+}
 export class Simulation {
  engine:any; ufo:any; king:any; terrain:any[]=[]; probes:any[]=[]; contacts:any[]=[];
- pitchTrim=0; boostHeight=0; energy=1; risk=0; offMs=0; dockMs=0; elapsed=0; state='RUNNING';
+ lastGroundY=rules.groundY; pitchTrim=0; boostHeight=0; energy=1; risk=0; offMs=0; dockMs=0; elapsed=0; state='RUNNING';
  aboard=false; ejectedMs=0; protectionMs=0; failureX=0;
- layout:TerrainLayout; roofs:any[]=[]; warning=''; springTimers=new Map<string,number>(); approachTimers=new Map<string,number>();
+ layout:TerrainLayout; roofs:any[]=[]; warning=''; springTimers=new Map<string,number>();springPulses=new Map<string,number>(); approachTimers=new Map<string,number>();
  dynamics:{section:Section;type:string;body:any;baseX:number;baseY:number;loadedAt?:number;fallen?:boolean}[]=[];
  constraints:any[]=[]; hazardClock=0; magneticScale=1; windForce=0; hazardEffects=new Map<string,{warning:boolean;active:boolean;phase:number}>();
- constructor(public config:Level=level){
+ tuning:ReturnType<typeof tunePhysics>;
+ constructor(public config:Level=level,public upgrades:Record<string,number>={},public boostScale=1){
+  this.upgrades=structuredClone(upgrades);this.tuning=tunePhysics(this.upgrades,boostScale);
   this.layout=new TerrainLayout(config,cfg.pixelsPerMeter);
   this.engine=M.Engine.create({gravity:{x:0,y:cfg.physics.gravityY},positionIterations:10,velocityIterations:8});
   const boundaries=[start-200,this.layout.finish+650,...this.layout.sections.flatMap(s=>[s.gapStart,s.gapEnd].filter((x):x is number=>x!==undefined))].sort((a,b)=>a-b);
@@ -56,7 +70,7 @@ export class Simulation {
       }
     }
   }
-  const u=cfg.physics.ufo,k=cfg.physics.king;
+  const u=this.tuning.ufo,k=this.tuning.king;
   this.ufo=M.Bodies.rectangle(0,this.layout.profile(0)-u.hoverHeightPx,u.widthPx,20,{chamfer:{radius:8},mass:u.mass,friction:k.friction,frictionStatic:k.frictionStatic,frictionAir:u.linearDrag,label:'ufo'});
   this.king=M.Bodies.rectangle(0,this.ufo.position.y-10-k.heightPx/2,k.widthPx,k.heightPx,{chamfer:{radius:28},mass:k.mass,friction:k.friction,frictionStatic:k.frictionStatic,frictionAir:k.frictionAir,label:'king'});
   M.Composite.add(this.engine.world,[...this.terrain,...this.constraints,this.ufo,this.king]);
@@ -94,7 +108,9 @@ export class Simulation {
 
     const left=this.surfaceAt(x-cfg.physics.ufo.deckWidthPx*.4),right=this.surfaceAt(x+cfg.physics.ufo.deckWidthPx*.4);
     const floors=[left,right].filter((y):y is number=>y!==null);
-    if(!floors.length)continue;
+    const margin=4;
+    const supportXs=[x-cfg.physics.ufo.deckWidthPx*.4,x+cfg.physics.ufo.deckWidthPx*.4];
+    if(!floors.length||!supportXs.some(px=>this.surfaceAt(px-margin)!==null&&this.surfaceAt(px+margin)!==null))continue;
     const y=Math.min(...floors)-cfg.physics.ufo.hoverHeightPx;
     const u=M.Bodies.rectangle(x,y,cfg.physics.ufo.widthPx,20),k=M.Bodies.rectangle(x,y-10-cfg.physics.king.heightPx/2,cfg.physics.king.widthPx,cfg.physics.king.heightPx);
     if(M.Query.collides(u,this.terrain).length===0&&M.Query.collides(k,this.terrain).length===0)return x;
@@ -119,16 +135,18 @@ export class Simulation {
       if(d.loadedAt!==undefined&&this.hazardClock-d.loadedAt>=p.collapseDelayMs&&!d.fallen){M.Body.setStatic(d.body,false);M.Body.setMass(d.body,3);d.fallen=true;}
     }
   }
-  const labels:Record<string,string>={gentle_hills:'GENTLE HILLS · EASY ON THE THROTTLE',rolling_waves:'WAVES · STEADY SPEED',steep_ramp:'STEEP RAMP · BRAKE BEFORE THE CREST',sudden_dip:'DIP AHEAD · SLOW DOWN',gap_jump:'GAP AHEAD · SHORT BOOST',low_ceiling:'LOW CEILING · DO NOT BOOST',spring_mushroom:'SPRING MUSHROOM · SLOW APPROACH',seesaw:'SEESAW · BALANCE OVER THE PIVOT',moving_platform:'MOVING PLATFORM · WATCH THE CYCLE',crumbling_bridge:'CRUMBLING BRIDGE · KEEP MOVING',magnetic_pulse:'MAGNETIC PULSE · WATCH THE WARNING',crosswind:'CROSSWIND · LEAVE ROOM TO BRAKE'};
+  const labels:Record<string,string>={gentle_hills:'GENTLE HILLS · EASY ON THE THROTTLE',rolling_waves:'WAVES · STEADY SPEED',steep_ramp:'STEEP RAMP · BRAKE BEFORE THE CREST',sudden_dip:'DIP AHEAD · SLOW DOWN',gap_jump:'GAP AHEAD · BUILD SPEED + SHORT BOOST',low_ceiling:'LOW CEILING · DO NOT BOOST',spring_mushroom:'SPRING MUSHROOM · SLOW APPROACH',seesaw:'SEESAW · BALANCE OVER THE PIVOT',moving_platform:'MOVING PLATFORM · WATCH THE CYCLE, THEN BOOST',crumbling_bridge:'CRUMBLING BRIDGE · KEEP MOVING',magnetic_pulse:'MAGNETIC PULSE · WATCH THE WARNING',crosswind:'CROSSWIND · LEAVE ROOM TO BRAKE'};
   for(const s of this.layout.sections){
     if(x<s.x-rules.warningDistancePx||x>s.end+100)continue;
     const approach=(this.approachTimers.get(s.id)??0)+dt;this.approachTimers.set(s.id,approach);
     if(!this.warning)this.warning=labels[s.type];
     if(s.type==='spring_mushroom'){
       const timer=(this.springTimers.get(s.id)??0)+dt;this.springTimers.set(s.id,timer);
-      const active=timer>=s.params.warningMs&&Math.abs(x-s.center)<70&&!safe;
+      const ready=timer>=s.params.warningMs&&Math.abs(x-s.center)<70&&!safe;
+      if(ready&&!this.springPulses.has(s.id))this.springPulses.set(s.id,this.hazardClock);
+      const active=ready&&this.hazardClock-(this.springPulses.get(s.id)??-Infinity)<difficulty.springPulseMs;
       this.hazardEffects.set(s.id,{warning:timer<s.params.warningMs,active,phase:timer});
-      if(active)M.Body.applyForce(this.ufo,this.ufo.position,{x:0,y:-(this.ufo.mass+this.king.mass)*this.engine.gravity.y*.001*(s.params.impulseMultiplier-1)});
+      if(active)M.Body.applyForce(this.ufo,this.ufo.position,{x:0,y:-difficulty.springPulseForce*(s.params.impulseMultiplier/1.1)});
     }
     for(const effect of [s.type,...s.overlays]){
       if(effect==='magnetic_pulse'){
@@ -152,6 +170,7 @@ export class Simulation {
     }
   }
  }
+ refreshTuning(){this.tuning=tunePhysics(this.upgrades,this.boostScale);this.king.friction=this.tuning.king.friction;this.king.frictionStatic=this.tuning.king.frictionStatic;this.ufo.friction=this.tuning.king.friction;this.ufo.frictionStatic=this.tuning.king.frictionStatic;}
  step(direction:number,boost:boolean){
   if(this.state==='KING_EJECTED'){
     this.ejectedMs+=1000/cfg.physics.fixedStepHz;
@@ -160,9 +179,9 @@ export class Simulation {
     return;
   }
   if(!['RUNNING','DANGER','DOCKING'].includes(this.state)) return;
-  const dt=1000/cfg.physics.fixedStepHz,u=cfg.physics.ufo,b=cfg.physics.boost;
+  const dt=1000/cfg.physics.fixedStepHz,u=this.tuning.ufo,b=this.tuning.boost;
   this.elapsed+=dt;this.updateHazards(dt);this.protectionMs=Math.max(0,this.protectionMs-dt);
-  const active=boost&&this.energy>0.01&&this.state==='RUNNING';
+  const active=boost&&this.energy>0.01&&['RUNNING','DANGER'].includes(this.state);
   const desiredHeight=active?b.heightBonusPx:0;
   this.boostHeight+=Phaser.Math.Clamp(desiredHeight-this.boostHeight,-b.heightRampPxPerSec/cfg.physics.fixedStepHz,b.heightRampPxPerSec/cfg.physics.fixedStepHz);
   this.energy=Phaser.Math.Clamp(this.energy+(active?-1/b.durationSecAtFull:1/b.rechargeSec)/cfg.physics.fixedStepHz,0,1);
@@ -179,7 +198,11 @@ export class Simulation {
    const support=(body.mass+this.king.mass)*this.engine.gravity.y*0.001/2;
    let force=Phaser.Math.Clamp(support+(p.y-target)*u.hoverSpring+vy*u.hoverDamping,-.018,.065);
    force*=this.magneticScale;
-   if(surface===null)force=active?support*b.forceMultiplier:0;
+   if(surface!==null)this.lastGroundY=surface;
+   if(surface===null){
+    const flightTarget=this.lastGroundY-u.hoverHeightPx-this.boostHeight;
+    force=active?Phaser.Math.Clamp(support+(p.y-flightTarget)*u.hoverSpring+vy*u.hoverDamping,0,support*b.forceMultiplier):0;
+   }
    if(sample?.body&&!sample.body.isStatic)M.Body.applyForce(sample.body,{x:p.x,y:sample.y},{x:0,y:Math.max(0,force)*rules.dynamic.hoverReactionScale});
    M.Body.applyForce(body,p,{x:0,y:-force});this.probes.push({...p,target,ground:surface});
   }
@@ -205,7 +228,7 @@ export class Simulation {
   // Short airborne hops are recoverable; contact must return before grace expires.
   this.offMs=aboard?0:this.offMs+dt;
   this.state=this.risk>cfg.physics.king.edgeWarningThreshold||this.offMs>100?'DANGER':'RUNNING';
-  if(this.offMs>cfg.physics.king.ejectGraceMs||this.king.position.y>800||body.position.x<start||body.position.x>this.layout.finish+400){this.state='KING_EJECTED';this.failureX=body.position.x;M.Body.setStatic(body,true);return;}
+  if(this.offMs>this.tuning.king.ejectGraceMs||this.king.position.y>800||body.position.x<start||body.position.x>this.layout.finish+400){this.state='KING_EJECTED';this.failureX=body.position.x;M.Body.setStatic(body,true);return;}
   const dock=cfg.docking;
   const kingStable=Math.hypot(this.king.velocity.x-body.velocity.x,this.king.velocity.y-body.velocity.y)*60<=dock.maxSpeedPxPerSec&&Math.abs(this.king.angularVelocity)*60<=dock.kingMaxAngularSpeedRadS;
   if(Math.abs(body.position.x-this.layout.finish)<=this.config.dock.radiusPx&&Math.hypot(body.velocity.x,body.velocity.y)*60<=dock.maxSpeedPxPerSec&&Math.abs(body.angle)*180/Math.PI<=dock.maxAngleDeg&&aboard&&kingStable){this.dockMs+=dt;this.state='DOCKING';}else this.dockMs=0;

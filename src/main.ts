@@ -1,16 +1,20 @@
 import Phaser from 'phaser';
 import {cfg,finish,ground,level,start} from './physics';
 import {Session} from './session';
+import {economyRules,upgradePrice,upgradeValue,type UpgradeId} from './progress';
 import {allLevels,AVAILABLE_LEVELS,rules} from './terrain';
 import stage2 from '../data/prototype_stage2.json';
 import {MockBridge} from './bridge';
+import {MemorySaveBackend} from './storage';
+import {RunStore} from './save';
+import {GameSaveService} from './game-save';
 import './style.css';
 const debug=new URLSearchParams(location.search).has('debug');
 const bridge=new MockBridge();await bridge.init();
 const root=document.getElementById('game')!;
 root.innerHTML=`
 <header>
-  <div class="brand">Don't Drop<br><b>the King!</b><small>TERRAIN PROTOTYPE · STAGE 03</small></div>
+  <div class="brand">Don't Drop<br><b>the King!</b><small>ROYAL COURIER · STAGE 04</small></div>
   <div class="level">LEVEL 01<small>His First Ride</small></div>
   <div class="route"><span>◉</span><progress id="progress" max="500" value="0"></progress><span>♛</span></div>
   <div id="distance">0 / 500m</div>
@@ -18,7 +22,7 @@ root.innerHTML=`
 </header>
 <div id="canvas"></div>
 <div id="caption">DELIVER THE KING.<br><b>NOT LAUNCH HIM.</b></div>
-<div id="run-hud"><span id="checkpoint-chip">⚑ START</span><span id="rescue-chip">♛ RESCUE 1 / 1</span><span id="save-chip">SAVED LOCALLY</span></div>
+<div id="run-hud"><span id="checkpoint-chip">⚑ START</span><span id="rescue-chip">♛ RESCUE 1 / 1</span><span id="save-chip">SAVED LOCALLY</span><button id="garage" aria-label="Garage">COINS 0</button></div>
 <div id="toast" role="status"></div><div id="hazard-tip" role="status"></div>
 <div id="risk-box" hidden><span>! YOUR MAJESTY IS SLIPPING</span><progress id="risk" max="1" value="0"></progress></div>
 <div id="status">Hold D / → to move · Release early. Brake gently.</div>
@@ -37,6 +41,7 @@ function clearInput(){held.left=held.right=held.boost=false;document.querySelect
 function canDrive(){return !paused&&['RUNNING','DANGER','DOCKING'].includes(sim.state);}
 function closeMenu(){paused=false;acc=0;clearInput();el('modal').hidden=true;bridge.gameplayStart();}
 function modal(title:string,message:string,buttons:[string,()=>void][],note=''){
+  el('modal').className='';
   el('eyebrow').textContent=`ROYAL DELIVERY SERVICE · LEVEL ${String(level.index).padStart(2,'0')}`;
   paused=true;acc=0;clearInput();bridge.gameplayStop();el('title').textContent=title;el('message').textContent=message;
   el('summary').hidden=true;el('menu-note').textContent=note;el('actions').replaceChildren();
@@ -60,8 +65,8 @@ function levelMenu(){
   modal('ROYAL ROUTES',session.progress.error||'Finish a delivery to unlock the next route.',[['BACK',()=>{if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else closeMenu();}]],'NO UPGRADES OR ADS REQUIRED');
   const grid=document.createElement('div');grid.id='level-grid';
   for(const route of allLevels){
-    const b=document.createElement('button');b.textContent=`${String(route.index).padStart(2,'0')} · ${route.name}`;
-    b.disabled=route.index>session.progress.data.highestUnlockedLevel||route.index>AVAILABLE_LEVELS;
+    const b=document.createElement('button');b.textContent=`${String(route.index).padStart(2,'0')} · ${route.name} ${"★".repeat(session.progress.data.bestStars[route.id]??0)}`;
+    b.disabled=route.index>Math.max(session.memoryUnlocked,session.progress.data.highestUnlockedLevel)||route.index>AVAILABLE_LEVELS;
     b.classList.toggle('completed',session.progress.data.completedLevels.includes(route.id));
     b.onclick=()=>openLevel(route.index);grid.append(b);
   }
@@ -70,29 +75,63 @@ function levelMenu(){
 function clearMenu(){
   const actions:[string,()=>void][]=[];
   if(level.index<AVAILABLE_LEVELS)actions.push(['NEXT LEVEL',()=>openLevel(level.index+1)]);
-  actions.push(['PLAY AGAIN',reset],['CHOOSE LEVEL',levelMenu]);
-  modal('ROYAL DELIVERY COMPLETE!',`${level.name} delivered. ${session.progress.error||(level.index<AVAILABLE_LEVELS?'The next route is unlocked and saved.':'Final route delivered. Choose a route to replay.')}`,actions,`${level.id} · STAGE 03 TERRAIN PROTOTYPE`);
+  actions.push(['GARAGE / UPGRADES',garageMenu],['MISSIONS',missionsMenu],['PLAY AGAIN',reset],['CHOOSE LEVEL',levelMenu]);
+  const receipt=session.progress.data.settledRuns[session.run.runId];
+  if(!receipt)actions.unshift(['RETRY REWARD SAVE',()=>{session.settle();clearMenu();}]);
+  modal('ROYAL DELIVERY COMPLETE!',`${level.name} delivered. ${session.progress.error||(level.index<AVAILABLE_LEVELS?'The next route is unlocked and saved.':'Final route delivered. Choose a route to replay.')}`,actions,`${level.id} · ${session.run.dailyChallengeDate?'DAILY CHALLENGE':'ROYAL DELIVERY'}`);
+  el('modal').className='reward-mode';
+  el('summary').hidden=false;
+  el('summary').innerHTML=receipt?`<div class="reward-stars">${'★'.repeat(receipt.stars)}${'☆'.repeat(3-receipt.stars)}</div><div class="reward-total">+${receipt.coins} COINS</div><div class="reward-details">Delivery ${receipt.base} · Pickups ${receipt.pickups} · First clear ${receipt.firstClear}<br>Three stars ${receipt.threeStar} · Daily ${receipt.daily}<br>${receipt.seconds.toFixed(1)}s · BEST ${session.progress.data.bestTimes[level.id].toFixed(1)}s</div>`:'Reward pending — free play remains available. Retry saving before leaving to keep this reward.';
+}
+function backToRunMenu(){if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else modal('A ROYAL BREATHER','Your run is paused.',[['RESUME',closeMenu],['GARAGE',garageMenu],['MISSIONS',missionsMenu],['RESTART LEVEL',confirmRestart]]);}
+function garageMenu(){
+  modal('THE ROYAL GARAGE',session.progress.error||`Wallet: ${session.progress.data.coinsWallet} coins. Upgrades apply to the next run or full restart. Checkpoint retries keep the current setup.`,[['BACK',backToRunMenu]],'NO ADS REQUIRED · UPGRADES NEVER GLUE THE KING DOWN');
+  el('modal').className='garage-mode';
+  const grid=document.createElement('div');grid.className='garage-grid';
+  for(const id of Object.keys(cfg.upgrades) as UpgradeId[]){
+    const n=session.progress.data.upgradeLevels[id],max=cfg.upgrades[id].maxLevel,price=upgradePrice(id,n);
+    const card=document.createElement('div');card.className='upgrade-card';
+    const title=document.createElement('b');title.textContent=`${economyRules.upgradeLabels[id]} · ${n}/${max}`;
+    const detail=document.createElement('p');detail.textContent=`${upgradeValue(id,n)} → ${upgradeValue(id,Math.min(n+1,max))}`;
+    const b=document.createElement('button');b.textContent=n>=max?'MAX LEVEL':`BUY · ${price} COINS`;b.disabled=n>=max||price>session.progress.data.coinsWallet||session.progress.blocked;
+    b.onclick=()=>{session.progress.purchase(id,n);garageMenu();};card.append(title,detail,b);grid.append(card);
+  }
+  el('actions').prepend(grid);
+}
+function missionsMenu(){
+  modal('ROYAL ASSIGNMENTS',session.progress.error||`Wallet: ${session.progress.data.coinsWallet} coins. Optional goals reward successful deliveries.`,[['BACK',backToRunMenu]],'DAILY: 15% WEAKER BOOST · NO RESCUES OR CHECKPOINT RETRIES FOR BONUS');
+  el('modal').className='mission-mode';
+  const list=document.createElement('div');list.className='mission-list';
+  for(const m of economyRules.missions){
+    const b=document.createElement('button'),claimed=session.progress.data.missions.claimed.includes(m.id),ready=session.progress.data.completedLevels.includes(m.levelId);
+    b.textContent=`${m.name} · Finish ${m.levelId} · ${claimed?'CLAIMED':ready?'CLAIM +'+m.reward:'+'+m.reward+' COINS'}`;
+    b.disabled=claimed||!ready||session.progress.blocked;b.onclick=()=>{session.progress.claimMission(m.id);missionsMenu();};list.append(b);
+  }
+  const daily=document.createElement('button');daily.textContent=`START DAILY · ${session.progress.dailyAvailable()?`+${economyRules.daily.reward} BONUS`:'BONUS ALREADY CLAIMED / NOT READY'}`;
+  daily.onclick=()=>{if(session.startDaily()){sim=session.sim;closeMenu();toast('DAILY FLIGHT · WEAKER BOOST · CLEAN DELIVERY FOR BONUS');}};list.append(daily);el('actions').prepend(list);
 }
 function pause(){
   clearInput();session.save();
   if(paused||['FAIL_MENU','CLEAR'].includes(sim.state))return;
-  modal('A ROYAL BREATHER','Physics, the rescue animation and time are paused.',[['RESUME',closeMenu],['RESTART LEVEL',confirmRestart]]);
+  modal('A ROYAL BREATHER','Physics, the rescue animation and time are paused.',[['RESUME',closeMenu],['GARAGE',garageMenu],['MISSIONS',missionsMenu],['RESTART LEVEL',confirmRestart]]);
 }
 function confirmRestart(){
   const wasPaused=paused;
   modal('RESTART THIS RIDE?','Start a new run. Checkpoint progress and temporary coins reset. Your one free rescue returns.',[['RESTART',reset],['CANCEL',()=>{
-    if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else if(wasPaused){modal('A ROYAL BREATHER','Your run is paused.',[['RESUME',closeMenu],['RESTART LEVEL',confirmRestart]]);}else closeMenu();
+    if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else if(wasPaused){modal('A ROYAL BREATHER','Your run is paused.',[['RESUME',closeMenu],['GARAGE',garageMenu],['MISSIONS',missionsMenu],['RESTART LEVEL',confirmRestart]]);}else closeMenu();
   }]]);
 }
 function toast(text:string){el('toast').textContent=text;toastMs=2200;}
-el('levels').onclick=levelMenu;el('pause').onclick=pause;el('restart').onclick=confirmRestart;
+el('garage').onclick=garageMenu;el('levels').onclick=levelMenu;el('pause').onclick=pause;el('restart').onclick=confirmRestart;
 el('skip').onclick=()=>{if(sim.state==='KING_EJECTED'){sim.state='FAIL_MENU';failMenu();}};
 const mapping:Record<string,keyof typeof held>={KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right',Space:'boost',KeyW:'boost'};
 window.addEventListener('keydown',e=>{if(mapping[e.code]){e.preventDefault();if(canDrive())held[mapping[e.code]]=true;}if(!e.repeat){if(e.code==='KeyP'||e.code==='Escape')pause();if(e.code==='KeyR')confirmRestart();}});
 window.addEventListener('keyup',e=>{if(mapping[e.code])held[mapping[e.code]]=false;});
 window.addEventListener('blur',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 window.addEventListener('pagehide',()=>session.save());
-window.addEventListener('storage',event=>{if(event.key==='ddtk-stage2-run-v1'){
+window.addEventListener('storage',event=>{
+ if(event.key==='ddtk-profile-v2'){if(session.progress.refresh()){if(el('title').textContent==='THE ROYAL GARAGE')garageMenu();else if(el('title').textContent==='ROYAL ASSIGNMENTS')missionsMenu();}return;}
+ if(event.key==='ddtk-stage2-run-v1'){
   try{const incoming=JSON.parse(event.newValue??'null');if(incoming&&incoming.revision<=session.run.revision)return;}catch{/* Invalid external writes still pause safely. */}
   modal('RUN UPDATED IN ANOTHER TAB','Continue in one tab to keep your saved checkpoint and rescue in sync.',[['LOAD SAVED RUN',()=>location.reload()]]);
 }});
@@ -105,8 +144,8 @@ document.querySelectorAll<HTMLButtonElement>('[data-key]').forEach(b=>{
 if(session.store.error){modal('A NOTE FROM THE ROYAL ARCHIVE',session.store.error,[['START NEW RUN',reset]],'CHECKPOINT RETRIES ARE ALWAYS FREE');}
 else if(sim.state==='FAIL_MENU')failMenu();
 else if(sim.state==='CLEAR')clearMenu();
-else modal(session.restored?'WELCOME BACK, CAPTAIN.':'HIS MAJESTY NEEDS A RIDE.',session.restored?`Saved run restored at ${session.run.checkpointId?`checkpoint ${level.checkpointsMeters[session.run.checkpointId-1]}m`:'the start'}. ${session.run.freeRescueUsed?'Royal Rescue already used.':'One free Royal Rescue available.'}`:'Keep the king aboard. Ease over the hills, boost when needed, and stop at the throne.',[[session.restored?'CONTINUE':'PLAY',closeMenu],['CHOOSE LEVEL',levelMenu]],'A / D TO MOVE · SPACE TO BOOST · CHECKPOINTS ARE FREE');
-if(debug){const fields:[string,any,string,number,number,number][]=[['King friction',cfg.physics.king,'friction',0,1,.01],['King mass',cfg.physics.king,'mass',1,6,.1],['Gravity',cfg.physics,'gravityY',.5,2,.05],['Hover spring',cfg.physics.ufo,'hoverSpring',.0001,.0015,.00005],['Drive force',cfg.physics.ufo,'horizontalForce',.0005,.026,.0005]];for(const [label,obj,key,min,max,step]of fields){const l=document.createElement('label');l.textContent=label;const i=document.createElement('input');i.type='range';i.min=String(min);i.max=String(max);i.step=String(step);i.value=String(obj[key]);i.oninput=()=>{obj[key]=Number(i.value);sim.engine.gravity.y=cfg.physics.gravityY;sim.king.friction=cfg.physics.king.friction;((Phaser.Physics.Matter as any).Matter as any).Body.setMass(sim.king,cfg.physics.king.mass);};l.append(i);el('sliders').append(l);}}
+else modal(session.restored?'WELCOME BACK, CAPTAIN.':'HIS MAJESTY NEEDS A RIDE.',session.restored?`Saved run restored at ${session.run.checkpointId?`checkpoint ${level.checkpointsMeters[session.run.checkpointId-1]}m`:'the start'}. ${session.run.freeRescueUsed?'Royal Rescue already used.':'One free Royal Rescue available.'}`:'Keep the king aboard. Ease over the hills, boost when needed, and stop at the throne.',[[session.restored?'CONTINUE':'PLAY',closeMenu],['CHOOSE LEVEL',levelMenu],['GARAGE',garageMenu],['MISSIONS / DAILY',missionsMenu]],'A / D TO MOVE · SPACE TO BOOST · CHECKPOINTS ARE FREE');
+if(debug){const fields:[string,any,string,number,number,number][]=[['King friction',cfg.physics.king,'friction',0,1,.01],['King mass',cfg.physics.king,'mass',1,6,.1],['Gravity',cfg.physics,'gravityY',.5,2,.05],['Hover spring',cfg.physics.ufo,'hoverSpring',.0001,.0015,.00005],['Drive force',cfg.physics.ufo,'horizontalForce',.0005,.026,.0005]];for(const [label,obj,key,min,max,step]of fields){const l=document.createElement('label');l.textContent=label;const i=document.createElement('input');i.type='range';i.min=String(min);i.max=String(max);i.step=String(step);i.value=String(obj[key]);i.oninput=()=>{obj[key]=Number(i.value);sim.refreshTuning();sim.engine.gravity.y=cfg.physics.gravityY;sim.king.friction=cfg.physics.king.friction;((Phaser.Physics.Matter as any).Matter as any).Body.setMass(sim.king,cfg.physics.king.mass);};l.append(i);el('sliders').append(l);}}
 class Game extends Phaser.Scene {
  g!:Phaser.GameObjects.Graphics; cameraX=-350;
  create(){this.g=this.add.graphics();}
@@ -188,10 +227,11 @@ class Game extends Phaser.Scene {
   document.querySelector('.level')!.innerHTML=`LEVEL ${String(level.index).padStart(2,'0')}<small>${level.name}</small>`;
   el('hazard-tip').textContent=sim.warning;
   el('rescue-chip').textContent=session.run.freeRescueUsed?'♛ RESCUE USED':'♛ RESCUE 1 / 1';
-  el('save-chip').textContent=session.store.error?'! SAVE UNAVAILABLE':'SAVED LOCALLY';
+  el('save-chip').textContent=session.store.error||session.progress.error?'! SAVE NOTICE':'SAVED LOCALLY';
+  el('garage').textContent=session.progress.blocked?'COINS —':`COINS ${session.progress.data.coinsWallet}`;
   el('toast').classList.toggle('show',toastMs>0);
   el('risk-box').hidden=sim.state!=='DANGER';
-  (el('risk') as HTMLProgressElement).value=sim.offMs?sim.offMs/cfg.physics.king.ejectGraceMs:Math.min(1,sim.risk);
+  (el('risk') as HTMLProgressElement).value=sim.offMs?sim.offMs/sim.tuning.king.ejectGraceMs:Math.min(1,sim.risk);
   el('skip').hidden=sim.state!=='KING_EJECTED'||paused;
   if(sim.protectionMs>0)el('status').textContent=`ROYAL RECOVERY · ${(sim.protectionMs/1000).toFixed(1)}s · gentle controls, collisions remain active`;
   if(sim.state==='KING_EJECTED')el('status').textContent="HE'S FLYING!";
@@ -202,13 +242,14 @@ class Game extends Phaser.Scene {
  }
 }
 new Phaser.Game({type:Phaser.AUTO,parent:'canvas',width:1280,height:720,backgroundColor:'#8796ad',scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},scene:Game,audio:{noAudio:true}});
-(window as any).__test={get sim(){return sim;},session,reset,step:(direction:number,boost=false)=>{session.step(direction,boost);sim=session.sim;},setPaused:(p:boolean)=>{paused=p;},held,failMenu,closeMenu};
+(window as any).__test={get sim(){return sim;},session,garageMenu,missionsMenu,levelMenu,clearMenu,reset,step:(direction:number,boost=false)=>{session.step(direction,boost);sim=session.sim;},setPaused:(p:boolean)=>{paused=p;},held,failMenu,closeMenu};
 if(debug){
   const select=document.createElement('select');select.id='qa-level';select.setAttribute('aria-label','QA level jump');
   for(const l of allLevels){const option=document.createElement('option');option.value=String(l.index);option.textContent=`L${String(l.index).padStart(2,'0')} · ${l.name}`;select.append(option);}
   select.value=String(level.index);select.onchange=()=>{session.startLevel(Number(select.value),true);sim=session.sim;closeMenu();};el('sliders').prepend(select);
 }
 if(debug)Object.assign((window as any).__test,{
+  createMemorySaves:()=>new GameSaveService(new RunStore(new MemorySaveBackend())),createMockBridge:()=>new MockBridge(),
   loadLevel(index:number){const ok=session.startLevel(index,true);sim=session.sim;closeMenu();return ok;},
   dislodge(x?:number){
     const M=(Phaser.Physics.Matter as any).Matter;
@@ -216,6 +257,7 @@ if(debug)Object.assign((window as any).__test,{
     M.Body.setPosition(sim.king,{x:sim.ufo.position.x+250,y:sim.ufo.position.y-75});
     M.Body.setVelocity(sim.king,{x:2,y:0});
   },
+  approachDockFast(){const M=(Phaser.Physics.Matter as any).Matter;sim.spawnAt(sim.layout.finish-150);M.Body.setVelocity(sim.ufo,{x:5,y:0});M.Body.setVelocity(sim.king,{x:5,y:0});},
   edgeBrake(offset=80){const M=(Phaser.Physics.Matter as any).Matter;sim.spawnAt(sim.layout.finish-700);M.Body.setPosition(sim.king,{x:sim.ufo.position.x+offset,y:sim.king.position.y});M.Body.setVelocity(sim.ufo,{x:4.5,y:0});M.Body.setVelocity(sim.king,{x:4.5,y:0});},
   overlapDepth(){const M=(Phaser.Physics.Matter as any).Matter;return Math.max(0,...M.Query.collides(sim.ufo,sim.terrain).map((c:any)=>c.depth),...M.Query.collides(sim.king,sim.terrain).map((c:any)=>c.depth));},
   overlaps(){const M=(Phaser.Physics.Matter as any).Matter;return M.Query.collides(sim.ufo,sim.terrain).length+M.Query.collides(sim.king,sim.terrain).length;}

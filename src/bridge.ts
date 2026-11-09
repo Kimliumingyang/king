@@ -1,4 +1,8 @@
-export interface PlatformBridge { init():Promise<void>; gameplayStart():void; gameplayStop():void; }
+import type {PlatformSavePort} from './game-save';
+export interface PlatformBridge extends PlatformSavePort {init():Promise<void>;gameplayStart():void;gameplayStop():void;}
 export class MockBridge implements PlatformBridge {
-  async init() {} gameplayStart() {} gameplayStop() {}
+  private snapshot:string|null=null;
+  async init(){} gameplayStart(){} gameplayStop(){}
+  async loadSave(){return this.snapshot;}
+  async save(value:string){this.snapshot=value;}
 }

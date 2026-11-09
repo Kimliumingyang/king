@@ -1,0 +1,387 @@
+[
+  {
+    "name": "locked routes / stable dock unlock and saved reward",
+    "pass": true,
+    "locked": true,
+    "unlocked": 2
+  },
+  {
+    "name": "saved unlock / NEXT LEVEL / new level seed",
+    "pass": true,
+    "level": "L02"
+  },
+  {
+    "name": "all 12 module types / layout reproducibility / visible-ground collider alignment",
+    "pass": true,
+    "types": [
+      "gentle_hills",
+      "sudden_dip",
+      "rolling_waves",
+      "spring_mushroom",
+      "steep_ramp",
+      "gap_jump",
+      "low_ceiling",
+      "crumbling_bridge",
+      "crosswind",
+      "magnetic_pulse",
+      "seesaw",
+      "moving_platform"
+    ],
+    "maxError": 2.2417907530325465e-9,
+    "checkpoints": 30
+  },
+  {
+    "name": "every configured checkpoint: zero velocity, collision-safe, survives neutral input",
+    "pass": true,
+    "checks": [
+      {
+        "level": 1,
+        "checkpoint": 1,
+        "x": 1440.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 2,
+        "checkpoint": 1,
+        "x": 1164.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 2,
+        "checkpoint": 2,
+        "x": 2328.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 3,
+        "checkpoint": 1,
+        "x": 1308.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 3,
+        "checkpoint": 2,
+        "x": 2610.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 4,
+        "checkpoint": 1,
+        "x": 1446.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 4,
+        "checkpoint": 2,
+        "x": 2898.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 5,
+        "checkpoint": 1,
+        "x": 1590.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 5,
+        "checkpoint": 2,
+        "x": 3180.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 6,
+        "checkpoint": 1,
+        "x": 1734.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 6,
+        "checkpoint": 2,
+        "x": 3468.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 7,
+        "checkpoint": 1,
+        "x": 1878.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 7,
+        "checkpoint": 2,
+        "x": 3756.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 8,
+        "checkpoint": 1,
+        "x": 2022.025167187847,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 8,
+        "checkpoint": 2,
+        "x": 4038.025167187835,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 9,
+        "checkpoint": 1,
+        "x": 2160.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 9,
+        "checkpoint": 2,
+        "x": 4326.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 10,
+        "checkpoint": 1,
+        "x": 2304.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 10,
+        "checkpoint": 2,
+        "x": 4608.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 11,
+        "checkpoint": 1,
+        "x": 2448.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 11,
+        "checkpoint": 2,
+        "x": 4896.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 12,
+        "checkpoint": 1,
+        "x": 2592.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 12,
+        "checkpoint": 2,
+        "x": 5184.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 13,
+        "checkpoint": 1,
+        "x": 2736.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 13,
+        "checkpoint": 2,
+        "x": 5466.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 14,
+        "checkpoint": 1,
+        "x": 2874.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 14,
+        "checkpoint": 2,
+        "x": 5754.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 15,
+        "checkpoint": 1,
+        "x": 2220.025167187856,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 15,
+        "checkpoint": 2,
+        "x": 4440.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      },
+      {
+        "level": 15,
+        "checkpoint": 3,
+        "x": 6660.025167187185,
+        "zero": true,
+        "state": "RUNNING",
+        "overlap": 0
+      }
+    ]
+  },
+  {
+    "name": "moving platform safe alignment windows less than 4s",
+    "pass": true,
+    "maxMissingMs": 1700.000000000002
+  },
+  {
+    "name": "roof is a real collision: boost cannot phase king through it",
+    "pass": true,
+    "hits": 42
+  },
+  {
+    "name": "rescue on each dynamic support keeps collision and safe recovery",
+    "pass": true,
+    "checks": [
+      {
+        "index": 6,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0.11320534173648866
+      },
+      {
+        "index": 7,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0
+      },
+      {
+        "index": 8,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0
+      },
+      {
+        "index": 10,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0
+      },
+      {
+        "index": 11,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0
+      },
+      {
+        "index": 13,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0.11320534173648866
+      },
+      {
+        "index": 14,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0
+      },
+      {
+        "index": 15,
+        "used": true,
+        "backtrack": 0,
+        "state": "RUNNING",
+        "spawnOverlap": 0,
+        "depth": 0.11411032991679804
+      }
+    ]
+  },
+  {
+    "name": "rescue preserves broken bridge / checkpoint reconstructs it",
+    "pass": true,
+    "broken": 1,
+    "kept": 1,
+    "rebuilt": 0
+  },
+  {
+    "name": "warning approach gate / checkpoint suppression / protection keeps physical collisions",
+    "pass": true,
+    "initial": 0,
+    "warning": "! CROSSWIND APPROACH · PREPARE",
+    "safe": true
+  },
+  {
+    "name": "legacy 2.4px/m save migrates to 6px/m without refunding rescue",
+    "pass": true,
+    "scale": 6,
+    "used": true,
+    "checkpoint": 1,
+    "furthestX": 1500,
+    "failureX": 1250
+  },
+  {
+    "name": "browser runtime errors",
+    "pass": true,
+    "errors": []
+  }
+]

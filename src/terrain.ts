@@ -1,6 +1,9 @@
 import levelData from '../data/levels.json';
 import terrainData from '../data/terrain_modules.json';
 import rules from '../data/layout_rules.json';
+import difficulty from '../data/difficulty.json';
+import economy from '../data/economy_rules.json';
+export {difficulty};
 export {rules};
 export const allLevels=levelData.levels;
 export const AVAILABLE_LEVELS=15;
@@ -19,20 +22,35 @@ export class TerrainLayout {
     const recovery=level.index>=11?rules.lateRecoveryPx:rules.recoveryPx;
     const reserved=this.checkpointXs.map(x=>[x-rules.checkpointFlatPx/2,x+rules.checkpointFlatPx/2]);
     const safeEnd=this.finish-level.dock.safeGroundBeforeMeters*ppm;
+    const sequence=[...level.terrainSequence,...((difficulty.extraModulesByLevel as Record<string,string[]>)[level.id]??[])];
+    const free:number[][]=[];let edge=rules.startFlatPx;
+    for(const [a,b]of reserved){if(a>edge)free.push([edge,a]);edge=Math.max(edge,b);}if(edge<safeEnd)free.push([edge,safeEnd]);
+    // Backward feasibility bounds prevent a checkpoint from pushing later modules off the map.
+    const latest:number[]=[];let right=safeEnd;
+    for(let i=sequence.length-1;i>=0;i--){
+      const spec=moduleSpec(sequence[i]),length=spec.lengthPx;
+      const choices=free.map(([a,b])=>({a,x:Math.min(b-length,right-length)})).filter(c=>c.x>=c.a);
+      if(!choices.length)throw new Error(`${level.id}: terrain recipe exceeds safe layout capacity`);
+      latest[i]=Math.max(...choices.map(c=>c.x));
+      if(i>0)right=latest[i]-Math.max(recovery,moduleSpec(sequence[i-1]).minimumSafeGapAfterPx);
+    }
     let seed=level.seed;
     const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-    for(const [i,type]of level.terrainSequence.entries()){
+    for(const [i,type]of sequence.entries()){
       const spec=moduleSpec(type);const length=spec.lengthPx;
-      const spread=level.terrainSequence.length>1?i/(level.terrainSequence.length-1):0;
-      cursor=Math.max(cursor,rules.startFlatPx+(safeEnd-rules.startFlatPx-length)*spread);
-      for(const [a,b]of reserved)if(cursor<b&&cursor+length>a)cursor=b;
+      const spread=sequence.length>1?i/(sequence.length-1):0;
+      const desired=rules.startFlatPx+(safeEnd-rules.startFlatPx-length)*spread;
+      const choices=free.map(([a,b])=>({a:Math.max(a,cursor),b:Math.min(b-length,latest[i])})).filter(c=>c.a<=c.b).map(c=>Math.max(c.a,Math.min(c.b,desired)));
+      if(!choices.length)throw new Error(`${level.id}: no safe placement for ${type}`);
+      cursor=choices.sort((a,b)=>Math.abs(a-desired)-Math.abs(b-desired))[0];
       const params:Record<string,any>={};
-      for(const [key,value]of Object.entries(spec.parameters))params[key]=Array.isArray(value)?value[0]+(value[1]-value[0])*random()*.3:value;
+      for(const [key,value]of Object.entries(spec.parameters))params[key]=Array.isArray(value)?value[0]+(value[1]-value[0])*Math.min(1,difficulty.parameterFractionMin+(level.index-1)/14*difficulty.parameterLevelGrowth+random()*difficulty.parameterRandomSpan):value;
+      if(type==='gap_jump')params.gapWidthPx=(difficulty.gapWidthsPx as Record<string,number>)[level.id]??165;
       if(params.periods)params.periods=Math.round(params.periods);
       const s:Section={id:`${level.id}-${type}-${i}`,type,x:cursor,end:cursor+length,center:cursor+length/2,params,overlays:[]};
       if(type==='gap_jump'){s.gapStart=s.center-params.gapWidthPx/2;s.gapEnd=s.center+params.gapWidthPx/2;}
       if(['moving_platform','seesaw','crumbling_bridge'].includes(type)){
-        const span=type==='moving_platform'?250:type==='seesaw'?params.platformLengthPx:rules.dynamic.bridgeSpanPx;
+        const span=type==='moving_platform'?difficulty.movingPlatformGapPx:type==='seesaw'?params.platformLengthPx:rules.dynamic.bridgeSpanPx;
         s.gapStart=s.center-span/2;s.gapEnd=s.center+span/2;
       }
       for(const combo of (rules.combos as Record<string,{on:string;effect:string}[]>)[level.id]??[])if(combo.on===type)s.overlays.push(combo.effect);
@@ -57,7 +75,7 @@ export class TerrainLayout {
         const height=Math.tan(p.slopeDeg*Math.PI/180)*ramp;
         return rules.groundY-height*Math.min(1,(x-s.x)/ramp,(s.end-x)/ramp);
       }
-      case 'spring_mushroom':return rules.groundY-8*Math.sin(t*Math.PI)**2;
+      case 'spring_mushroom':return rules.groundY-difficulty.springSurfaceHeightPx*Math.sin(t*Math.PI)**2;
       default:return rules.groundY;
     }
   }
@@ -68,5 +86,5 @@ export class TerrainLayout {
     const a=Math.floor(x/rules.samplePx)*rules.samplePx;
     return this.profile(a)+(this.profile(a+rules.samplePx)-this.profile(a))*(x-a)/rules.samplePx;
   }
-  pickups(){return this.sections.map((s,i)=>({id:`${this.level.id}-p${String(i+1).padStart(2,'0')}`,x:s.end+90,value:5}));}
+  pickups(){return this.sections.map((s,i)=>({id:`${this.level.id}-p${String(i+1).padStart(2,'0')}`,x:s.end+difficulty.pickupOffsetPx,value:economy.pickupValue}));}
 }

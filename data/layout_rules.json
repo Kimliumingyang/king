@@ -63,8 +63,8 @@
     "bridgeSpanPx": 150,
     "magneticActiveMs": 1400,
     "windRestMs": 4500,
-    "windForceScale": 0.12,
-    "hoverReactionScale": 0.5,
+    "windForceScale": 0.28,
+    "hoverReactionScale": 0.65,
     "probeRangePx": 260
   }
 }

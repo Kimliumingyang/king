@@ -1,0 +1,5 @@
+{
+  "pass": true,
+  "checkedLevels": 15,
+  "reason": "Runtime gap bounds synchronized; all final generated sections exactly match the validated zero-upgrade traces."
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 2,
+  "pickupValue": 5,
+  "missions": [
+    { "id": "first_delivery", "name": "His First Delivery", "levelId": "L01", "reward": 50 },
+    { "id": "third_route", "name": "Spill-Proof Courier", "levelId": "L03", "reward": 75 },
+    { "id": "fifth_route", "name": "Royal Road Veteran", "levelId": "L05", "reward": 100 }
+  ],
+  "daily": { "levelIndex": 1, "boostScale": 0.85, "reward": 100, "minimumClaimGapHours": 18, "requiresCleanRun": true },
+  "upgradeLabels": { "engine": "Engine", "stabilizer": "Stabilizer", "grip": "Deck Grip", "battery": "Battery", "rescue_kit": "Rescue Kit" }
+}

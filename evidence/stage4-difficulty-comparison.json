@@ -1,0 +1,277 @@
+{
+  "baselineOldPolicyClears": 15,
+  "newOldPolicyClears": 11,
+  "newTacticalPolicyClears": 15,
+  "levels": [
+    {
+      "level": "L01",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.317,
+        "longestBetweenModuleFlatPx": 1070,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.317,
+        "longestBetweenModuleFlatPx": 1070,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 86.26666666666667
+    },
+    {
+      "level": "L02",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.287,
+        "longestBetweenModuleFlatPx": 995,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.287,
+        "longestBetweenModuleFlatPx": 995,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 98.55
+    },
+    {
+      "level": "L03",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.232,
+        "longestBetweenModuleFlatPx": 1290,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.326,
+        "longestBetweenModuleFlatPx": 1018,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 110.35
+    },
+    {
+      "level": "L04",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.232,
+        "longestBetweenModuleFlatPx": 1435,
+        "maxJumpGapPx": 68.3
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.293,
+        "longestBetweenModuleFlatPx": 1136,
+        "maxJumpGapPx": 165.0
+      },
+      "oldPolicyAfter": "KING_EJECTED",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 110.78333333333333
+    },
+    {
+      "level": "L05",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.194,
+        "longestBetweenModuleFlatPx": 1670,
+        "maxJumpGapPx": 67.1
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.271,
+        "longestBetweenModuleFlatPx": 1300,
+        "maxJumpGapPx": 215.0
+      },
+      "oldPolicyAfter": "KING_EJECTED",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 123.53333333333333
+    },
+    {
+      "level": "L06",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.204,
+        "longestBetweenModuleFlatPx": 1800,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.273,
+        "longestBetweenModuleFlatPx": 1314,
+        "maxJumpGapPx": 225.0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 82.08333333333333
+    },
+    {
+      "level": "L07",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.17,
+        "longestBetweenModuleFlatPx": 2105,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.219,
+        "longestBetweenModuleFlatPx": 1488,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 111.35
+    },
+    {
+      "level": "L08",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.192,
+        "longestBetweenModuleFlatPx": 2195,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.242,
+        "longestBetweenModuleFlatPx": 1572,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 108.31666666666666
+    },
+    {
+      "level": "L09",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.168,
+        "longestBetweenModuleFlatPx": 2450,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.225,
+        "longestBetweenModuleFlatPx": 1830,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 115.65
+    },
+    {
+      "level": "L10",
+      "before": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.193,
+        "longestBetweenModuleFlatPx": 1954,
+        "maxJumpGapPx": 65.5
+      },
+      "after": {
+        "moduleCount": 5,
+        "terrainCoverage": 0.232,
+        "longestBetweenModuleFlatPx": 1243,
+        "maxJumpGapPx": 235.0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 128
+    },
+    {
+      "level": "L11",
+      "before": {
+        "moduleCount": 3,
+        "terrainCoverage": 0.161,
+        "longestBetweenModuleFlatPx": 2795,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 5,
+        "terrainCoverage": 0.249,
+        "longestBetweenModuleFlatPx": 1321,
+        "maxJumpGapPx": 245.0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 129.63333333333333
+    },
+    {
+      "level": "L12",
+      "before": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.156,
+        "longestBetweenModuleFlatPx": 2262,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 6,
+        "terrainCoverage": 0.245,
+        "longestBetweenModuleFlatPx": 1112,
+        "maxJumpGapPx": 0
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 167.05
+    },
+    {
+      "level": "L13",
+      "before": {
+        "moduleCount": 4,
+        "terrainCoverage": 0.164,
+        "longestBetweenModuleFlatPx": 2410,
+        "maxJumpGapPx": 65.8
+      },
+      "after": {
+        "moduleCount": 6,
+        "terrainCoverage": 0.246,
+        "longestBetweenModuleFlatPx": 1186,
+        "maxJumpGapPx": 250
+      },
+      "oldPolicyAfter": "CLEAR",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 148.33333333333334
+    },
+    {
+      "level": "L14",
+      "before": {
+        "moduleCount": 5,
+        "terrainCoverage": 0.21,
+        "longestBetweenModuleFlatPx": 1602.5,
+        "maxJumpGapPx": 0
+      },
+      "after": {
+        "moduleCount": 8,
+        "terrainCoverage": 0.327,
+        "longestBetweenModuleFlatPx": 1021.1,
+        "maxJumpGapPx": 250
+      },
+      "oldPolicyAfter": "KING_EJECTED",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 140.03333333333333
+    },
+    {
+      "level": "L15",
+      "before": {
+        "moduleCount": 6,
+        "terrainCoverage": 0.241,
+        "longestBetweenModuleFlatPx": 1830,
+        "maxJumpGapPx": 68.5
+      },
+      "after": {
+        "moduleCount": 10,
+        "terrainCoverage": 0.382,
+        "longestBetweenModuleFlatPx": 865.6,
+        "maxJumpGapPx": 250.0
+      },
+      "oldPolicyAfter": "KING_EJECTED",
+      "newPolicyAfter": "CLEAR",
+      "newPolicySeconds": 116.58333333333333
+    }
+  ]
+}

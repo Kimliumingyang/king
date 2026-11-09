@@ -5,7 +5,9 @@
 - [x] Stage 1: build and browser physics acceptance; record evidence
 - [x] Stage 2: failure performance + once/run Royal Rescue + free checkpoint + atomic run save, 30 retries
 - [x] Stage 3: twelve terrain modules; L01–05 gate, then L06–15
-- [ ] Stage 4: economy, upgrades, reward idempotency and save integration
+- [x] Stage 4: economy, upgrades, reward idempotency and save integration
 - [ ] Stage 5: approved sprite art, animations and warned seeded events
 - [ ] Stage 6: official SDK validation and platform bridges
 - [ ] Stage 7: complete QA, real devices and platform packaging
+
+- [x] User-requested difficulty pass: denser routes, wider boost gaps, 45 ability-route validations and old-policy comparison

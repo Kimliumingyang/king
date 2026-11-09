@@ -1,61 +1,65 @@
-# Don't Drop the King! — Stage 0–3
+# Don't Drop the King! — Stage 0–4 · v0.4.0
 
-可玩的 15 关物理原型，当前完成到阶段 3：15 个配置关卡、12 种物理地形、逐关解锁、独立刚体、免费救援与检查点、本局持久化。正式角色美术、升级和 SDK 尚未制作。
+15 关物理护送游戏。当前完成金币结算、五条升级线、三星/最佳纪录、任务与每日挑战，并提高关卡密度和断崖操作要求。正式角色美术和 SDK 尚未制作。
 
 ## 在线走查
 
-https://kimliumingyang.github.io/king/play/
+https://kimliumingyang.github.io/king/play/?v=0.4.0
 
-调试模式：https://kimliumingyang.github.io/king/play/?debug=1 。第一次选择 PLAY；存在存档时选择 CONTINUE。GitHub Pages 当前从 `main` 根目录发布，`play/` 保存可玩的静态构建。源码与在线构建一起提交。
+调试：https://kimliumingyang.github.io/king/play/?debug=1&v=0.4.0 。QA 下拉框可直接看全部 15 关；正常模式逐关解锁。打开 COINS 可进入车库，开始/暂停/结算菜单可进入任务。
 
-## 启动
+## 启动与操作
 
-Node.js 22.12+（验证版本 24.22.1）。
+Node.js 22.12+（验证 24.22.1）。
 ```
 npm install
 npm run dev
 ```
-`?debug=1` 内有可跳转全部 15 关的 QA 下拉框（正常模式仍逐关解锁），并显示碰撞体、质心、双探针、接触、风险、FPS、检查点、救援次数和实时物理调参。
+A / ← 制动、倒退；D / → 推进；Space / W 悬浮增强；P / Esc 暂停；R 确认后重开。触屏用底部三键，建议横屏。页面失焦自动暂停。危险预警状态仍允许操控和持续 Boost，菜单/动画期间不接受推进。当前没有音频。
 
-A / 左箭头：制动及倒退；D / 右箭头：推进；Space / W：悬浮增强（消耗能量，仅 RUNNING 生效）；P / Esc：暂停；R：确认后重开。触屏使用底部三键，建议横屏。失焦自动暂停。当前没有音频。
+慢进波浪和险坡；断崖前蓄速、短喷，落地后再刹车；限高不要 Boost。终点须保持真实甲板接触、低速、小倾角并停稳 1.5 秒。
 
-## 失败与继续
+## 金币、升级与记录
 
-- 离开甲板后有 650ms 实际接触恢复窗口，随后短暂翻滚/皇冠飞出，进入失败菜单；可跳过演出。
-- ROYAL RESCUE — FREE：每个完整 run 一次。先持久保存已使用标记，再播放一秒磁铁回收动画；回到最近碰撞检查通过的位置，最大回退 10m。恢复后 2.5 秒轻度稳定/柔和推进，碰撞与失败判定保持正常。
-- RETRY CHECKPOINT：永远免费。激活 本关检查点后从其安全位置重建，否则从起点；速度清零。保留救援消耗、拾取 ID、run/attempt ID 和升级快照，临时金币损失 20%（向下取整）。
-- RESTART LEVEL：确认后新建 run，恢复一次救援。
-- 刷新回最近检查点；失败时刷新仍显示失败菜单；救援途中刷新保留已使用标记并安全回检查点。不能靠刷新或 checkpoint 领取额外救援。
-- 每段地形后一枚演示拾取币仅验证去重和临时扣除，不结算永久钱包、升级或星级（阶段 4）。重复路段不发里程金币。
-- 存储被禁用时有明确提示，仍可免费重试；无法写入存档时不会发放无法记录的 Royal Rescue。主存档损坏可从验证过的 staging/backup 恢复；全部损坏则需明确选择新 run。
+- 成功奖励：100 + 20×(关卡序号−1)，加本局拾取币；首次每关 +80，三星 +40。结算后一次进入永久钱包。重复刷新不会重复领取。
+- 1★ 送达；2★ 银牌时间内、救援<=1；3★ 金牌时间内、无救援/检查点重试、dangerCount<=2。最佳星级不降、最佳时间只改善，过关即解锁。
+- Engine / Stabilizer / Deck Grip / Battery 上限 4；Rescue Kit 上限 3。车库显示价格和升级前后数值，参数来自 balance.json。
+- 购买只影响下一局/完整重开；本局和检查点继续使用开局能力快照。救援包只延长缓冲，不增加免费次数。金币不够可继续免费通关赚取，不需要广告。
+- L01/L03/L05 三项固定任务各领取一次。每日挑战是 L01、Boost 弱 15%，无救援/无检查点重试可得 +100；同一当地日期不能重复领。额外 UTC 冷却保护可能推迟午夜附近的下一次每日奖励；普通游戏不受影响。
 
-没有广告、广告按钮、SDK 或联网付费依赖。主菜单、继续、失败和恢复界面使用批准配色；国王/UFO 仍是几何占位，正式角色与动作在阶段 5。
+## 免费继续与存档
 
-## 构建、测试和更新发布
+每 run 一次 ROYAL RESCUE — FREE，含一秒磁铁回收和 2.5 秒有限保护；不会关闭碰撞或清空机关。RETRY CHECKPOINT 永远免费，未激活检查点就回起点；只损失 20% 临时币，永久钱包不扣。RESTART LEVEL 确认后创建新 run、恢复一次救援。
+
+刷新保留救援消耗、检查点、拾取 ID、能力快照、钱包、解锁、星级、最佳纪录及任务领取状态。原有 2.4px/m 存档自动换算为 6px/m。旧解锁保留，不批量补发所有历史金币；当前已完成但未结算的 run 可恢复结算一次。
+
+存档使用校验过的 staging/main/backup。主副本损坏可恢复；全部永久档损坏时保留原数据并提示，不默默清空钱包。存储被禁用时免费玩法仍可用，但无法确认永久奖励/购买。没有广告或 SDK 依赖。
+
+## 构建和验证
 
 ```
 npm run build
 npm run dev -- --port 5173
-# 另一个终端
+# 另一个终端，需 Chromium
 CHROMIUM_PATH=/usr/bin/chromium npm test
+CHROMIUM_PATH=/usr/bin/chromium npm run test:economy
+CHROMIUM_PATH=/usr/bin/chromium npm run test:terrain
 CHROMIUM_PATH=/usr/bin/chromium npm run test:revive
 CHROMIUM_PATH=/usr/bin/chromium npm run test:levels
-CHROMIUM_PATH=/usr/bin/chromium npm run test:terrain
+UPGRADE_MODE=basic npm run test:levels
+UPGRADE_MODE=max npm run test:levels
+npm run test:difficulty
 ```
+`CHROMIUM_PATH` 可改为本机路径。`TEST_URL` 指向固定静态构建服务器并带 `?debug=1`，可测试生产输出。不要测试期间重建该服务器的目录。关卡三组测试中，basic 用一次人为 fixture 跌落触发救援；zero/max 不用救援。所有实际行进靠真实推进/Boost，未绑定国王或关闭碰撞。
 
-测试使用 Playwright 与 Chromium；可修改 `CHROMIUM_PATH`，`TEST_URL` 可指向生产预览服务器（必须带 `?debug=1`）。物理测试做正常输入控制；阶段 2 的 30 次重复失败通过仅 debug 模式下的 fixture 移动国王制造不同位置的跌落，后续失败/恢复走真实逻辑。不是 30 个真人完整通关或 30 个不同关卡。
+`test:difficulty` 回放旧操作策略，部分失败是对比的预期结果；新策略的 `test:levels` 才要求全部通关。详细轨迹、经济测试及调校边界见 QA_STAGE4.md 和 evidence/stage4-*.json。
 
-`dist/` 是 HTTP 静态输出，不能直接用 file://。Vite 使用相对资源路径，关闭 publicDir，避免发布本地源码 ZIP。发布时把当前 dist 内容替换到 `play/` 并推送 main；独立 `gh-pages` 分支是旧版构建备份，不是当前 Pages 源。
+`dist/` 是 HTTP 静态输出；发布时将其内容同步到 `play/` 后推送 main。GitHub Pages 使用 main 根目录，`gh-pages` 是旧构建备份。请勿 file:// 直接双击。资源使用相对路径，没有打包本地源码 ZIP。
 
-## 范围、证据和资源
+## 当前难度与后续
 
-Phaser 3 + bundled Matter.js + TypeScript + Vite，固定 60Hz 物理。全部 15 关按原配方实例化，十二种地形及后期组合实际参与物理。正式规格原样保存在 design-spec/；运行配置在 data/。prototype_stage2.json 保留动画/自动保存时间；拾取币由每关地形生成，layout_rules.json 声明安全区域和组合。
+本次增加后期模块与组合，扩大波浪/坡度取值，断崖从原先不足船长扩大到 165–250px。L15 从 6 段增至 10 段，最长模块间平路由 1830px 缩短为约 866px。仍保留安全检查点与恢复段，15 关都有零升级通关记录。正式 UI/角色制作之前先验证这些操作深度，再以玩家走查继续调手感。
 
-见 IMPLEMENTATION_PLAN.md、TASKS.md、QA_REPORT.md、QA_STAGE2.md、QA_STAGE3.md、evidence/stage3-level-results.json、evidence/stage3-terrain-qa.json、evidence/results.json 和 evidence/stage2-results.json。已执行的自动化与截图检查不代替真实手机或人工手感验收。本阶段关卡时长来自脚本通关，不等于首次玩家数据，尚未声称达到发行标准。
+Phaser 3 + Matter.js + TypeScript + Vite，固定 60Hz。原始策划案在 design-spec/，运行配置在 data/。几何图形为原创占位并使用批准配色；参考整图未作为游戏背景。没有外部字体/音乐/美术。依赖许可见各依赖包；用户规格与参考图的保存不推定对外商用授权。
 
-几何图形为原创占位，采用批准配色；参考整图从未作为游戏贴图。没有第三方美术/字体/音乐。依赖许可见各依赖包。用户提供的策划图文仅随项目保存，不推定获得对外商用授权。
-
-## 当前走查建议
-正常模式从 L01 开始，停稳后点击 NEXT LEVEL；CHOOSE LEVEL 可重玩已解锁路线。检查动态机关可用调试链接的 QA 下拉框。L01–L05 先学缓坡、下陷、波浪、弹力、短断崖与限高；L06–L15 加入破桥、跷跷板、移动平台、磁力、风区及组合。危险前先减速，破桥连续通过，断崖短喷，洞口不 Boost。
-
-尺度从 2.4 调为 6px/m 后首关为 3000px；旧存档自动换算位置并保留已用救援。具体调校及验证边界见 QA_STAGE3.md。
+真实手机、真人首轮难度和完整发行审核尚未验证。下一阶段按批准参考制作角色、分件美术、动作与预警事件；经济/难度本阶段已完成，SDK 后续接入。

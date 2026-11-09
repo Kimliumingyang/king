@@ -1,4 +1,4 @@
-> Historical stage 0–1 report. Stage 2 history is in QA_STAGE2.md; current stage 3 acceptance is in QA_STAGE3.md.
+> Historical stage 0–1 report. Stage 2 history is in QA_STAGE2.md; stage 3 history is in QA_STAGE3.md; current stage 4 acceptance is in QA_STAGE4.md.
 
 # QA report — stages 0 and 1
 

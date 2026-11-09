@@ -1,27 +1,33 @@
 import {Simulation,cfg,level,activateLevel} from './physics';
 import {allLevels,AVAILABLE_LEVELS} from './terrain';
-import {LevelProgress} from './progress';
+import {LevelProgress,localDay,economyRules,zeroUpgrades} from './progress';
+import {GameSaveService} from './game-save';
 import {RunStore,newRun,type RunState} from './save';
 import stage2 from '../data/prototype_stage2.json';
 export class Session {
-  progress=new LevelProgress();
+  progress:LevelProgress;saves:GameSaveService;memoryUnlocked=1;
   sim:Simulation; run:RunState; rescueMs=0; rescueFrom={x:0,y:0}; restored=false;
   private autosave=0; private previousDanger=false;
   constructor(public store=new RunStore()){
-    const saved=store.load();this.run=saved??newRun();this.restored=!!saved;activateLevel(this.run.levelId);
+    this.saves=new GameSaveService(store);this.progress=this.saves.profile;this.memoryUnlocked=this.progress.data.highestUnlockedLevel;
+    const saved=store.load();this.run=saved??newRun(this.progress.data.upgradeLevels);this.restored=!!saved;activateLevel(this.run.levelId);
     this.sim=this.atCheckpoint();
     if(saved?.status==='failed'){this.sim.state='FAIL_MENU';this.sim.failureX=saved.failureX;}
-    else if(saved?.status==='complete'){this.sim.state='CLEAR';this.progress.complete(this.run.levelId);}
+    else if(saved?.status==='complete'){this.sim.state='CLEAR';this.settle();}
     else if(saved?.status==='rescuing'){this.run.status='active';this.sim.protectionMs=cfg.revive.freeRescueInvulnerableMs;}
     if(!store.error)store.save(this.run);
   }
-  private atCheckpoint(){const s=new Simulation();s.spawnAt(this.run.checkpointId?level.checkpointsMeters[this.run.checkpointId-1]*cfg.pixelsPerMeter:0);s.elapsed=this.run.elapsedMs;return s;}
+  private atCheckpoint(){const s=new Simulation(level,this.run.runUpgradeSnapshot as ReturnType<typeof zeroUpgrades>,this.run.dailyChallengeDate?economyRules.daily.boostScale:1);s.spawnAt(this.run.checkpointId?level.checkpointsMeters[this.run.checkpointId-1]*cfg.pixelsPerMeter:0);s.elapsed=this.run.elapsedMs;return s;}
   save(allowNewRun=false){this.run.elapsedMs=this.sim.elapsed;return this.store.save(this.run,allowNewRun);}
-  restart(){this.store.needsReset=false;this.run=newRun();this.sim=this.atCheckpoint();this.rescueMs=0;this.previousDanger=false;this.save(true);}
+  restart(){this.store.needsReset=false;this.run=newRun(this.progress.data.upgradeLevels,this.run.dailyChallengeDate);this.sim=this.atCheckpoint();this.rescueMs=0;this.previousDanger=false;this.save(true);}
   startLevel(index:number,qa=false){
-    if(index<1||index>AVAILABLE_LEVELS||(!qa&&index>this.progress.data.highestUnlockedLevel))return false;
-    activateLevel(allLevels[index-1].id);this.restart();return true;
+    if(index<1||index>AVAILABLE_LEVELS||(!qa&&index>Math.max(this.memoryUnlocked,this.progress.data.highestUnlockedLevel)))return false;
+    activateLevel(allLevels[index-1].id);this.run.dailyChallengeDate=undefined;this.restart();return true;
   }
+  settle(){
+    const receipt=this.progress.settle(this.run);this.memoryUnlocked=Math.max(this.memoryUnlocked,Math.min(15,level.index+1));return receipt;
+  }
+  startDaily(){if(!this.startLevel(economyRules.daily.levelIndex))return false;this.run.dailyChallengeDate=localDay();this.sim=this.atCheckpoint();this.save();return true;}
   retry(){
     if(this.sim.state!=='FAIL_MENU')return false;
     this.run.retries++;this.run.runCoins=Math.max(0,Math.floor(this.run.runCoins*(1-cfg.revive.checkpointCoinLossFraction)));
@@ -60,6 +66,6 @@ export class Session {
     if(this.sim.state==='KING_EJECTED'&&was!=='KING_EJECTED'){
       this.run.status='failed';this.run.failureX=this.sim.failureX;this.run.elapsedMs=this.sim.elapsed;this.save();
     }
-    if(this.sim.state==='CLEAR'&&was!=='CLEAR'){this.run.status='complete';this.save();this.progress.complete(this.run.levelId);}
+    if(this.sim.state==='CLEAR'&&was!=='CLEAR'){this.run.status='complete';this.save();this.settle();}
   }
 }

@@ -1,0 +1,199 @@
+[
+  {
+    "name": "first clear atomically pays base + pickup + first + three-star bonuses",
+    "pass": true,
+    "receipt": {
+      "runId": "e646f835-327c-456f-b2f9-eaa2bee0389c",
+      "levelId": "L01",
+      "stars": 3,
+      "seconds": 71.50000000000044,
+      "coins": 235,
+      "base": 100,
+      "pickups": 15,
+      "firstClear": 80,
+      "threeStar": 40,
+      "daily": 0
+    }
+  },
+  {
+    "name": "refresh and repeated settlement callbacks pay one receipt only",
+    "pass": true
+  },
+  {
+    "name": "real garage button charges correct price; no mid-run physics change; insufficient funds refused",
+    "pass": true,
+    "wallet": 115,
+    "level": 1,
+    "snapshot": 0,
+    "force": 0.0035,
+    "denied": false
+  },
+  {
+    "name": "full restart takes new immutable upgrade snapshot",
+    "pass": true,
+    "snapshot": 1,
+    "force": 0.0036750000000000003
+  },
+  {
+    "name": "repeat run pays normal delivery only; worse stars/time never overwrite records",
+    "pass": true
+  },
+  {
+    "name": "fixed mission claim is once-only and locked goals pay nothing",
+    "pass": true
+  },
+  {
+    "name": "star rules account for time, rescues, checkpoint retries and near misses",
+    "pass": true,
+    "criteria": [
+      3,
+      2,
+      2,
+      2,
+      1
+    ]
+  },
+  {
+    "name": "all five upgrade lines use exponential prices and enforce caps",
+    "pass": true,
+    "caps": [
+      {
+        "id": "engine",
+        "prices": [
+          120,
+          200,
+          330,
+          540
+        ],
+        "extra": false,
+        "unchanged": true,
+        "level": 4
+      },
+      {
+        "id": "stabilizer",
+        "prices": [
+          150,
+          250,
+          410,
+          670
+        ],
+        "extra": false,
+        "unchanged": true,
+        "level": 4
+      },
+      {
+        "id": "grip",
+        "prices": [
+          180,
+          300,
+          490,
+          810
+        ],
+        "extra": false,
+        "unchanged": true,
+        "level": 4
+      },
+      {
+        "id": "battery",
+        "prices": [
+          200,
+          330,
+          540,
+          900
+        ],
+        "extra": false,
+        "unchanged": true,
+        "level": 4
+      },
+      {
+        "id": "rescue_kit",
+        "prices": [
+          250,
+          410,
+          680
+        ],
+        "extra": false,
+        "unchanged": true,
+        "level": 3
+      }
+    ]
+  },
+  {
+    "name": "daily reward once per local day; backward clock and rapid timezone advance do not pay",
+    "pass": true,
+    "bonuses": [
+      100,
+      0,
+      0,
+      0,
+      100
+    ],
+    "date": "2026-11-10"
+  },
+  {
+    "name": "START DAILY applies its actual weaker Boost and retains free rescue",
+    "pass": true,
+    "date": "2026-11-09",
+    "scale": 0.85,
+    "height": 52.699999999999996,
+    "free": false
+  },
+  {
+    "name": "all upgrade effects apply to actual physics; max rescue kit still grants only one rescue",
+    "pass": true,
+    "force": 0.0042,
+    "stability": 0.002244,
+    "friction": 0.558,
+    "battery": 3.8079999999999994,
+    "grace": 1550,
+    "first": true,
+    "extra": false,
+    "independent": true
+  },
+  {
+    "name": "unified Local/Memory save service and Mock port reject old cloud snapshots",
+    "pass": true,
+    "changed": false,
+    "before": 200,
+    "after": 200,
+    "imported": true,
+    "wallet": 977,
+    "failed": false
+  },
+  {
+    "name": "corrupted profile primary restores wallet, upgrades and receipts from backup",
+    "pass": true
+  },
+  {
+    "name": "interrupted purchase recovers once; stale displayed price cannot charge a second tier",
+    "pass": true,
+    "before": 1000,
+    "first": false,
+    "retry": false,
+    "wallet": 880,
+    "level": 1
+  },
+  {
+    "name": "storage refusal cannot debit wallet or promise an unrecorded payout",
+    "pass": true
+  },
+  {
+    "name": "all profile copies damaged: no silent wallet reset or purchase",
+    "pass": true
+  },
+  {
+    "name": "stage 3 unlocks migrate without inventing historical coin payments",
+    "pass": true,
+    "highest": 4,
+    "wallet": 0,
+    "levels": [
+      "L01",
+      "L03"
+    ]
+  },
+  {
+    "name": "economy UI has no browser runtime errors",
+    "pass": true,
+    "errors": []
+  }
+]

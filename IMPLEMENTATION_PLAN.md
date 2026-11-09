@@ -21,3 +21,6 @@ Implemented failure/rescue/checkpoint loop and validated recovery saves. See QA_
 
 ## Stage 3 delivery gate
 L01–L05 passed before L06–L15 extension. All twelve physical modules and fifteen deterministic layouts now implemented; all routes have recorded zero-upgrade/no-rescue completion traces. See QA_STAGE3.md for scale/clearance tuning, migration, checks and remaining device limitations. Stage 4 economy remains pending.
+
+## Stage 4 delivery gate
+Completed receipt-based economy, five upgrade lines, stars/records, three fixed missions, daily challenge, immutable run snapshots, Local/Memory/Mock save ports and legacy migration. User additionally requested higher difficulty before final art: curated denser modules, wider gaps, stronger warned surfaces/fields, safe recovery retained. 15 routes validated in zero/basic+one-rescue/max configurations. See QA_STAGE4.md. Stage 5 art remains pending.
