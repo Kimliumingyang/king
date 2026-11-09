@@ -1,3 +1,5 @@
+> Historical stage 0–1 report. Current stage 2 changes and acceptance are recorded in QA_STAGE2.md.
+
 # QA report — stages 0 and 1
 
 Date: 2026-11-09 (Pacific/Auckland). Environment: Linux, Node 24.22.1, headless system Chromium via Playwright, 1280×720 and emulated 844×390 viewport. No physical phone or human full-run testing. Evidence: evidence/results.json plus screenshots. Stage 0 review complete before implementation. Stage 1 scripted acceptance passes; manual gameplay feel approval remains open. Later stage features deliberately not accepted.

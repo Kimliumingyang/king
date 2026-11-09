@@ -1,0 +1,10 @@
+{
+  "failureAnimationMs": 1200,
+  "rescueAnimationMs": 1000,
+  "autosaveMs": 1000,
+  "pickups": [
+    { "id": "L01-p01", "x": 280, "value": 5 },
+    { "id": "L01-p02", "x": 650, "value": 5 },
+    { "id": "L01-p03", "x": 1000, "value": 5 }
+  ]
+}
