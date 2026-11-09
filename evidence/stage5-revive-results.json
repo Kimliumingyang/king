@@ -1,0 +1,311 @@
+[
+  {
+    "name": "first launch / real PLAY button",
+    "pass": true
+  },
+  {
+    "name": "actual input traversal activates and saves 240m checkpoint",
+    "pass": true,
+    "checkpoint": 1
+  },
+  {
+    "name": "departure starts real grace window",
+    "pass": true
+  },
+  {
+    "name": "1.2s ejection / economy, distance and gameplay time frozen",
+    "pass": true
+  },
+  {
+    "name": "one free rescue / zero velocities / collision-safe spawn / magnet animation",
+    "pass": true
+  },
+  {
+    "name": "refresh during rescue cannot restore ticket / 2.5s protection with collisions",
+    "pass": true,
+    "protection": {
+      "ms": 1466.666666666668,
+      "contact": 2,
+      "overlaps": 0,
+      "mask": 4294967295
+    }
+  },
+  {
+    "name": "30 failures/retries, no overlap or soft-lock; rescue stays used; no duplicate pickups",
+    "pass": true,
+    "cycles": [
+      {
+        "cycle": 1,
+        "deathX": 0,
+        "checkpointX": 1440,
+        "retries": 1,
+        "runCoins": 4
+      },
+      {
+        "cycle": 2,
+        "deathX": 370,
+        "checkpointX": 1440,
+        "retries": 2,
+        "runCoins": 3
+      },
+      {
+        "cycle": 3,
+        "deathX": 640,
+        "checkpointX": 1440,
+        "retries": 3,
+        "runCoins": 2
+      },
+      {
+        "cycle": 4,
+        "deathX": 1440,
+        "checkpointX": 1440,
+        "retries": 4,
+        "runCoins": 1
+      },
+      {
+        "cycle": 5,
+        "deathX": 1745,
+        "checkpointX": 1440,
+        "retries": 5,
+        "runCoins": 0
+      },
+      {
+        "cycle": 6,
+        "deathX": 1870,
+        "checkpointX": 1440,
+        "retries": 6,
+        "runCoins": 0
+      },
+      {
+        "cycle": 7,
+        "deathX": 2560,
+        "checkpointX": 1440,
+        "retries": 7,
+        "runCoins": 0
+      },
+      {
+        "cycle": 8,
+        "deathX": 2880,
+        "checkpointX": 1440,
+        "retries": 8,
+        "runCoins": 0
+      },
+      {
+        "cycle": 9,
+        "deathX": 0,
+        "checkpointX": 1440,
+        "retries": 9,
+        "runCoins": 0
+      },
+      {
+        "cycle": 10,
+        "deathX": 370,
+        "checkpointX": 1440,
+        "retries": 10,
+        "runCoins": 0
+      },
+      {
+        "cycle": 11,
+        "deathX": 640,
+        "checkpointX": 1440,
+        "retries": 11,
+        "runCoins": 0
+      },
+      {
+        "cycle": 12,
+        "deathX": 1440,
+        "checkpointX": 1440,
+        "retries": 12,
+        "runCoins": 0
+      },
+      {
+        "cycle": 13,
+        "deathX": 1745,
+        "checkpointX": 1440,
+        "retries": 13,
+        "runCoins": 0
+      },
+      {
+        "cycle": 14,
+        "deathX": 1870,
+        "checkpointX": 1440,
+        "retries": 14,
+        "runCoins": 0
+      },
+      {
+        "cycle": 15,
+        "deathX": 2560,
+        "checkpointX": 1440,
+        "retries": 15,
+        "runCoins": 0
+      },
+      {
+        "cycle": 16,
+        "deathX": 2880,
+        "checkpointX": 1440,
+        "retries": 16,
+        "runCoins": 0
+      },
+      {
+        "cycle": 17,
+        "deathX": 0,
+        "checkpointX": 1440,
+        "retries": 17,
+        "runCoins": 0
+      },
+      {
+        "cycle": 18,
+        "deathX": 370,
+        "checkpointX": 1440,
+        "retries": 18,
+        "runCoins": 0
+      },
+      {
+        "cycle": 19,
+        "deathX": 640,
+        "checkpointX": 1440,
+        "retries": 19,
+        "runCoins": 0
+      },
+      {
+        "cycle": 20,
+        "deathX": 1440,
+        "checkpointX": 1440,
+        "retries": 20,
+        "runCoins": 0
+      },
+      {
+        "cycle": 21,
+        "deathX": 1745,
+        "checkpointX": 1440,
+        "retries": 21,
+        "runCoins": 0
+      },
+      {
+        "cycle": 22,
+        "deathX": 1870,
+        "checkpointX": 1440,
+        "retries": 22,
+        "runCoins": 0
+      },
+      {
+        "cycle": 23,
+        "deathX": 2560,
+        "checkpointX": 1440,
+        "retries": 23,
+        "runCoins": 0
+      },
+      {
+        "cycle": 24,
+        "deathX": 2880,
+        "checkpointX": 1440,
+        "retries": 24,
+        "runCoins": 0
+      },
+      {
+        "cycle": 25,
+        "deathX": 0,
+        "checkpointX": 1440,
+        "retries": 25,
+        "runCoins": 0
+      },
+      {
+        "cycle": 26,
+        "deathX": 370,
+        "checkpointX": 1440,
+        "retries": 26,
+        "runCoins": 0
+      },
+      {
+        "cycle": 27,
+        "deathX": 640,
+        "checkpointX": 1440,
+        "retries": 27,
+        "runCoins": 0
+      },
+      {
+        "cycle": 28,
+        "deathX": 1440,
+        "checkpointX": 1440,
+        "retries": 28,
+        "runCoins": 0
+      },
+      {
+        "cycle": 29,
+        "deathX": 1745,
+        "checkpointX": 1440,
+        "retries": 29,
+        "runCoins": 0
+      },
+      {
+        "cycle": 30,
+        "deathX": 1870,
+        "checkpointX": 1440,
+        "retries": 30,
+        "runCoins": 0
+      }
+    ]
+  },
+  {
+    "name": "30 retries survive refresh",
+    "pass": true
+  },
+  {
+    "name": "damaged primary restores valid backup without refunding rescue",
+    "pass": true
+  },
+  {
+    "name": "interrupted atomic write recovers latest staging",
+    "pass": true
+  },
+  {
+    "name": "failed run reload stays on fail menu / free retry always visible",
+    "pass": true
+  },
+  {
+    "name": "failure buttons visible in 844x390 landscape",
+    "pass": true
+  },
+  {
+    "name": "confirmed full restart makes new run and restores one ticket",
+    "pass": true
+  },
+  {
+    "name": "storage failure: no uncommitted rescue / checkpoint remains playable",
+    "pass": true
+  },
+  {
+    "name": "full one-second rescue freezes gameplay; protection expires after 2.5s",
+    "pass": true,
+    "normalRescue": {
+      "state": "RUNNING",
+      "protection": 2500,
+      "x": 850,
+      "energy": 1,
+      "after": "RUNNING",
+      "protectionEnd": 0,
+      "contact": 2
+    }
+  },
+  {
+    "name": "30s blur pause freezes physics/time, resume without a giant timestep",
+    "pass": true
+  },
+  {
+    "name": "all save copies corrupt: explicit reset, no silent overwrite",
+    "pass": true
+  },
+  {
+    "name": "stale tab cannot overwrite a newly restarted run",
+    "pass": true
+  },
+  {
+    "name": "storage access denied at boot still allows free gameplay",
+    "pass": true
+  },
+  {
+    "name": "no runtime exceptions",
+    "pass": true,
+    "errors": []
+  }
+]

@@ -11,3 +11,12 @@
 - [ ] Stage 7: complete QA, real devices and platform packaging
 
 - [x] User-requested difficulty pass: denser routes, wider boost gaps, 45 ability-route validations and old-policy comparison
+
+## Stage 5 · first-level art and UI review preview
+- [x] Original replaceable SVG King, separate crown, two soldiers, UFO, throne and mushroom scenery.
+- [x] Shared HUD and home/routes/pause/failure/results/garage/missions visual pass.
+- [x] Isolated memory-save UI review navigation; keyboard modal focus and correct home Back flow.
+- [x] ART_HANDOFF.md and UI_REVIEW.md for artist review.
+- [ ] User/artist approval of the visual sample and replacement art.
+- [ ] Six king_events warnings/events and complete animation atlas (outside this preview).
+- [ ] Final per-world art and remaining stage 5 acceptance.

@@ -63,3 +63,7 @@ npm run test:difficulty
 Phaser 3 + Matter.js + TypeScript + Vite，固定 60Hz。原始策划案在 design-spec/，运行配置在 data/。几何图形为原创占位并使用批准配色；参考整图未作为游戏背景。没有外部字体/音乐/美术。依赖许可见各依赖包；用户规格与参考图的保存不推定对外商用授权。
 
 真实手机、真人首轮难度和完整发行审核尚未验证。下一阶段按批准参考制作角色、分件美术、动作与预警事件；经济/难度本阶段已完成，SDK 后续接入。
+
+### v0.5.0 · First-level art / UI preview
+
+[UI walkthrough](https://kimliumingyang.github.io/king/play/?review=1&v=0.5.0) provides eight screen shortcuts with temporary memory saves. [Normal play](https://kimliumingyang.github.io/king/play/?v=0.5.0) retains the existing local save. Physics and difficulty are unchanged from v0.4.0. See [ART_HANDOFF.md](ART_HANDOFF.md), [UI_REVIEW.md](UI_REVIEW.md) and [QA_STAGE5_PREVIEW.md](QA_STAGE5_PREVIEW.md). This is the first portion of stage 5, not completion of all art/events. SVG source assets are editable under src/assets/. `npm run test:ui` checks desktop, landscape, portrait, navigation, rescue and save isolation.

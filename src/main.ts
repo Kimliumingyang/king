@@ -9,12 +9,15 @@ import {MemorySaveBackend} from './storage';
 import {RunStore} from './save';
 import {GameSaveService} from './game-save';
 import './style.css';
+import {art,RoyalArt} from './art';
 const debug=new URLSearchParams(location.search).has('debug');
+const review=new URLSearchParams(location.search).has('review');
+document.body.classList.toggle('reviewing',review);
 const bridge=new MockBridge();await bridge.init();
 const root=document.getElementById('game')!;
 root.innerHTML=`
 <header>
-  <div class="brand">Don't Drop<br><b>the King!</b><small>ROYAL COURIER · STAGE 04</small></div>
+  <div class="brand">Don't Drop<br><b>the King!</b><small>ROYAL DELIVERY SERVICE</small></div>
   <div class="level">LEVEL 01<small>His First Ride</small></div>
   <div class="route"><span>◉</span><progress id="progress" max="500" value="0"></progress><span>♛</span></div>
   <div id="distance">0 / 500m</div>
@@ -35,18 +38,18 @@ root.innerHTML=`
 <div id="modal" hidden><div class="panel" role="dialog" aria-modal="true" aria-labelledby="title"><div class="royal-mark">♛</div><small id="eyebrow">ROYAL DELIVERY SERVICE · LEVEL 01</small><h1 id="title"></h1><p id="message"></p><div id="summary" hidden></div><div id="actions"></div><small id="menu-note"></small></div></div>
 ${debug?'<aside id="debug"><b>LIVE PHYSICS LAB</b><pre id="readout"></pre><div id="sliders"></div></aside>':''}`;
 const el=(id:string)=>document.getElementById(id)!;
-const session=new Session();let sim=session.sim,paused=true,acc=0,toastMs=0;
+const session=new Session(review?new RunStore(new MemorySaveBackend()):undefined);let sim=session.sim,paused=true,acc=0,toastMs=0,launched=false;
 const held={left:false,right:false,boost:false};
 function clearInput(){held.left=held.right=held.boost=false;document.querySelectorAll('.pressed').forEach(x=>x.classList.remove('pressed'));}
 function canDrive(){return !paused&&['RUNNING','DANGER','DOCKING'].includes(sim.state);}
-function closeMenu(){paused=false;acc=0;clearInput();el('modal').hidden=true;bridge.gameplayStart();}
+function closeMenu(){launched=true;(document.activeElement as HTMLElement)?.blur();paused=false;acc=0;clearInput();el('modal').hidden=true;bridge.gameplayStart();}
 function modal(title:string,message:string,buttons:[string,()=>void][],note=''){
   el('modal').className='';
   el('eyebrow').textContent=`ROYAL DELIVERY SERVICE · LEVEL ${String(level.index).padStart(2,'0')}`;
   paused=true;acc=0;clearInput();bridge.gameplayStop();el('title').textContent=title;el('message').textContent=message;
   el('summary').hidden=true;el('menu-note').textContent=note;el('actions').replaceChildren();
   for(const [label,action]of buttons){const b=document.createElement('button');b.textContent=label;b.onclick=action;el('actions').append(b);}
-  el('modal').hidden=false;
+  el('modal').hidden=false;requestAnimationFrame(()=>el('actions').querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus({preventScroll:true}));
 }
 function reset(){session.restart();sim=session.sim;closeMenu();}
 function failMenu(){
@@ -62,7 +65,7 @@ function failMenu(){
 }
 function openLevel(index:number){if(session.startLevel(index)){sim=session.sim;closeMenu();}}
 function levelMenu(){
-  modal('ROYAL ROUTES',session.progress.error||'Finish a delivery to unlock the next route.',[['BACK',()=>{if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else closeMenu();}]],'NO UPGRADES OR ADS REQUIRED');
+  modal('ROYAL ROUTES',session.progress.error||'Finish a delivery to unlock the next route.',[['BACK',()=>{if(!launched)startMenu();else if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else closeMenu();}]],'NO UPGRADES OR ADS REQUIRED');
   const grid=document.createElement('div');grid.id='level-grid';
   for(const route of allLevels){
     const b=document.createElement('button');b.textContent=`${String(route.index).padStart(2,'0')} · ${route.name} ${"★".repeat(session.progress.data.bestStars[route.id]??0)}`;
@@ -83,7 +86,7 @@ function clearMenu(){
   el('summary').hidden=false;
   el('summary').innerHTML=receipt?`<div class="reward-stars">${'★'.repeat(receipt.stars)}${'☆'.repeat(3-receipt.stars)}</div><div class="reward-total">+${receipt.coins} COINS</div><div class="reward-details">Delivery ${receipt.base} · Pickups ${receipt.pickups} · First clear ${receipt.firstClear}<br>Three stars ${receipt.threeStar} · Daily ${receipt.daily}<br>${receipt.seconds.toFixed(1)}s · BEST ${session.progress.data.bestTimes[level.id].toFixed(1)}s</div>`:'Reward pending — free play remains available. Retry saving before leaving to keep this reward.';
 }
-function backToRunMenu(){if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else modal('A ROYAL BREATHER','Your run is paused.',[['RESUME',closeMenu],['GARAGE',garageMenu],['MISSIONS',missionsMenu],['RESTART LEVEL',confirmRestart]]);}
+function backToRunMenu(){if(!launched){startMenu();return;}if(sim.state==='FAIL_MENU')failMenu();else if(sim.state==='CLEAR')clearMenu();else modal('A ROYAL BREATHER','Your run is paused.',[['RESUME',closeMenu],['GARAGE',garageMenu],['MISSIONS',missionsMenu],['RESTART LEVEL',confirmRestart]]);}
 function garageMenu(){
   modal('THE ROYAL GARAGE',session.progress.error||`Wallet: ${session.progress.data.coinsWallet} coins. Upgrades apply to the next run or full restart. Checkpoint retries keep the current setup.`,[['BACK',backToRunMenu]],'NO ADS REQUIRED · UPGRADES NEVER GLUE THE KING DOWN');
   el('modal').className='garage-mode';
@@ -125,11 +128,12 @@ function toast(text:string){el('toast').textContent=text;toastMs=2200;}
 el('garage').onclick=garageMenu;el('levels').onclick=levelMenu;el('pause').onclick=pause;el('restart').onclick=confirmRestart;
 el('skip').onclick=()=>{if(sim.state==='KING_EJECTED'){sim.state='FAIL_MENU';failMenu();}};
 const mapping:Record<string,keyof typeof held>={KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right',Space:'boost',KeyW:'boost'};
-window.addEventListener('keydown',e=>{if(mapping[e.code]){e.preventDefault();if(canDrive())held[mapping[e.code]]=true;}if(!e.repeat){if(e.code==='KeyP'||e.code==='Escape')pause();if(e.code==='KeyR')confirmRestart();}});
+window.addEventListener('keydown',e=>{if(!el('modal').hidden){if(e.code==='Escape'){if(el('title').textContent==='A ROYAL BREATHER')closeMenu();else if(el('title').textContent==='RESTART THIS RIDE?')Array.from(el('actions').querySelectorAll('button')).find(b=>b.textContent==='CANCEL')?.click();}if(e.code==='Tab'){const buttons=Array.from(el('modal').querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));const first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}return;}if(mapping[e.code]){e.preventDefault();if(canDrive())held[mapping[e.code]]=true;}if(!e.repeat){if(e.code==='KeyP'||e.code==='Escape')pause();if(e.code==='KeyR')confirmRestart();}});
 window.addEventListener('keyup',e=>{if(mapping[e.code])held[mapping[e.code]]=false;});
 window.addEventListener('blur',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 window.addEventListener('pagehide',()=>session.save());
 window.addEventListener('storage',event=>{
+ if(review)return;
  if(event.key==='ddtk-profile-v2'){if(session.progress.refresh()){if(el('title').textContent==='THE ROYAL GARAGE')garageMenu();else if(el('title').textContent==='ROYAL ASSIGNMENTS')missionsMenu();}return;}
  if(event.key==='ddtk-stage2-run-v1'){
   try{const incoming=JSON.parse(event.newValue??'null');if(incoming&&incoming.revision<=session.run.revision)return;}catch{/* Invalid external writes still pause safely. */}
@@ -144,11 +148,15 @@ document.querySelectorAll<HTMLButtonElement>('[data-key]').forEach(b=>{
 if(session.store.error){modal('A NOTE FROM THE ROYAL ARCHIVE',session.store.error,[['START NEW RUN',reset]],'CHECKPOINT RETRIES ARE ALWAYS FREE');}
 else if(sim.state==='FAIL_MENU')failMenu();
 else if(sim.state==='CLEAR')clearMenu();
-else modal(session.restored?'WELCOME BACK, CAPTAIN.':'HIS MAJESTY NEEDS A RIDE.',session.restored?`Saved run restored at ${session.run.checkpointId?`checkpoint ${level.checkpointsMeters[session.run.checkpointId-1]}m`:'the start'}. ${session.run.freeRescueUsed?'Royal Rescue already used.':'One free Royal Rescue available.'}`:'Keep the king aboard. Ease over the hills, boost when needed, and stop at the throne.',[[session.restored?'CONTINUE':'PLAY',closeMenu],['CHOOSE LEVEL',levelMenu],['GARAGE',garageMenu],['MISSIONS / DAILY',missionsMenu]],'A / D TO MOVE · SPACE TO BOOST · CHECKPOINTS ARE FREE');
+else startMenu();
+function startMenu(){modal(session.restored?'WELCOME BACK, CAPTAIN.':'HIS MAJESTY NEEDS A RIDE.',session.restored?`Saved run restored at ${session.run.checkpointId?`checkpoint ${level.checkpointsMeters[session.run.checkpointId-1]}m`:'the start'}. ${session.run.freeRescueUsed?'Royal Rescue already used.':'One free Royal Rescue available.'}`:'Keep the king aboard. Ease over the hills, boost when needed, and stop at the throne.',[[session.restored?'CONTINUE':'PLAY',closeMenu],['CHOOSE LEVEL',levelMenu],['GARAGE',garageMenu],['MISSIONS / DAILY',missionsMenu]],'A / D TO MOVE · SPACE TO BOOST · CHECKPOINTS ARE FREE');}
+
 if(debug){const fields:[string,any,string,number,number,number][]=[['King friction',cfg.physics.king,'friction',0,1,.01],['King mass',cfg.physics.king,'mass',1,6,.1],['Gravity',cfg.physics,'gravityY',.5,2,.05],['Hover spring',cfg.physics.ufo,'hoverSpring',.0001,.0015,.00005],['Drive force',cfg.physics.ufo,'horizontalForce',.0005,.026,.0005]];for(const [label,obj,key,min,max,step]of fields){const l=document.createElement('label');l.textContent=label;const i=document.createElement('input');i.type='range';i.min=String(min);i.max=String(max);i.step=String(step);i.value=String(obj[key]);i.oninput=()=>{obj[key]=Number(i.value);sim.refreshTuning();sim.engine.gravity.y=cfg.physics.gravityY;sim.king.friction=cfg.physics.king.friction;((Phaser.Physics.Matter as any).Matter as any).Body.setMass(sim.king,cfg.physics.king.mass);};l.append(i);el('sliders').append(l);}}
 class Game extends Phaser.Scene {
- g!:Phaser.GameObjects.Graphics; cameraX=-350;
- create(){this.g=this.add.graphics();}
+ g!:Phaser.GameObjects.Graphics; cameraX=-350; royal!:RoyalArt;
+ preload(){for(const [key,url] of Object.entries(art))this.load.svg(key,url,{scale:2});}
+ create(){this.g=this.add.graphics();this.royal=new RoyalArt(this);for(let i=-1;i<16;i++)this.add.image(i*380+70,450,'mushroom').setDisplaySize(150+(i%3)*40,200+(i%3)*50).setAlpha(.4).setScrollFactor(.35).setDepth(-1);}
+
  update(_t:number,delta:number){
   if(!paused){
     acc+=Math.min(delta,50);
@@ -163,14 +171,20 @@ class Game extends Phaser.Scene {
   const x=sim.ufo.position.x;this.cameraX=Phaser.Math.Clamp(x-440,start-210,finish-700);this.cameras.main.scrollX=this.cameraX;
   this.cameras.main.setBackgroundColor(level.world==='moonlit_citadel'?'#65738f':level.world==='wobbly_wastes'?'#a297a5':'#8796ad');
   const g=this.g;g.clear();
-  // Independent vector greybox shapes, no reference image texture.
+  // Original layered scenery; no collision geometry or reference image texture.
+  g.fillStyle(0xc0c4d6,.55);g.fillCircle(this.cameraX+1050,205,62);g.lineStyle(10,0xc8c9d9,.5);g.strokeEllipse(this.cameraX+1050,205,180,43);
+  g.fillStyle(0xe9d7c5,.72);for(let i=0;i<5;i++){const cx=i*345-this.cameraX*.12+this.cameraX;g.fillEllipse(cx,235+(i%3)*35,115,13);g.fillEllipse(cx+12,224+(i%3)*35,45,32);}
+
   g.fillStyle(0x68778c,0.3);for(let i=-2;i<10;i++){const px=i*330+this.cameraX*.6;g.fillTriangle(px,570,px+100,320+(i%3)*35,px+240,570);}
   for(const body of sim.terrain){
     if(body.bounds.max.x<this.cameraX||body.bounds.min.x>this.cameraX+1280)continue;
     const bodyColor:Record<string,number>={low_ceiling:0x565469,moving_platform:0x9bafba,seesaw:0xb393a2,crumbling_bridge:0x968687,seesaw_stop:0x565469};
-    g.fillStyle(bodyColor[body.label]??0x706b7c);g.fillPoints(body.vertices,true);
+    g.fillStyle(bodyColor[body.label]??0x706b7c);g.fillPoints(body.vertices,true);if(body.label!=='ground'){g.lineStyle(2,0x514e62,.65);g.strokePoints(body.vertices,true);}
+    if(body.label==='ground'){g.lineStyle(2,0xaaa0ad,.15);for(let rx=Math.ceil(body.bounds.min.x/100)*100;rx<body.bounds.max.x;rx+=100){const gy=sim.layout.groundAt(rx);if(gy!==null)g.lineBetween(rx,gy+24,rx-30,gy+90);}}
   }
-  g.lineStyle(5,0xa9aa85);
+  g.fillStyle(0x706b7c);for(let px=Math.floor(this.cameraX/10)*10;px<this.cameraX+1290;px+=10){const a=sim.layout.groundAt(px+.001),b=sim.layout.groundAt(px+9.999);if(a!==null&&b!==null)g.fillPoints([{x:px,y:a},{x:px+10,y:b},{x:px+10,y:740},{x:px,y:740}],true);}
+  g.lineStyle(3,0x514e62,.45);for(let px=Math.floor(this.cameraX/115)*115;px<this.cameraX+1290;px+=115){const gy=sim.layout.groundAt(px);if(gy!==null){g.lineBetween(px,gy+25,px-24,gy+80);g.lineBetween(px-24,gy+80,px-16,gy+115);}}
+  g.lineStyle(8,0xb0b18b);
   for(let px=Math.floor(this.cameraX/10)*10;px<this.cameraX+1290;px+=10){
     const a=sim.layout.groundAt(px+.001),b=sim.layout.groundAt(px+9.999);
     if(a!==null&&b!==null)g.lineBetween(px,a,px+10,b);
@@ -190,12 +204,11 @@ class Game extends Phaser.Scene {
     if(section.type==='spring_mushroom'){g.fillStyle(0x9d7b96);g.fillEllipse(section.center,sim.layout.profile(section.center)+8,110,16);}
     if(debug){g.lineStyle(1,0xd9b563,.6);g.strokeRect(section.x,580,section.end-section.x,20);}
   }
-  g.lineStyle(3,0xe3ccad);g.strokeRoundedRect(finish-level.dock.radiusPx,430,level.dock.radiusPx*2,108,12);g.fillStyle(0xb393a2);g.fillRoundedRect(finish-24,471,48,58,8);g.fillStyle(0xd4bb81);g.fillRect(finish-30,522,60,10);g.fillTriangle(finish-22,470,finish-30,448,finish-1,463);g.fillTriangle(finish,470,finish+6,445,finish+24,470);
-  const drawBody=(b:any,color:number)=>{g.fillStyle(color);g.lineStyle(3,0x343440);g.fillPoints(b.vertices,true);g.strokePoints(b.vertices,true);};
+  g.lineStyle(2,0xe3ccad,.6);g.strokeRoundedRect(finish-level.dock.radiusPx,430,level.dock.radiusPx*2,108,12);
   for(const coin of sim.layout.pickups()){
     if(!session.run.claimedPickupIds.includes(coin.id)){g.fillStyle(0xd9b563);g.lineStyle(2,0x343440);g.fillCircle(coin.x,ground(coin.x)-112,9);g.strokeCircle(coin.x,ground(coin.x)-112,9);}
   }
-  drawBody(sim.ufo,0xa49aa5);
+
   const restoring=sim.state==='REVIVE_ANIMATION';
   const t=Math.min(1,session.rescueMs/stage2.rescueAnimationMs);
   const kingVisual=restoring?{
@@ -208,11 +221,10 @@ class Game extends Phaser.Scene {
     g.fillStyle(0xb5d6d5,.2);g.fillTriangle(sim.ufo.position.x,sim.ufo.position.y-240,kingVisual.x-65,kingVisual.y+65,kingVisual.x+65,kingVisual.y+65);
     g.fillStyle(0xa49aa5);g.lineStyle(3,0x343440);g.fillEllipse(sim.ufo.position.x,sim.ufo.position.y-240,92,24);g.strokeEllipse(sim.ufo.position.x,sim.ufo.position.y-240,92,24);
     g.lineStyle(7,0xb5d6d5);g.strokeCircle(sim.ufo.position.x,sim.ufo.position.y-216,12);g.lineStyle(4,0x733e54);g.lineBetween(sim.ufo.position.x-12,sim.ufo.position.y-215,sim.ufo.position.x-12,sim.ufo.position.y-198);g.lineBetween(sim.ufo.position.x+12,sim.ufo.position.y-215,sim.ufo.position.x+12,sim.ufo.position.y-198);
-  }else drawBody(sim.king,0xe6cfb2);
+  }
   if(sim.protectionMs>0){g.lineStyle(2,0xb5d6d5,.8);g.strokeCircle(sim.king.position.x,sim.king.position.y,90);}
 
-  // Geometric crown distinguishes the independent king body.
-  const k={position:{...kingVisual}};if(sim.state==='KING_EJECTED'){k.position.x+=sim.ejectedMs*.12;k.position.y-=Math.sin(Math.min(1,sim.ejectedMs/stage2.failureAnimationMs)*Math.PI)*90;}const crownY=k.position.y-72;g.fillStyle(0xd9b563);g.fillTriangle(k.position.x-23,crownY+13,k.position.x-27,crownY-5,k.position.x-9,crownY+6);g.fillTriangle(k.position.x-13,crownY+13,k.position.x,crownY-12,k.position.x+13,crownY+13);g.fillTriangle(k.position.x+9,crownY+6,k.position.x+27,crownY-5,k.position.x+23,crownY+13);
+  this.royal.draw(kingVisual,sim.king.angle,sim.ufo.position,sim.ufo.angle,finish,ground(finish),sim.state==='KING_EJECTED'?sim.ejectedMs:0);
   for(const d of sim.dynamics){
     if(d.type==='seesaw'){g.fillStyle(0x343440);g.fillTriangle(d.baseX-15,d.baseY+34,d.baseX+15,d.baseY+34,d.baseX,d.baseY);}
     if(d.type==='crumbling_bridge'&&d.loadedAt!==undefined&&!d.fallen){g.lineStyle(3,0xd9b563);g.lineBetween(d.body.position.x-14,d.body.position.y-8,d.body.position.x+14,d.body.position.y-8);}
@@ -262,3 +274,11 @@ if(debug)Object.assign((window as any).__test,{
   overlapDepth(){const M=(Phaser.Physics.Matter as any).Matter;return Math.max(0,...M.Query.collides(sim.ufo,sim.terrain).map((c:any)=>c.depth),...M.Query.collides(sim.king,sim.terrain).map((c:any)=>c.depth));},
   overlaps(){const M=(Phaser.Physics.Matter as any).Matter;return M.Query.collides(sim.ufo,sim.terrain).length+M.Query.collides(sim.king,sim.terrain).length;}
 });
+
+if(review){
+ const nav=document.createElement('nav');nav.id='review-nav';nav.setAttribute('aria-label','UI walkthrough');
+ const previewLevel=()=>{session.startLevel(1,true);sim=session.sim;launched=true;};
+ const screens:[string,()=>void][]=[['Home',()=>{previewLevel();launched=false;startMenu();}],['Level 1',()=>{previewLevel();closeMenu();}],['Routes',levelMenu],['Pause',()=>{previewLevel();backToRunMenu();}],['Failure',()=>{previewLevel();sim.state='FAIL_MENU';session.run.status='failed';session.run.failureX=sim.ufo.position.x;failMenu();}],['Results',()=>{previewLevel();sim.elapsed=70000;sim.spawnAt(finish);for(let i=0;i<110;i++)session.step(0,false);clearMenu();}],['Garage',garageMenu],['Missions',missionsMenu]];
+ const label=document.createElement('span');label.textContent='UI REVIEW · temporary save';nav.append(label);
+ for(const [name,fn] of screens){const b=document.createElement('button');b.textContent=name;b.onclick=fn;nav.append(b);}document.body.append(nav);
+}

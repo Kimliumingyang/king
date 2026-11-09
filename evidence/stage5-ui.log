@@ -1,0 +1,34 @@
+[
+  {
+    "name": "8 review screens at 1280x720",
+    "pass": true
+  },
+  {
+    "name": "8 review screens at 844x390",
+    "pass": true
+  },
+  {
+    "name": "8 review screens at 390x844",
+    "pass": true
+  },
+  {
+    "name": "review mode never changes persistent run or profile",
+    "pass": true
+  },
+  {
+    "name": "review failure supports real rescue return to play",
+    "pass": true
+  },
+  {
+    "name": "garage back returns to home before run starts",
+    "pass": true
+  },
+  {
+    "name": "modal keyboard focus loops and Space activates Play",
+    "pass": true
+  },
+  {
+    "name": "SVG textures and all review screens load without runtime exceptions",
+    "pass": true
+  }
+]

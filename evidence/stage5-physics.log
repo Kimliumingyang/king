@@ -1,0 +1,76 @@
+
+> dont-drop-the-king-prototype@0.4.0 test
+> node tests/physics.mjs
+
+[
+  {
+    "name": "idle 40 seconds / physical contact",
+    "pass": true,
+    "state": "RUNNING",
+    "relative": -2.2063027479456307,
+    "contact": 2
+  },
+  {
+    "name": "zero upgrade / no rescue L01 traversal and stable docking",
+    "pass": true,
+    "state": "CLEAR",
+    "seconds": 86.26666666666667,
+    "maxAngle": 10.897991025490242,
+    "maxOffMs": 0,
+    "x": 2982.776828411724
+  },
+  {
+    "name": "hard brake produces independent slide",
+    "pass": true,
+    "relativeBefore": -15.220561827221559,
+    "relativeAfter": 35.75199338643535,
+    "state": "RUNNING"
+  },
+  {
+    "name": "edge-loaded king can eject under hard braking",
+    "pass": true,
+    "failed": true,
+    "offMs": 666.6666666666665,
+    "restarted": "RUNNING"
+  },
+  {
+    "name": "high speed crossing does not clear",
+    "pass": true,
+    "crossed": true,
+    "state": "KING_EJECTED",
+    "crossingSpeed": 309.3903600989779
+  },
+  {
+    "name": "boost energy consumption and recharge",
+    "pass": true,
+    "consumed": 0.8809523809523814,
+    "recovered": 0.9365079365079367
+  },
+  {
+    "name": "keyboard release",
+    "pass": true,
+    "x": 2.3253552932670036
+  },
+  {
+    "name": "pause freezes physics",
+    "pass": true
+  },
+  {
+    "name": "restart confirmation and reset",
+    "pass": true
+  },
+  {
+    "name": "landscape pointer capture release",
+    "pass": true
+  },
+  {
+    "name": "browser runtime exceptions",
+    "pass": true,
+    "errors": []
+  }
+]
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
