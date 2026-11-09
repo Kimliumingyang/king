@@ -1,0 +1,24 @@
+
+> dont-drop-the-king-prototype@0.6.0 test:levels
+> node tests/levels.mjs
+
+L01 CLEAR 85.82s checkpoint 1 seesaw 0.0°
+L02 CLEAR 98.10s checkpoint 2 seesaw 0.0°
+L03 CLEAR 111.07s checkpoint 2 seesaw 0.0°
+L04 CLEAR 111.05s checkpoint 2 seesaw 0.0°
+L05 CLEAR 122.90s checkpoint 2 seesaw 0.0°
+L06 CLEAR 81.73s checkpoint 2 seesaw 0.0°
+L07 CLEAR 111.37s checkpoint 2 seesaw 13.7°
+L08 CLEAR 108.28s checkpoint 2 seesaw 0.0°
+L09 CLEAR 115.08s checkpoint 2 seesaw 0.0°
+L10 CLEAR 126.98s checkpoint 2 seesaw 13.1°
+L11 CLEAR 129.07s checkpoint 2 seesaw 0.0°
+L12 CLEAR 167.05s checkpoint 2 seesaw 14.2°
+L13 CLEAR 147.43s checkpoint 2 seesaw 14.2°
+L14 CLEAR 139.93s checkpoint 2 seesaw 14.2°
+L15 CLEAR 103.27s checkpoint 3 seesaw 7.3°
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

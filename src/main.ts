@@ -9,11 +9,15 @@ import {MemorySaveBackend} from './storage';
 import {RunStore} from './save';
 import {GameSaveService} from './game-save';
 import './style.css';
-import {art,RoyalArt} from './art';
+import {art,RoyalArt,eventLabel} from './art';
+import {Scenery,preloadScenery} from './scenery';
+import {loadAssetCatalog,preloadReplacements,skinUI} from './asset-loader';
+import {RoyalAudio} from './audio';
+import stage5 from '../data/stage5_tuning.json';
 const debug=new URLSearchParams(location.search).has('debug');
 const review=new URLSearchParams(location.search).has('review');
 document.body.classList.toggle('reviewing',review);
-const bridge=new MockBridge();await bridge.init();
+const bridge=new MockBridge();await bridge.init();await loadAssetCatalog();skinUI();
 const root=document.getElementById('game')!;
 root.innerHTML=`
 <header>
@@ -21,12 +25,12 @@ root.innerHTML=`
   <div class="level">LEVEL 01<small>His First Ride</small></div>
   <div class="route"><span>◉</span><progress id="progress" max="500" value="0"></progress><span>♛</span></div>
   <div id="distance">0 / 500m</div>
-  <button id="levels" aria-label="Choose level">☰</button><button id="pause" aria-label="Pause">||</button><button id="restart" aria-label="Restart level">↻</button>
+  <button id="sound" aria-label="Mute sound" title="Sound · M">♪</button><button id="levels" aria-label="Choose level">☰</button><button id="pause" aria-label="Pause">||</button><button id="restart" aria-label="Restart level">↻</button>
 </header>
 <div id="canvas"></div>
 <div id="caption">DELIVER THE KING.<br><b>NOT LAUNCH HIM.</b></div>
 <div id="run-hud"><span id="checkpoint-chip">⚑ START</span><span id="rescue-chip">♛ RESCUE 1 / 1</span><span id="save-chip">SAVED LOCALLY</span><button id="garage" aria-label="Garage">COINS 0</button></div>
-<div id="toast" role="status"></div><div id="hazard-tip" role="status"></div>
+<div id="event-tip" role="status" hidden></div><div id="toast" role="status"></div><div id="hazard-tip" role="status"></div>
 <div id="risk-box" hidden><span>! YOUR MAJESTY IS SLIPPING</span><progress id="risk" max="1" value="0"></progress></div>
 <div id="status">Hold D / → to move · Release early. Brake gently.</div>
 <button id="skip" hidden>SKIP ANIMATION</button>
@@ -39,23 +43,25 @@ root.innerHTML=`
 ${debug?'<aside id="debug"><b>LIVE PHYSICS LAB</b><pre id="readout"></pre><div id="sliders"></div></aside>':''}`;
 const el=(id:string)=>document.getElementById(id)!;
 const session=new Session(review?new RunStore(new MemorySaveBackend()):undefined);let sim=session.sim,paused=true,acc=0,toastMs=0,launched=false;
+const audio=new RoyalAudio();audio.mute(session.progress.data.settings.muted);
 const held={left:false,right:false,boost:false};
 function clearInput(){held.left=held.right=held.boost=false;document.querySelectorAll('.pressed').forEach(x=>x.classList.remove('pressed'));}
 function canDrive(){return !paused&&['RUNNING','DANGER','DOCKING'].includes(sim.state);}
-function closeMenu(){launched=true;(document.activeElement as HTMLElement)?.blur();paused=false;acc=0;clearInput();el('modal').hidden=true;bridge.gameplayStart();}
+function closeMenu(){void audio.unlock();launched=true;(document.activeElement as HTMLElement)?.blur();paused=false;acc=0;clearInput();el('modal').hidden=true;bridge.gameplayStart();audio.setScene(level.world,false);}
 function modal(title:string,message:string,buttons:[string,()=>void][],note=''){
   el('modal').className='';
   el('eyebrow').textContent=`ROYAL DELIVERY SERVICE · LEVEL ${String(level.index).padStart(2,'0')}`;
-  paused=true;acc=0;clearInput();bridge.gameplayStop();el('title').textContent=title;el('message').textContent=message;
+  paused=true;acc=0;clearInput();bridge.gameplayStop();audio.setScene(['HIS MAJESTY NEEDS A RIDE.','WELCOME BACK, CAPTAIN.','THE ROYAL GARAGE','ROYAL ROUTES','ROYAL ASSIGNMENTS'].includes(title)?'menu':level.world,true);el('title').textContent=title;el('message').textContent=message;
   el('summary').hidden=true;el('menu-note').textContent=note;el('actions').replaceChildren();
-  for(const [label,action]of buttons){const b=document.createElement('button');b.textContent=label;b.onclick=action;el('actions').append(b);}
+  for(const [label,action]of buttons){const b=document.createElement('button');b.textContent=label;b.onclick=()=>{void audio.unlock();audio.play(label==='BACK'||label==='CANCEL'?'sfx_ui_back':'sfx_ui_click');action();};el('actions').append(b);}
   el('modal').hidden=false;requestAnimationFrame(()=>el('actions').querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus({preventScroll:true}));
 }
 function reset(){session.restart();sim=session.sim;closeMenu();}
 function failMenu(){
+  audio.play('sfx_fail',1000);
   const run=session.run;const buttons:[string,()=>void][]=[];
   if(!run.freeRescueUsed)buttons.push(['ROYAL RESCUE — FREE',()=>{
-    if(session.rescue()){sim=session.sim;closeMenu();}else{el('message').textContent=session.store.error;}
+    if(session.rescue()){sim=session.sim;closeMenu();audio.play('sfx_rescue');}else{el('message').textContent=session.store.error;}
   }]);
   buttons.push(['RETRY CHECKPOINT',()=>{if(session.retry()){sim=session.sim;closeMenu();toast('BACK IN BUSINESS · CHECKPOINT RETRY');}}]);
   buttons.push(['RESTART LEVEL',confirmRestart]);
@@ -76,6 +82,7 @@ function levelMenu(){
   el('actions').prepend(grid);
 }
 function clearMenu(){
+  audio.play('sfx_reward',1000);
   const actions:[string,()=>void][]=[];
   if(level.index<AVAILABLE_LEVELS)actions.push(['NEXT LEVEL',()=>openLevel(level.index+1)]);
   actions.push(['GARAGE / UPGRADES',garageMenu],['MISSIONS',missionsMenu],['PLAY AGAIN',reset],['CHOOSE LEVEL',levelMenu]);
@@ -97,7 +104,7 @@ function garageMenu(){
     const title=document.createElement('b');title.textContent=`${economyRules.upgradeLabels[id]} · ${n}/${max}`;
     const detail=document.createElement('p');detail.textContent=`${upgradeValue(id,n)} → ${upgradeValue(id,Math.min(n+1,max))}`;
     const b=document.createElement('button');b.textContent=n>=max?'MAX LEVEL':`BUY · ${price} COINS`;b.disabled=n>=max||price>session.progress.data.coinsWallet||session.progress.blocked;
-    b.onclick=()=>{session.progress.purchase(id,n);garageMenu();};card.append(title,detail,b);grid.append(card);
+    b.onclick=()=>{audio.play(session.progress.purchase(id,n)?'sfx_upgrade':'sfx_ui_denied');garageMenu();};card.append(title,detail,b);grid.append(card);
   }
   el('actions').prepend(grid);
 }
@@ -108,7 +115,7 @@ function missionsMenu(){
   for(const m of economyRules.missions){
     const b=document.createElement('button'),claimed=session.progress.data.missions.claimed.includes(m.id),ready=session.progress.data.completedLevels.includes(m.levelId);
     b.textContent=`${m.name} · Finish ${m.levelId} · ${claimed?'CLAIMED':ready?'CLAIM +'+m.reward:'+'+m.reward+' COINS'}`;
-    b.disabled=claimed||!ready||session.progress.blocked;b.onclick=()=>{session.progress.claimMission(m.id);missionsMenu();};list.append(b);
+    b.disabled=claimed||!ready||session.progress.blocked;b.onclick=()=>{audio.play(session.progress.claimMission(m.id)?'sfx_mission':'sfx_ui_denied');missionsMenu();};list.append(b);
   }
   const daily=document.createElement('button');daily.textContent=`START DAILY · ${session.progress.dailyAvailable()?`+${economyRules.daily.reward} BONUS`:'BONUS ALREADY CLAIMED / NOT READY'}`;
   daily.onclick=()=>{if(session.startDaily()){sim=session.sim;closeMenu();toast('DAILY FLIGHT · WEAKER BOOST · CLEAN DELIVERY FOR BONUS');}};list.append(daily);el('actions').prepend(list);
@@ -125,12 +132,14 @@ function confirmRestart(){
   }]]);
 }
 function toast(text:string){el('toast').textContent=text;toastMs=2200;}
+function toggleSound(){audio.mute(!audio.muted);session.progress.setMuted(audio.muted);el('sound').textContent=audio.muted?'♩':'♪';el('sound').setAttribute('aria-label',audio.muted?'Unmute sound':'Mute sound');el('sound').setAttribute('aria-pressed',String(audio.muted));}
+el('sound').onclick=()=>{void audio.unlock();toggleSound();};el('sound').textContent=audio.muted?'♩':'♪';el('sound').setAttribute('aria-label',audio.muted?'Unmute sound':'Mute sound');el('sound').setAttribute('aria-pressed',String(audio.muted));
 el('garage').onclick=garageMenu;el('levels').onclick=levelMenu;el('pause').onclick=pause;el('restart').onclick=confirmRestart;
 el('skip').onclick=()=>{if(sim.state==='KING_EJECTED'){sim.state='FAIL_MENU';failMenu();}};
 const mapping:Record<string,keyof typeof held>={KeyA:'left',ArrowLeft:'left',KeyD:'right',ArrowRight:'right',Space:'boost',KeyW:'boost'};
-window.addEventListener('keydown',e=>{if(!el('modal').hidden){if(e.code==='Escape'){if(el('title').textContent==='A ROYAL BREATHER')closeMenu();else if(el('title').textContent==='RESTART THIS RIDE?')Array.from(el('actions').querySelectorAll('button')).find(b=>b.textContent==='CANCEL')?.click();}if(e.code==='Tab'){const buttons=Array.from(el('modal').querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));const first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}return;}if(mapping[e.code]){e.preventDefault();if(canDrive())held[mapping[e.code]]=true;}if(!e.repeat){if(e.code==='KeyP'||e.code==='Escape')pause();if(e.code==='KeyR')confirmRestart();}});
+window.addEventListener('keydown',e=>{void audio.unlock();if(e.code==='KeyM'&&!e.repeat){toggleSound();return;}if(!el('modal').hidden){if(e.code==='Escape'){if(el('title').textContent==='A ROYAL BREATHER')closeMenu();else if(el('title').textContent==='RESTART THIS RIDE?')Array.from(el('actions').querySelectorAll('button')).find(b=>b.textContent==='CANCEL')?.click();}if(e.code==='Tab'){const buttons=Array.from(el('modal').querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));const first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}return;}if(mapping[e.code]){e.preventDefault();if(canDrive())held[mapping[e.code]]=true;}if(!e.repeat){if(e.code==='KeyP'||e.code==='Escape')pause();if(e.code==='KeyR')confirmRestart();}});
 window.addEventListener('keyup',e=>{if(mapping[e.code])held[mapping[e.code]]=false;});
-window.addEventListener('blur',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+window.addEventListener('blur',()=>{pause();audio.suspend();});document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();audio.suspend();}});
 window.addEventListener('pagehide',()=>session.save());
 window.addEventListener('storage',event=>{
  if(review)return;
@@ -141,7 +150,7 @@ window.addEventListener('storage',event=>{
 }});
 document.querySelectorAll<HTMLButtonElement>('[data-key]').forEach(b=>{
   const key=b.dataset.key as keyof typeof held;
-  b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);if(canDrive()){held[key]=true;b.classList.add('pressed');}};
+  b.onpointerdown=e=>{void audio.unlock();e.preventDefault();b.setPointerCapture(e.pointerId);if(canDrive()){held[key]=true;b.classList.add('pressed');}};
   const release=()=>{held[key]=false;b.classList.remove('pressed');};
   b.onpointerup=release;b.onpointercancel=release;b.onlostpointercapture=release;
 });
@@ -153,9 +162,9 @@ function startMenu(){modal(session.restored?'WELCOME BACK, CAPTAIN.':'HIS MAJEST
 
 if(debug){const fields:[string,any,string,number,number,number][]=[['King friction',cfg.physics.king,'friction',0,1,.01],['King mass',cfg.physics.king,'mass',1,6,.1],['Gravity',cfg.physics,'gravityY',.5,2,.05],['Hover spring',cfg.physics.ufo,'hoverSpring',.0001,.0015,.00005],['Drive force',cfg.physics.ufo,'horizontalForce',.0005,.026,.0005]];for(const [label,obj,key,min,max,step]of fields){const l=document.createElement('label');l.textContent=label;const i=document.createElement('input');i.type='range';i.min=String(min);i.max=String(max);i.step=String(step);i.value=String(obj[key]);i.oninput=()=>{obj[key]=Number(i.value);sim.refreshTuning();sim.engine.gravity.y=cfg.physics.gravityY;sim.king.friction=cfg.physics.king.friction;((Phaser.Physics.Matter as any).Matter as any).Body.setMass(sim.king,cfg.physics.king.mass);};l.append(i);el('sliders').append(l);}}
 class Game extends Phaser.Scene {
- g!:Phaser.GameObjects.Graphics; cameraX=-350; royal!:RoyalArt;
- preload(){for(const [key,url] of Object.entries(art))this.load.svg(key,url,{scale:2});}
- create(){this.g=this.add.graphics();this.royal=new RoyalArt(this);for(let i=-1;i<16;i++)this.add.image(i*380+70,450,'mushroom').setDisplaySize(150+(i%3)*40,200+(i%3)*50).setAlpha(.4).setScrollFactor(.35).setDepth(-1);}
+ g!:Phaser.GameObjects.Graphics; cameraX=-350; royal!:RoyalArt; scenery!:Scenery;previousState="";previousCoins=0;previousEventCount=0;lastHazards=new Set<string>();lastBridgeCount=0;
+ preload(){for(const [key,url] of Object.entries(art))this.load.svg(key,url,{scale:2});preloadScenery(this);preloadReplacements(this);}
+ create(){this.g=this.add.graphics();this.royal=new RoyalArt(this);this.scenery=new Scenery(this);}
 
  update(_t:number,delta:number){
   if(!paused){
@@ -163,28 +172,23 @@ class Game extends Phaser.Scene {
     while(acc>=1000/cfg.physics.fixedStepHz){
       const cp=session.run.checkpointId;
       session.step(Number(held.right)-Number(held.left),held.boost);sim=session.sim;
-      if(cp!==session.run.checkpointId)toast(`⚑ CHECKPOINT SAVED · ${level.checkpointsMeters[session.run.checkpointId-1]}m`);
+      if(cp!==session.run.checkpointId){toast(`⚑ CHECKPOINT SAVED · ${level.checkpointsMeters[session.run.checkpointId-1]}m`);audio.play('sfx_checkpoint');}
       acc-=1000/cfg.physics.fixedStepHz;
     }
     toastMs=Math.max(0,toastMs-delta);
   }
   const x=sim.ufo.position.x;this.cameraX=Phaser.Math.Clamp(x-440,start-210,finish-700);this.cameras.main.scrollX=this.cameraX;
-  this.cameras.main.setBackgroundColor(level.world==='moonlit_citadel'?'#65738f':level.world==='wobbly_wastes'?'#a297a5':'#8796ad');
+  const theme=stage5.worlds[level.world as keyof typeof stage5.worlds];this.cameras.main.setBackgroundColor(theme.sky);this.scenery.draw(level.world,this.cameraX);
   const g=this.g;g.clear();
-  // Original layered scenery; no collision geometry or reference image texture.
-  g.fillStyle(0xc0c4d6,.55);g.fillCircle(this.cameraX+1050,205,62);g.lineStyle(10,0xc8c9d9,.5);g.strokeEllipse(this.cameraX+1050,205,180,43);
-  g.fillStyle(0xe9d7c5,.72);for(let i=0;i<5;i++){const cx=i*345-this.cameraX*.12+this.cameraX;g.fillEllipse(cx,235+(i%3)*35,115,13);g.fillEllipse(cx+12,224+(i%3)*35,45,32);}
-
-  g.fillStyle(0x68778c,0.3);for(let i=-2;i<10;i++){const px=i*330+this.cameraX*.6;g.fillTriangle(px,570,px+100,320+(i%3)*35,px+240,570);}
   for(const body of sim.terrain){
     if(body.bounds.max.x<this.cameraX||body.bounds.min.x>this.cameraX+1280)continue;
     const bodyColor:Record<string,number>={low_ceiling:0x565469,moving_platform:0x9bafba,seesaw:0xb393a2,crumbling_bridge:0x968687,seesaw_stop:0x565469};
-    g.fillStyle(bodyColor[body.label]??0x706b7c);g.fillPoints(body.vertices,true);if(body.label!=='ground'){g.lineStyle(2,0x514e62,.65);g.strokePoints(body.vertices,true);}
+    g.fillStyle(bodyColor[body.label]??Phaser.Display.Color.HexStringToColor(theme.rock).color);g.fillPoints(body.vertices,true);if(body.label!=='ground'){g.lineStyle(2,0x514e62,.65);g.strokePoints(body.vertices,true);}
     if(body.label==='ground'){g.lineStyle(2,0xaaa0ad,.15);for(let rx=Math.ceil(body.bounds.min.x/100)*100;rx<body.bounds.max.x;rx+=100){const gy=sim.layout.groundAt(rx);if(gy!==null)g.lineBetween(rx,gy+24,rx-30,gy+90);}}
   }
-  g.fillStyle(0x706b7c);for(let px=Math.floor(this.cameraX/10)*10;px<this.cameraX+1290;px+=10){const a=sim.layout.groundAt(px+.001),b=sim.layout.groundAt(px+9.999);if(a!==null&&b!==null)g.fillPoints([{x:px,y:a},{x:px+10,y:b},{x:px+10,y:740},{x:px,y:740}],true);}
+  g.fillStyle(Phaser.Display.Color.HexStringToColor(theme.rock).color);for(let px=Math.floor(this.cameraX/10)*10;px<this.cameraX+1290;px+=10){const a=sim.layout.groundAt(px+.001),b=sim.layout.groundAt(px+9.999);if(a!==null&&b!==null)g.fillPoints([{x:px,y:a},{x:px+10,y:b},{x:px+10,y:740},{x:px,y:740}],true);}
   g.lineStyle(3,0x514e62,.45);for(let px=Math.floor(this.cameraX/115)*115;px<this.cameraX+1290;px+=115){const gy=sim.layout.groundAt(px);if(gy!==null){g.lineBetween(px,gy+25,px-24,gy+80);g.lineBetween(px-24,gy+80,px-16,gy+115);}}
-  g.lineStyle(8,0xb0b18b);
+  g.lineStyle(8,Phaser.Display.Color.HexStringToColor(theme.grass).color);
   for(let px=Math.floor(this.cameraX/10)*10;px<this.cameraX+1290;px+=10){
     const a=sim.layout.groundAt(px+.001),b=sim.layout.groundAt(px+9.999);
     if(a!==null&&b!==null)g.lineBetween(px,a,px+10,b);
@@ -224,7 +228,19 @@ class Game extends Phaser.Scene {
   }
   if(sim.protectionMs>0){g.lineStyle(2,0xb5d6d5,.8);g.strokeCircle(sim.king.position.x,sim.king.position.y,90);}
 
-  this.royal.draw(kingVisual,sim.king.angle,sim.ufo.position,sim.ufo.angle,finish,ground(finish),sim.state==='KING_EJECTED'?sim.ejectedMs:0);
+  this.royal.draw(kingVisual,sim,finish,ground,paused?0:Math.min(delta,50),held.boost&&sim.energy>.01,id=>audio.play(id));
+  audio.update(Math.min(delta,50),!paused&&['RUNNING','DANGER','DOCKING'].includes(sim.state),held.boost&&sim.energy>.01,Math.abs(sim.ufo.velocity.x)*60);
+  if(!paused){
+   if(sim.state!==this.previousState){if(sim.state==='DANGER')audio.play('sfx_warning',1800);if(sim.state==='KING_EJECTED')audio.play('sfx_eject');if(sim.state==='CLEAR')audio.play('sfx_dock');}
+   if(session.run.runCoins>this.previousCoins)audio.play('sfx_pickup');
+   if(sim.events.data.fired>this.previousEventCount&&sim.events.active)audio.play('sfx_'+sim.events.active.id);
+   if(sim.aboard&&Math.abs(sim.king.velocity.x-sim.ufo.velocity.x)*60>20)audio.play('sfx_slide',900);
+   const active=new Set<string>();for(const [id,h] of sim.hazardEffects)if(h.active){active.add(id);if(!this.lastHazards.has(id))audio.play(id.includes('magnetic')?'sfx_magnet':id.includes('crosswind')?'sfx_wind':'sfx_spring',1300);}this.lastHazards=active;
+   const fallen=sim.dynamics.filter(d=>d.fallen).length;if(fallen>this.lastBridgeCount)audio.play('sfx_bridge',1300);this.lastBridgeCount=fallen;
+  }
+  this.previousState=sim.state;this.previousCoins=session.run.runCoins;this.previousEventCount=sim.events.data.fired;
+  const event=sim.events.pending;el('event-tip').hidden=!event;el('event-tip').textContent=event?eventLabel(event.id)+' · '+(sim.events.data.warningLeft/1000).toFixed(1)+'s · STEADY NOW':'';
+
   for(const d of sim.dynamics){
     if(d.type==='seesaw'){g.fillStyle(0x343440);g.fillTriangle(d.baseX-15,d.baseY+34,d.baseX+15,d.baseY+34,d.baseX,d.baseY);}
     if(d.type==='crumbling_bridge'&&d.loadedAt!==undefined&&!d.fallen){g.lineStyle(3,0xd9b563);g.lineBetween(d.body.position.x-14,d.body.position.y-8,d.body.position.x+14,d.body.position.y-8);}
@@ -237,7 +253,7 @@ class Game extends Phaser.Scene {
   (el('progress') as HTMLProgressElement).max=level.lengthMeters;
   const qaSelect=document.getElementById('qa-level') as HTMLSelectElement|null;if(qaSelect&&qaSelect.value!==String(level.index))qaSelect.value=String(level.index);
   document.querySelector('.level')!.innerHTML=`LEVEL ${String(level.index).padStart(2,'0')}<small>${level.name}</small>`;
-  el('hazard-tip').textContent=sim.warning;
+  el('hazard-tip').textContent=sim.warning;el('caption').hidden=x>180||!!sim.events.pending||!!sim.events.active;
   el('rescue-chip').textContent=session.run.freeRescueUsed?'♛ RESCUE USED':'♛ RESCUE 1 / 1';
   el('save-chip').textContent=session.store.error||session.progress.error?'! SAVE NOTICE':'SAVED LOCALLY';
   el('garage').textContent=session.progress.blocked?'COINS —':`COINS ${session.progress.data.coinsWallet}`;
@@ -253,8 +269,8 @@ class Game extends Phaser.Scene {
   if(!paused&&sim.state==='CLEAR')clearMenu();
  }
 }
-new Phaser.Game({type:Phaser.AUTO,parent:'canvas',width:1280,height:720,backgroundColor:'#8796ad',scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},scene:Game,audio:{noAudio:true}});
-(window as any).__test={get sim(){return sim;},session,garageMenu,missionsMenu,levelMenu,clearMenu,reset,step:(direction:number,boost=false)=>{session.step(direction,boost);sim=session.sim;},setPaused:(p:boolean)=>{paused=p;},held,failMenu,closeMenu};
+const game=new Phaser.Game({type:Phaser.AUTO,parent:'canvas',width:1280,height:720,backgroundColor:'#8796ad',scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},scene:Game,audio:{noAudio:true}});
+(window as any).__test={get sim(){return sim;},session,audio,get royal(){return (game.scene.scenes[0] as Game)?.royal;},garageMenu,missionsMenu,levelMenu,clearMenu,reset,step:(direction:number,boost=false)=>{session.step(direction,boost);sim=session.sim;},setPaused:(p:boolean)=>{paused=p;},held,failMenu,closeMenu};
 if(debug){
   const select=document.createElement('select');select.id='qa-level';select.setAttribute('aria-label','QA level jump');
   for(const l of allLevels){const option=document.createElement('option');option.value=String(l.index);option.textContent=`L${String(l.index).padStart(2,'0')} · ${l.name}`;select.append(option);}
@@ -278,7 +294,14 @@ if(debug)Object.assign((window as any).__test,{
 if(review){
  const nav=document.createElement('nav');nav.id='review-nav';nav.setAttribute('aria-label','UI walkthrough');
  const previewLevel=()=>{session.startLevel(1,true);sim=session.sim;launched=true;};
- const screens:[string,()=>void][]=[['Home',()=>{previewLevel();launched=false;startMenu();}],['Level 1',()=>{previewLevel();closeMenu();}],['Routes',levelMenu],['Pause',()=>{previewLevel();backToRunMenu();}],['Failure',()=>{previewLevel();sim.state='FAIL_MENU';session.run.status='failed';session.run.failureX=sim.ufo.position.x;failMenu();}],['Results',()=>{previewLevel();sim.elapsed=70000;sim.spawnAt(finish);for(let i=0;i<110;i++)session.step(0,false);clearMenu();}],['Garage',garageMenu],['Missions',missionsMenu]];
- const label=document.createElement('span');label.textContent='UI REVIEW · temporary save';nav.append(label);
+ const screens:[string,()=>void][]=[['Home',()=>{previewLevel();launched=false;startMenu();}],['Level 1',()=>{previewLevel();closeMenu();}],['Routes',levelMenu],['Pause',()=>{previewLevel();backToRunMenu();}],['Failure',()=>{previewLevel();sim.state='FAIL_MENU';session.run.status='failed';session.run.failureX=sim.ufo.position.x;failMenu();}],['Results',()=>{previewLevel();sim.elapsed=70000;sim.spawnAt(finish);for(let i=0;i<110;i++)session.step(0,false);clearMenu();}],['Garage',garageMenu],['Missions',missionsMenu],['Events',()=>{previewLevel();eventReviewMenu();}],['Worlds',()=>{previewLevel();worldReviewMenu();}]];
+ const label=document.createElement('span');label.textContent='UI REVIEW · temporary save';nav.append(label);const download=document.createElement('a');download.href='./downloads/';download.target='_blank';download.rel='noopener';download.textContent='Art / Audio Kit';nav.append(download);
  for(const [name,fn] of screens){const b=document.createElement('button');b.textContent=name;b.onclick=fn;nav.append(b);}document.body.append(nav);
 }
+
+function eventReviewMenu(){
+ modal('ROYAL MISCHIEF','Six warned events. Choose a sample, then ease off and watch his majesty.',[['HICCUP',()=>previewEvent('hiccup')],['SNEEZE',()=>previewEvent('sneeze')],['NAP',()=>previewEvent('nap')],['TOAST',()=>previewEvent('toast')],['SCEPTER',()=>previewEvent('scepter')],['HURRY',()=>previewEvent('hurry')],['BACK',backToRunMenu]],'EVENT PREVIEW · PHYSICS REMAINS ACTIVE');
+}
+function previewEvent(id:string){if(!review&&!debug)return;session.startLevel(15,true);sim=session.sim;sim.spawnAt(350);sim.eventSafe=()=>true;sim.events.data.pending=id;sim.events.data.warningLeft=1200;sim.events.data.nextAt=1e12;closeMenu();}
+function worldReviewMenu(){modal('THREE ROYAL WORLDS','Preview the three layered environments.',[['ROYAL FOOTHILLS · L01',()=>{session.startLevel(1,true);sim=session.sim;closeMenu();}],['WOBBLY WASTES · L06',()=>{session.startLevel(6,true);sim=session.sim;closeMenu();}],['MOONLIT CITADEL · L11',()=>{session.startLevel(11,true);sim=session.sim;closeMenu();}],['BACK',backToRunMenu]]);}
+if(debug)Object.assign((window as any).__test,{previewEvent,eventReviewMenu,worldReviewMenu});

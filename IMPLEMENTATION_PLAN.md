@@ -24,3 +24,7 @@ L01–L05 passed before L06–L15 extension. All twelve physical modules and fif
 
 ## Stage 4 delivery gate
 Completed receipt-based economy, five upgrade lines, stars/records, three fixed missions, daily challenge, immutable run snapshots, Local/Memory/Mock save ports and legacy migration. User additionally requested higher difficulty before final art: curated denser modules, wider gaps, stronger warned surfaces/fields, safe recovery retained. 15 routes validated in zero/basic+one-rescue/max configurations. See QA_STAGE4.md. Stage 5 art remains pending.
+
+### Stage 5 delivery v0.6.0
+
+Implemented all six warned humor events, seeded scheduling/save recovery, visual animation state replacement, separate warning/falling crown, guard/prop/hover feedback, three worlds with three-layer scenery, original fallback art, optional external spritesheets/audio, persisted mute and synth placeholders. Artist handoff includes111 slots, XLSX/CSV/JSON, animation pivots, background placement, audio cue map and direct-download ZIP. User additionally authorized harder terrain/slipperier King across15 routes. Stage6 SDK/ad implementation remains separate and is not started. Final artist-authored replacements and physical-device approval follow user uploads.

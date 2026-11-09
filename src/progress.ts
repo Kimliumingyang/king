@@ -98,5 +98,6 @@ export class LevelProgress {
   purchase(id:UpgradeId,expectedLevel=this.data.upgradeLevels[id]){
     return this.transaction(d=>{const n=d.upgradeLevels[id];if(n!==expectedLevel){this.error='Upgrade changed in another save. Review the new level and price.';return false;}if(n>=cfg.upgrades[id].maxLevel){this.error='Already at maximum level.';return false;}const price=upgradePrice(id,n);if(d.coinsWallet<price){this.error='Not enough coins. Deliveries earn coins without ads.';return false;}d.coinsWallet-=price;d.upgradeLevels[id]++;return true;});
   }
+  setMuted(value:boolean){return this.transaction(d=>{d.settings.muted=value;return true;});}
   claimMission(id:string){return this.transaction(d=>{const m=rules.missions.find(m=>m.id===id);if(!m||d.missions.claimed.includes(id)||!d.completedLevels.includes(m.levelId))return false;d.missions.claimed.push(id);d.coinsWallet+=m.reward;return true;});}
 }

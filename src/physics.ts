@@ -3,6 +3,8 @@ import balance from '../data/balance.json';
 import {TerrainLayout,allLevels,rules,difficulty,moduleSpec,type Level,type Section} from './terrain';
 import type {Upgrades} from './progress';
 import stage2 from '../data/prototype_stage2.json';
+import {KingEvents,eventSpec,type EventSnapshot,type EventDefinition} from './king-events';
+import stage5 from '../data/stage5_tuning.json';
 const M = (Phaser.Physics.Matter as any).Matter as any;
 export const cfg = structuredClone(balance);
 export let level=allLevels[0];
@@ -29,10 +31,10 @@ export class Simulation {
  layout:TerrainLayout; roofs:any[]=[]; warning=''; springTimers=new Map<string,number>();springPulses=new Map<string,number>(); approachTimers=new Map<string,number>();
  dynamics:{section:Section;type:string;body:any;baseX:number;baseY:number;loadedAt?:number;fallen?:boolean}[]=[];
  constraints:any[]=[]; hazardClock=0; magneticScale=1; windForce=0; hazardEffects=new Map<string,{warning:boolean;active:boolean;phase:number}>();
- tuning:ReturnType<typeof tunePhysics>;
+ tuning:ReturnType<typeof tunePhysics>; events:KingEvents; failures=0;
  constructor(public config:Level=level,public upgrades:Record<string,number>={},public boostScale=1){
   this.upgrades=structuredClone(upgrades);this.tuning=tunePhysics(this.upgrades,boostScale);
-  this.layout=new TerrainLayout(config,cfg.pixelsPerMeter);
+  this.layout=new TerrainLayout(config,cfg.pixelsPerMeter);this.events=new KingEvents(config.seed,config.index,config.humorEventIntensity);
   this.engine=M.Engine.create({gravity:{x:0,y:cfg.physics.gravityY},positionIterations:10,velocityIterations:8});
   const boundaries=[start-200,this.layout.finish+650,...this.layout.sections.flatMap(s=>[s.gapStart,s.gapEnd].filter((x):x is number=>x!==undefined))].sort((a,b)=>a-b);
   for(let x=start-200;x<this.layout.finish+650;){
@@ -76,7 +78,7 @@ export class Simulation {
   M.Composite.add(this.engine.world,[...this.terrain,...this.constraints,this.ufo,this.king]);
  }
  spawnAt(x:number){
-  this.pitchTrim=0;this.boostHeight=0;M.Pairs.clear(this.engine.pairs);
+  this.events.cancel();this.restoreFriction();this.pitchTrim=0;this.boostHeight=0;M.Pairs.clear(this.engine.pairs);
   M.Body.setStatic(this.ufo,false);
   const left=this.surfaceAt(x-cfg.physics.ufo.deckWidthPx*.4),right=this.surfaceAt(x+cfg.physics.ufo.deckWidthPx*.4);
   const floors=[left,right].filter((v):v is number=>v!==null);
@@ -170,6 +172,20 @@ export class Simulation {
     }
   }
  }
+ eventSafe(){
+  const x=this.ufo.position.x,pad=cfg.physics.ufo.widthPx/2+Math.max(Math.abs(this.ufo.velocity.x)*60,stage5.eventResponseMaxPxPerSec)*eventSpec.globalRules.majorHazardBufferSec;
+  if(this.protectionMs>0||this.state==='DOCKING'||x<rules.startFlatPx||x>this.layout.finish-this.config.dock.safeGroundBeforeMeters*cfg.pixelsPerMeter-pad)return false;
+  if(this.layout.checkpointXs.some(cp=>Math.abs(x-cp)<rules.checkpointFlatPx/2))return false;
+  return !this.layout.sections.some(s=>!['gentle_hills','rolling_waves'].includes(s.type)&&x>s.x-pad&&x<s.end+pad);
+ }
+ restoreFriction(){if(!this.king)return;this.king.friction=this.tuning.king.friction;this.king.frictionStatic=this.tuning.king.frictionStatic;}
+ applyKingEvent(event:EventDefinition){
+  const e=event.physicsEffect,dir=this.events.data.direction;
+  const scale=stage5.eventForceScale*(.65+this.config.humorEventIntensity*.35)*(this.events.data.gentle?.25:1);
+  if(e.type==='king_angular_impulse'&&'magnitudeMax' in e)M.Body.setAngularVelocity(this.king,this.king.angularVelocity+dir*(e.magnitudeMax??0)*scale);
+  if(e.type==='king_horizontal_impulse'&&'magnitudeMax' in e)M.Body.applyForce(this.king,this.king.position,{x:dir*(e.magnitudeMax??0)*scale,y:0});
+ }
+ restoreEvents(snapshot?:EventSnapshot){this.events=new KingEvents(this.config.seed,this.config.index,this.config.humorEventIntensity,snapshot);this.events.cancel();}
  refreshTuning(){this.tuning=tunePhysics(this.upgrades,this.boostScale);this.king.friction=this.tuning.king.friction;this.king.frictionStatic=this.tuning.king.frictionStatic;this.ufo.friction=this.tuning.king.friction;this.ufo.frictionStatic=this.tuning.king.frictionStatic;}
  step(direction:number,boost:boolean){
   if(this.state==='KING_EJECTED'){
@@ -181,6 +197,14 @@ export class Simulation {
   if(!['RUNNING','DANGER','DOCKING'].includes(this.state)) return;
   const dt=1000/cfg.physics.fixedStepHz,u=this.tuning.ufo,b=this.tuning.boost;
   this.elapsed+=dt;this.updateHazards(dt);this.protectionMs=Math.max(0,this.protectionMs-dt);
+  const safeEvent=this.eventSafe();const fired=this.events.update(dt,safeEvent,this.failures);if(fired)this.applyKingEvent(fired);
+  this.restoreFriction();
+  const effect=this.events.active?.physicsEffect;
+  if(safeEvent&&effect?.type==='king_friction_scale'&&'factor' in effect){const factor=1-(1-(effect.factor??1))*(this.events.data.gentle?.25:1);this.king.friction*=factor;this.king.frictionStatic*=factor;}
+  if(safeEvent&&effect?.type==='king_body_shift'&&'magnitudeMax' in effect&&this.events.data.activeLeft>stage5.eventActiveMs-stage5.bodyShiftMs)M.Body.applyForce(this.king,{x:this.king.position.x,y:this.king.position.y-35},{x:this.events.data.direction*(effect.magnitudeMax??0)*stage5.eventForceScale*.25*(this.events.data.gentle?.25:1),y:0});
+  // A small seated fidget is a torque on the independent body, never a position binding.
+  if(this.aboard&&this.protectionMs<=0&&this.state!=='DOCKING'&&Math.abs(this.ufo.velocity.x)*60>10&&this.ufo.position.x<this.layout.finish-300)this.king.torque+=Math.sin(this.elapsed/700+this.config.seed)*stage5.idleSwayTorque;
+
   const active=boost&&this.energy>0.01&&['RUNNING','DANGER'].includes(this.state);
   const desiredHeight=active?b.heightBonusPx:0;
   this.boostHeight+=Phaser.Math.Clamp(desiredHeight-this.boostHeight,-b.heightRampPxPerSec/cfg.physics.fixedStepHz,b.heightRampPxPerSec/cfg.physics.fixedStepHz);

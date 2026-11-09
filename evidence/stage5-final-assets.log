@@ -1,0 +1,35 @@
+
+> dont-drop-the-king-prototype@0.6.0 test:assets
+> node tests/asset-integration.mjs
+
+[
+  {
+    "name": "enabled King spritesheet replaces SVG while missing crown falls back",
+    "pass": true
+  },
+  {
+    "name": "replacement art does not alter King mass/collider or independence",
+    "pass": true
+  },
+  {
+    "name": "single-row replacement frames advance using catalog FPS",
+    "pass": true
+  },
+  {
+    "name": "missing uploaded MP3 is handled and does not block free play",
+    "pass": true
+  },
+  {
+    "name": "all three worlds switch all three independent parallax layers",
+    "pass": true
+  },
+  {
+    "name": "missing optional asset catalog still starts a playable game",
+    "pass": true
+  }
+]
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

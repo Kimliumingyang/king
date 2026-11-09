@@ -1,0 +1,19 @@
+
+> dont-drop-the-king-prototype@0.6.0 test:terrain
+> node tests/terrain-qa.mjs
+
+PASS locked routes / stable dock unlock and saved reward
+PASS saved unlock / NEXT LEVEL / new level seed
+PASS all 12 module types / layout reproducibility / visible-ground collider alignment
+PASS every configured checkpoint: zero velocity, collision-safe, survives neutral input
+PASS moving platform safe alignment windows less than 4s
+PASS roof is a real collision: boost cannot phase king through it
+PASS rescue on each dynamic support keeps collision and safe recovery
+PASS rescue preserves broken bridge / checkpoint reconstructs it
+PASS warning approach gate / checkpoint suppression / protection keeps physical collisions
+PASS legacy 2.4px/m save migrates to 6px/m without refunding rescue
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

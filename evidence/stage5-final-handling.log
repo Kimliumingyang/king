@@ -1,0 +1,78 @@
+PASS careless full-throttle + full Boost loses on all 15 routes; skilled zero-upgrade route is separately validated
+[
+  {
+    "level": 1,
+    "seconds": 11.3,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 2,
+    "seconds": 12.666666666666666,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 3,
+    "seconds": 14.016666666666667,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 4,
+    "seconds": 15.383333333333333,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 5,
+    "seconds": 16.733333333333334,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 6,
+    "seconds": 18.1,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 7,
+    "seconds": 19.433333333333334,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 8,
+    "seconds": 20.8,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 9,
+    "seconds": 3.183333333333333,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 10,
+    "seconds": 3.2,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 11,
+    "seconds": 24.866666666666667,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 12,
+    "seconds": 3.316666666666667,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 13,
+    "seconds": 27.566666666666666,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 14,
+    "seconds": 28.95,
+    "state": "KING_EJECTED"
+  },
+  {
+    "level": 15,
+    "seconds": 30.3,
+    "state": "KING_EJECTED"
+  }
+]

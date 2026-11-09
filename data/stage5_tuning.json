@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "eventResponseMaxPxPerSec": 300,
+  "eventForceScale": 0.38,
+  "eventActiveMs": 2300,
+  "eventChancePerWindow": 0.85,
+  "gentleFirstEventAfterFailures": 2,
+  "bodyShiftMs": 380,
+  "crownWarningDeg": 11,
+  "crownDropDeg": 16,
+  "crownDropKingDeg": 24,
+  "crownDropRisk": 0.7,
+  "crownWarningMs": 350,
+  "crownGroundLifetimeMs": 4000,
+  "idleSwayTorque": 0.012,
+  "worlds": {
+    "royal_foothills": {"sky":"#8796ad","rock": "#706b7c","grass":"#adb087","scenery":"foothills"},
+    "wobbly_wastes": {"sky":"#9a8d9f","rock":"#766375","grass":"#b5a38c","scenery":"wastes"},
+    "moonlit_citadel": {"sky":"#65738f","rock":"#5b596f","grass":"#949d9e","scenery":"citadel"}
+  }
+}

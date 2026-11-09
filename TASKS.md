@@ -18,5 +18,17 @@
 - [x] Isolated memory-save UI review navigation; keyboard modal focus and correct home Back flow.
 - [x] ART_HANDOFF.md and UI_REVIEW.md for artist review.
 - [ ] User/artist approval of the visual sample and replacement art.
-- [ ] Six king_events warnings/events and complete animation atlas (outside this preview).
-- [ ] Final per-world art and remaining stage 5 acceptance.
+- [x] v0.6.0: all six king_events with warnings/cooldowns/safety, replaceable state sheets and procedural fallback feedback.
+- [x] v0.6.0: three worlds / nine scenery layers; state art and missing-asset fallback integration tests.
+- [ ] Receive final artist art/recordings and approve final visual/device quality (current art is original sample).
+
+
+## Stage 5 full implementation · v0.6.0
+- [x] Warning-first six events, seeded/recoverable clocks, safety buffers and gentle first event after repeated failure.
+- [x] Independent falling/bouncing crown before King ejection; retained real King/UFO collision and inertia.
+- [x] Steeper hills/waves/ramps/dips in all15 routes, lower friction and angular damping.
+- [x] Three world scenery sets, animation-state hooks and original fallback motion/props.
+- [x] Audio cue routing, original synth fallback, uploaded audio fallback, M/HUD persisted mute and background pause.
+- [x] 111-item artist/audio catalog, XLSX/CSV/JSON, source SVGs, upload templates and downloadable ZIP.
+- [x] Events/Worlds/asset-kit walkthrough navigation with isolated saves.
+- [ ] Final user artwork/audio uploads: validate, enable and review in batches.

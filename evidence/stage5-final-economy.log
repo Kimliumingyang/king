@@ -1,0 +1,27 @@
+
+> dont-drop-the-king-prototype@0.6.0 test:economy
+> node tests/economy.mjs
+
+PASS first clear atomically pays base + pickup + first + three-star bonuses
+PASS refresh and repeated settlement callbacks pay one receipt only
+PASS real garage button charges correct price; no mid-run physics change; insufficient funds refused
+PASS full restart takes new immutable upgrade snapshot
+PASS repeat run pays normal delivery only; worse stars/time never overwrite records
+PASS fixed mission claim is once-only and locked goals pay nothing
+PASS star rules account for time, rescues, checkpoint retries and near misses
+PASS all five upgrade lines use exponential prices and enforce caps
+PASS daily reward once per local day; backward clock and rapid timezone advance do not pay
+PASS START DAILY applies its actual weaker Boost and retains free rescue
+PASS all upgrade effects apply to actual physics; max rescue kit still grants only one rescue
+PASS unified Local/Memory save service and Mock port reject old cloud snapshots
+PASS corrupted profile primary restores wallet, upgrades and receipts from backup
+PASS interrupted purchase recovers once; stale displayed price cannot charge a second tier
+PASS storage refusal cannot debit wallet or promise an unrecorded payout
+PASS all profile copies damaged: no silent wallet reset or purchase
+PASS stage 3 unlocks migrate without inventing historical coin payments
+PASS economy UI has no browser runtime errors
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

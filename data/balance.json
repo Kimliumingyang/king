@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "notes": "ALL PARAMETERS ARE INITIAL DESIGN TUNING VALUES; verify in gameplay. px @ 1280x720.",
+  "notes": "v0.6.0: slipperier King, steeper roads, warning-first deterministic humor; retain independent rigid bodies and free rescue rules.",
   "pixelsPerMeter": 6,
   "physics": {
     "fixedStepHz": 60,
@@ -25,12 +25,12 @@
       "widthPx": 112,
       "heightPx": 125,
       "mass": 2.8,
-      "friction": 0.45,
-      "frictionStatic": 0.63,
+      "friction": 0.25,
+      "frictionStatic": 0.38,
       "frictionAir": 0,
       "ejectGraceMs": 650,
       "edgeWarningThreshold": 0.78,
-      "angularDrag": 0.06
+      "angularDrag": 0.035
     },
     "boost": {
       "durationSecAtFull": 2.8,

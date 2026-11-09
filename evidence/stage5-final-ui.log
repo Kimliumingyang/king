@@ -1,0 +1,43 @@
+
+> dont-drop-the-king-prototype@0.6.0 test:ui
+> node tests/ui-review.mjs
+
+[
+  {
+    "name": "10 review screens at 1280x720",
+    "pass": true
+  },
+  {
+    "name": "10 review screens at 844x390",
+    "pass": true
+  },
+  {
+    "name": "10 review screens at 390x844",
+    "pass": true
+  },
+  {
+    "name": "review mode never changes persistent run or profile",
+    "pass": true
+  },
+  {
+    "name": "review failure supports real rescue return to play",
+    "pass": true
+  },
+  {
+    "name": "garage back returns to home before run starts",
+    "pass": true
+  },
+  {
+    "name": "modal keyboard focus loops and Space activates Play",
+    "pass": true
+  },
+  {
+    "name": "SVG textures and all review screens load without runtime exceptions",
+    "pass": true
+  }
+]
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

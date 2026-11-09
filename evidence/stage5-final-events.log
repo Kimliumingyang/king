@@ -1,0 +1,22 @@
+
+> dont-drop-the-king-prototype@0.6.0 test:events
+> node tests/stage5.mjs
+
+PASS seeded schedules cover all six; spacing, level gates and two-failure gentle first event
+PASS gap 1.5s approach, checkpoint, dock and rescue protection suppress/cancel events
+PASS full warning → hiccup effect/pose → restoration
+PASS full warning → sneeze effect/pose → restoration
+PASS full warning → nap effect/pose → restoration
+PASS full warning → toast effect/pose → restoration
+PASS full warning → scepter effect/pose → restoration
+PASS full warning → hurry effect/pose → restoration
+PASS two-failure nap is gentler; a successful delivery resets consecutive failures
+PASS event clock/count/cooldown survive save and refresh
+PASS crown visibly detaches before independently simulated King ejects under braking
+PASS sound HUD/M toggles persist; silent play remains functional
+PASS new backgrounds, event poses and audio have no browser runtime exceptions
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

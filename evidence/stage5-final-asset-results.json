@@ -1,0 +1,26 @@
+[
+  {
+    "name": "enabled King spritesheet replaces SVG while missing crown falls back",
+    "pass": true
+  },
+  {
+    "name": "replacement art does not alter King mass/collider or independence",
+    "pass": true
+  },
+  {
+    "name": "single-row replacement frames advance using catalog FPS",
+    "pass": true
+  },
+  {
+    "name": "missing uploaded MP3 is handled and does not block free play",
+    "pass": true
+  },
+  {
+    "name": "all three worlds switch all three independent parallax layers",
+    "pass": true
+  },
+  {
+    "name": "missing optional asset catalog still starts a playable game",
+    "pass": true
+  }
+]

@@ -31,3 +31,7 @@ No Git checkout was supplied (git status reports not a repository), so no fabric
 
 ## GitHub Pages packaging verification
 Relative asset base configured in vite.config.ts; publicDir disabled to exclude local source ZIP downloads. Rebuilt production dist successfully and ran all 11 browser checks against local production preview on port 4173: PASS. Publishing explicitly requested by user after original stage delivery.
+
+## v0.6.0 / Stage5
+
+See [QA_STAGE5.md](QA_STAGE5.md):45 route proofs, event/crown/asset/audio tests, existing physics/rescue/economy/terrain regressions,10-screen UI review at three viewports, download/archive validation. Final artist files/recordings and physical-device QA remain explicit follow-ups. The approved design archive is unchanged.

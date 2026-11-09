@@ -1,0 +1,7 @@
+import type Phaser from 'phaser';
+export interface AssetEntry {id:string;kind:string;path:string;enabled:boolean;width:number;height:number;frames:number;fps:number;loop:boolean;}
+export let assetEntries:AssetEntry[]=[];
+export async function loadAssetCatalog(){try{const response=await fetch('./asset-manifest.json');if(!response.ok)return;const data=await response.json();if(data.schemaVersion===1&&Array.isArray(data.assets))assetEntries=data.assets.filter((a:any)=>typeof a.id==='string'&&typeof a.path==='string'&&!a.path.includes('..')&&!/^(https?:|\/)/.test(a.path));}catch{/* A missing optional catalog must never prevent free play. */}}
+export function preloadReplacements(scene:Phaser.Scene){for(const a of assetEntries.filter(a=>a.enabled&&a.kind!=='audio'&&a.kind!=='ui')){if(a.frames>1)scene.load.spritesheet(a.id,'./'+a.path,{frameWidth:a.width,frameHeight:a.height});else scene.load.image(a.id,'./'+a.path);}}
+export function frameAsset(image:Phaser.GameObjects.Image,id:string,fallback:string,clock:number){const a=assetEntries.find(a=>a.enabled&&a.id===id);if(a&&image.scene.textures.exists(id)){let frame=Math.floor(clock/1000*a.fps);frame=a.loop?frame%a.frames:Math.min(a.frames-1,frame);image.setTexture(id,Math.max(0,frame));return;}image.setTexture(fallback);}
+export function skinUI(){for(const a of assetEntries.filter(a=>a.enabled&&a.kind==='ui')){const cssId=a.id.replaceAll('_','-');document.documentElement.style.setProperty('--'+cssId,`url("./${a.path}")`);}}

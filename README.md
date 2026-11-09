@@ -67,3 +67,12 @@ Phaser 3 + Matter.js + TypeScript + Vite，固定 60Hz。原始策划案在 desi
 ### v0.5.0 · First-level art / UI preview
 
 [UI walkthrough](https://kimliumingyang.github.io/king/play/?review=1&v=0.5.0) provides eight screen shortcuts with temporary memory saves. [Normal play](https://kimliumingyang.github.io/king/play/?v=0.5.0) retains the existing local save. Physics and difficulty are unchanged from v0.4.0. See [ART_HANDOFF.md](ART_HANDOFF.md), [UI_REVIEW.md](UI_REVIEW.md) and [QA_STAGE5_PREVIEW.md](QA_STAGE5_PREVIEW.md). This is the first portion of stage 5, not completion of all art/events. SVG source assets are editable under src/assets/. `npm run test:ui` checks desktop, landscape, portrait, navigation, rescue and save isolation.
+
+
+### v0.6.0 · Stage 5 implementation and harder handling
+
+[Play](https://kimliumingyang.github.io/king/play/?v=0.6.0) · [UI/events/world walkthrough](https://kimliumingyang.github.io/king/play/?review=1&v=0.6.0) · [Download artist/audio ZIP](https://kimliumingyang.github.io/king/play/downloads/DDTK_Art_Audio_Kit_v0.6.0.zip) · [Excel](https://kimliumingyang.github.io/king/play/downloads/DDTK_Art_Audio_List_v0.6.0.xlsx) · [Searchable catalog](https://kimliumingyang.github.io/king/play/downloads/).
+
+Six warned, seeded King events; crown can fall before the independent King; steeper terrain and slipperier contact in all15 levels; three layered world samples; replaceable spritesheets/audio with original SVG/synth fallbacks. M or the sound button toggles persisted mute. Final artist originals/recordings are still pending; no SDK or ad rollout is included. See ART_HANDOFF.md, UI_REVIEW.md and QA_STAGE5.md.
+
+Artist uploads belong under `game-assets/assets/`; editable source files and licensing under `art-source/`. `npm run assets:check`, `npm run assets:kit`, `npm run test:events`, `npm run test:assets` supplement the existing physics/level/economy/rescue tests. Build now copies `game-assets/` as public assets; do not put runtime assets under ignored legacy public/output/.

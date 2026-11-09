@@ -8,8 +8,8 @@
       "difficulty": 1,
       "parameters": {
         "amplitudePx": [
-          14,
-          32
+          25,
+          48
         ],
         "wavelengthPx": [
           220,
@@ -24,8 +24,8 @@
       "difficulty": 2,
       "parameters": {
         "amplitudePx": [
-          24,
-          40
+          30,
+          53
         ],
         "periods": [
           2,
@@ -40,8 +40,8 @@
       "difficulty": 2,
       "parameters": {
         "slopeDeg": [
-          14,
-          23
+          22,
+          31
         ],
         "landingFlatPx": 90
       },
@@ -53,8 +53,8 @@
       "difficulty": 2,
       "parameters": {
         "depthPx": [
-          28,
-          56
+          38,
+          69
         ],
         "entryRampPx": 65
       },

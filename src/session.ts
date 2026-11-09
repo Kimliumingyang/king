@@ -17,9 +17,9 @@ export class Session {
     else if(saved?.status==='rescuing'){this.run.status='active';this.sim.protectionMs=cfg.revive.freeRescueInvulnerableMs;}
     if(!store.error)store.save(this.run);
   }
-  private atCheckpoint(){const s=new Simulation(level,this.run.runUpgradeSnapshot as ReturnType<typeof zeroUpgrades>,this.run.dailyChallengeDate?economyRules.daily.boostScale:1);s.spawnAt(this.run.checkpointId?level.checkpointsMeters[this.run.checkpointId-1]*cfg.pixelsPerMeter:0);s.elapsed=this.run.elapsedMs;return s;}
-  save(allowNewRun=false){this.run.elapsedMs=this.sim.elapsed;return this.store.save(this.run,allowNewRun);}
-  restart(){this.store.needsReset=false;this.run=newRun(this.progress.data.upgradeLevels,this.run.dailyChallengeDate);this.sim=this.atCheckpoint();this.rescueMs=0;this.previousDanger=false;this.save(true);}
+  private atCheckpoint(){const s=new Simulation(level,this.run.runUpgradeSnapshot as ReturnType<typeof zeroUpgrades>,this.run.dailyChallengeDate?economyRules.daily.boostScale:1);s.spawnAt(this.run.checkpointId?level.checkpointsMeters[this.run.checkpointId-1]*cfg.pixelsPerMeter:0);s.elapsed=this.run.elapsedMs;s.failures=this.run.consecutiveFailures??0;s.restoreEvents(this.run.eventSnapshot);return s;}
+  save(allowNewRun=false){this.run.elapsedMs=this.sim.elapsed;this.run.eventSnapshot=structuredClone(this.sim.events.data);this.run.consecutiveFailures=this.sim.failures;return this.store.save(this.run,allowNewRun);}
+  restart(){const failures=this.run?.levelId===level.id?(this.run.consecutiveFailures??0):0;this.store.needsReset=false;this.run=newRun(this.progress.data.upgradeLevels,this.run.dailyChallengeDate);this.run.consecutiveFailures=failures;this.sim=this.atCheckpoint();this.rescueMs=0;this.previousDanger=false;this.save(true);}
   startLevel(index:number,qa=false){
     if(index<1||index>AVAILABLE_LEVELS||(!qa&&index>Math.max(this.memoryUnlocked,this.progress.data.highestUnlockedLevel)))return false;
     activateLevel(allLevels[index-1].id);this.run.dailyChallengeDate=undefined;this.restart();return true;
@@ -64,8 +64,8 @@ export class Session {
       this.autosave+=1000/cfg.physics.fixedStepHz;if(this.autosave>=stage2.autosaveMs){this.autosave=0;this.save();}
     }
     if(this.sim.state==='KING_EJECTED'&&was!=='KING_EJECTED'){
-      this.run.status='failed';this.run.failureX=this.sim.failureX;this.run.elapsedMs=this.sim.elapsed;this.save();
+      this.sim.failures++;this.run.consecutiveFailures=this.sim.failures;this.run.status='failed';this.run.failureX=this.sim.failureX;this.run.elapsedMs=this.sim.elapsed;this.save();
     }
-    if(this.sim.state==='CLEAR'&&was!=='CLEAR'){this.run.status='complete';this.save();this.settle();}
+    if(this.sim.state==='CLEAR'&&was!=='CLEAR'){this.sim.failures=0;this.run.consecutiveFailures=0;this.run.status='complete';this.save();this.settle();}
   }
 }

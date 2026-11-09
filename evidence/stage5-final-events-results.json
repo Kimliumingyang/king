@@ -1,0 +1,121 @@
+[
+  {
+    "name": "seeded schedules cover all six; spacing, level gates and two-failure gentle first event",
+    "pass": true
+  },
+  {
+    "name": "gap 1.5s approach, checkpoint, dock and rescue protection suppress/cancel events",
+    "pass": true
+  },
+  {
+    "name": "full warning → hiccup effect/pose → restoration",
+    "pass": true,
+    "before": 0,
+    "after": 1,
+    "saved": true,
+    "friction": 0.25,
+    "base": 0.25,
+    "restored": 0.25,
+    "pose": "hiccup",
+    "caption": "BURP!",
+    "ufoDelta": -0.004188173410355868,
+    "state": "RUNNING"
+  },
+  {
+    "name": "full warning → sneeze effect/pose → restoration",
+    "pass": true,
+    "before": 0,
+    "after": 1,
+    "saved": true,
+    "friction": 0.25,
+    "base": 0.25,
+    "restored": 0.25,
+    "pose": "sneeze",
+    "caption": "ACHOO!",
+    "ufoDelta": 13.50035556233293,
+    "state": "RUNNING"
+  },
+  {
+    "name": "full warning → nap effect/pose → restoration",
+    "pass": true,
+    "before": 0,
+    "after": 1,
+    "saved": true,
+    "friction": 0.23,
+    "base": 0.25,
+    "restored": 0.25,
+    "pose": "nap",
+    "caption": "Zzz...",
+    "ufoDelta": 0.043931419773872375,
+    "state": "RUNNING"
+  },
+  {
+    "name": "full warning → toast effect/pose → restoration",
+    "pass": true,
+    "before": 0,
+    "after": 1,
+    "saved": true,
+    "friction": 0.25,
+    "base": 0.25,
+    "restored": 0.25,
+    "pose": "toast",
+    "caption": "CHEERS!",
+    "ufoDelta": 20.397705446765574,
+    "state": "RUNNING"
+  },
+  {
+    "name": "full warning → scepter effect/pose → restoration",
+    "pass": true,
+    "before": 0,
+    "after": 1,
+    "saved": true,
+    "friction": 0.25,
+    "base": 0.25,
+    "restored": 0.25,
+    "pose": "scepter",
+    "caption": "MAKE WAY!",
+    "ufoDelta": -0.01780280110792739,
+    "state": "RUNNING"
+  },
+  {
+    "name": "full warning → hurry effect/pose → restoration",
+    "pass": true,
+    "before": 0,
+    "after": 1,
+    "saved": true,
+    "friction": 0.25,
+    "base": 0.25,
+    "restored": 0.25,
+    "pose": "hurry",
+    "caption": "FASTER, PEASANTS!",
+    "ufoDelta": 0.04194974362860253,
+    "state": "RUNNING"
+  },
+  {
+    "name": "two-failure nap is gentler; a successful delivery resets consecutive failures",
+    "pass": true,
+    "factor": 0.98,
+    "failedCount": 0,
+    "runCount": 0,
+    "state": "CLEAR"
+  },
+  {
+    "name": "event clock/count/cooldown survive save and refresh",
+    "pass": true
+  },
+  {
+    "name": "crown visibly detaches before independently simulated King ejects under braking",
+    "pass": true,
+    "drop": 20,
+    "eject": 129,
+    "state": "KING_EJECTED"
+  },
+  {
+    "name": "sound HUD/M toggles persist; silent play remains functional",
+    "pass": true
+  },
+  {
+    "name": "new backgrounds, event poses and audio have no browser runtime exceptions",
+    "pass": true
+  }
+]

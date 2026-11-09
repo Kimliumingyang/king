@@ -1,6 +1,6 @@
 {
   "name": "dont-drop-the-king-prototype",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,7 +12,11 @@
     "test:terrain": "node tests/terrain-qa.mjs",
     "test:economy": "node tests/economy.mjs",
     "test:difficulty": "node tests/difficulty-probe.mjs",
-    "test:ui": "node tests/ui-review.mjs"
+    "test:ui": "node tests/ui-review.mjs",
+    "test:events": "node tests/stage5.mjs",
+    "assets:check": "node scripts/validate-assets.mjs",
+    "assets:kit": "python scripts/make-asset-kit.py && python scripts/package-asset-kit.py",
+    "test:assets": "node tests/asset-integration.mjs"
   },
   "dependencies": {
     "phaser": "3.90.0"

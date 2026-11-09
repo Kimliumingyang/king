@@ -1,0 +1,67 @@
+[
+  {
+    "name": "idle 40 seconds / physical contact",
+    "pass": true,
+    "state": "RUNNING",
+    "relative": -2.1904772259179754,
+    "contact": 2
+  },
+  {
+    "name": "zero upgrade / no rescue L01 traversal and stable docking",
+    "pass": true,
+    "state": "CLEAR",
+    "seconds": 86.36666666666666,
+    "maxAngle": 14.218337873585032,
+    "maxOffMs": 0,
+    "x": 2980.027384686639
+  },
+  {
+    "name": "hard brake produces independent slide",
+    "pass": true,
+    "relativeBefore": -22.120372122718834,
+    "relativeAfter": 39.21281142784467,
+    "state": "RUNNING"
+  },
+  {
+    "name": "edge-loaded king can eject under hard braking",
+    "pass": true,
+    "failed": true,
+    "offMs": 666.6666666666665,
+    "restarted": "RUNNING"
+  },
+  {
+    "name": "high speed crossing does not clear",
+    "pass": true,
+    "crossed": true,
+    "state": "KING_EJECTED",
+    "crossingSpeed": 309.3907461896015
+  },
+  {
+    "name": "boost energy consumption and recharge",
+    "pass": true,
+    "consumed": 0.8809523809523814,
+    "recovered": 0.9365079365079367
+  },
+  {
+    "name": "keyboard release",
+    "pass": true,
+    "x": 0.8872957539044078
+  },
+  {
+    "name": "pause freezes physics",
+    "pass": true
+  },
+  {
+    "name": "restart confirmation and reset",
+    "pass": true
+  },
+  {
+    "name": "landscape pointer capture release",
+    "pass": true
+  },
+  {
+    "name": "browser runtime exceptions",
+    "pass": true,
+    "errors": []
+  }
+]

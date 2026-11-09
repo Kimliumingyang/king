@@ -1,8 +1,10 @@
 import {cfg,level} from './physics';
+import {validEventSnapshot,type EventSnapshot} from './king-events';
 import {allLevels} from './terrain';
 import type {SaveBackend} from './storage';
 export const SAVE_KEY='ddtk-stage2-run-v1';
 export interface RunState {
+  eventSnapshot?:EventSnapshot; consecutiveFailures?:number;
   schemaVersion:1; dailyChallengeDate?:string; pixelsPerMeter?:number; revision:number; runId:string; attemptId:string; levelId:string; seed:number;
   freeRescueUsed:boolean; extraRescueUsed:boolean; lastCheckpointId:number; checkpointId:number;
   claimedPickupIds:string[]; runCoins:number; retries:number; totalRescues:number;
@@ -12,7 +14,7 @@ export interface RunState {
 const statuses=['active','failed','rescuing','complete'];
 export function validRun(v:any):v is RunState {
   const savedLevel=allLevels.find(l=>l.id===v?.levelId);
-  return !!savedLevel&&!!v&&v.schemaVersion===1&&typeof v.runId==='string'&&v.runId.length>0&&typeof v.attemptId==='string'
+  return !!savedLevel&&!!v&&(v.eventSnapshot===undefined||validEventSnapshot(v.eventSnapshot))&&(v.consecutiveFailures===undefined||(Number.isInteger(v.consecutiveFailures)&&v.consecutiveFailures>=0))&&v.schemaVersion===1&&typeof v.runId==='string'&&v.runId.length>0&&typeof v.attemptId==='string'
     &&(v.pixelsPerMeter===undefined||(Number.isFinite(v.pixelsPerMeter)&&v.pixelsPerMeter>0))&&v.seed===savedLevel.seed&&typeof v.freeRescueUsed==='boolean'&&typeof v.extraRescueUsed==='boolean'
     &&statuses.includes(v.status)&&Array.isArray(v.claimedPickupIds)&&v.claimedPickupIds.every((id:any)=>typeof id==='string')
     &&['revision','lastCheckpointId','checkpointId','runCoins','retries','totalRescues','elapsedMs','furthestX','dangerCount','lastSavedAt'].every(k=>Number.isFinite(v[k])&&v[k]>=0)

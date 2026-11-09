@@ -1,8 +1,8 @@
 {
-  "version": 4,
-  "parameterFractionMin": 0.3,
+  "version": 6,
+  "parameterFractionMin": 0.35,
   "parameterLevelGrowth": 0.35,
-  "parameterRandomSpan": 0.35,
+  "parameterRandomSpan": 0.3,
   "extraModulesByLevel": {
     "L03": [
       "rolling_waves"
@@ -50,6 +50,9 @@
       "seesaw",
       "rolling_waves",
       "sudden_dip"
+    ],
+    "L01": [
+      "gentle_hills"
     ]
   },
   "gapWidthsPx": {
