@@ -26,3 +26,6 @@ Known issue/limitation: 34.6s scripted L01 is shorter than target 80–120s; pla
 
 ## Change and file inventory
 No Git checkout was supplied (git status reports not a repository), so no fabricated commit/diff is provided. New: src/{main,physics,bridge}.ts, src/style.css, index.html, package.json/lock, tsconfig.json, tests/physics.mjs, IMPLEMENTATION_PLAN.md, TASKS.md, README.md, TUNING_NOTES.md, this report, evidence screenshots/results, dist production output. Supplied spec retained verbatim in design-spec/. Five JSON runtime configs copied to data/, with one documented push-force tuning change. No other original specification changed.
+
+## GitHub Pages packaging verification
+Relative asset base configured in vite.config.ts; publicDir disabled to exclude local source ZIP downloads. Rebuilt production dist successfully and ran all 11 browser checks against local production preview on port 4173: PASS. Publishing explicitly requested by user after original stage delivery.

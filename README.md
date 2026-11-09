@@ -19,7 +19,7 @@ npm run dev -- --port 5173
 # 另一个终端；需要 Chromium
 CHROMIUM_PATH=/usr/bin/chromium npm test
 ```
-可使用 Playwright 安装的 Chromium 路径替代。`TEST_URL` 可切换到静态构建服务器测试。dist/ 是可托管静态文件，需要 HTTP 服务，不能双击 file://。当前 Vite 使用默认根路径，子目录托管须配置 base。
+可使用 Playwright 安装的 Chromium 路径替代。`TEST_URL` 可切换到静态构建服务器测试。dist/ 是可托管静态文件，需要 HTTP 服务，不能双击 file://。Vite 使用相对资源路径，可在 GitHub Pages 项目子目录中运行。
 
 ## 本次范围
 Phaser 3 + bundled Matter.js + TypeScript + Vite。独立国王刚体、真实接触/摩擦、双探针弹簧阻尼、推进惯性、Boost、失衡预警、镜头、停稳通关、暂停、重开、调试界面。L01 从 JSON 中的关卡及地形参数实例化；其余 14 关保留配置，未开发。船上没有固定国王坐标的约束。
@@ -30,3 +30,9 @@ Phaser 3 + bundled Matter.js + TypeScript + Vite。独立国王刚体、真实�
 阶段 2 才实现一次免费 Royal Rescue、永久免费 checkpoint、暂存 run 防刷新及失败短演出。当前失败可直接重开，没有收费、广告或虚假救援按钮。checkpoint 旗帜仅预留位置。无经济/升级/存档；不要将此包用于正式发行。实际手机、人工完整手感验收及 80–120 秒教学节奏仍待验证。
 
 详见 IMPLEMENTATION_PLAN.md、TASKS.md、QA_REPORT.md 和 evidence/results.json。原规格保存在 design-spec/，运行配置位于 data/。
+
+## 在线走查
+
+https://kimliumingyang.github.io/king/
+
+调试模式：https://kimliumingyang.github.io/king/?debug=1 。当前发布的是阶段 1 灰盒。`gh-pages` 分支保存静态构建，`main` 保存源码；后续源码改动需重新构建并更新发布分支。
