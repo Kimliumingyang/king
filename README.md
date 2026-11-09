@@ -33,6 +33,6 @@ Phaser 3 + bundled Matter.js + TypeScript + Vite。独立国王刚体、真实�
 
 ## 在线走查
 
-https://kimliumingyang.github.io/king/
+https://kimliumingyang.github.io/king/play/
 
-调试模式：https://kimliumingyang.github.io/king/?debug=1 。当前发布的是阶段 1 灰盒。`gh-pages` 分支保存静态构建，`main` 保存源码；后续源码改动需重新构建并更新发布分支。
+调试模式：https://kimliumingyang.github.io/king/play/?debug=1 。当前发布的是阶段 1 灰盒。Pages 当前从 `main` 根目录发布，`play/` 保存可玩的静态构建；后续源码改动需重新构建并同步到 `play/`。`gh-pages` 另保留独立构建备份。
