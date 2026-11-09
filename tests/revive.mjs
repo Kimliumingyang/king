@@ -8,7 +8,7 @@ const url=process.env.TEST_URL||'http://localhost:5173/?debug=1';const KEY='ddtk
 const pass=(name,detail={})=>{results.push({name,pass:true,...detail});console.log('PASS',name);};
 const load=async()=>{await page.goto(url);await page.waitForFunction(()=>window.__test?.dislodge);};
 await load();await page.getByRole('button',{name:'PLAY',exact:true}).click();pass('first launch / real PLAY button');
-await page.evaluate(()=>{const t=window.__test;t.reset();t.setPaused(true);let s=t.session;for(let i=0;i<1800&&s.sim.ufo.position.x<620;i++){const v=s.sim.ufo.velocity.x*60;s.step(v<33?1:v>37?-1:0,false);}});
+await page.evaluate(()=>{const t=window.__test;t.reset();t.setPaused(true);let s=t.session;for(let i=0;i<12000&&s.sim.ufo.position.x<s.sim.layout.checkpointXs[0]+44;i++){const v=s.sim.ufo.velocity.x*60;s.step(v<33?1:v>37?-1:0,false);}});
 let run=await page.evaluate(()=>window.__test.session.run);assert.equal(run.checkpointId,1);assert(run.claimedPickupIds.includes('L01-p01'));assert.equal(run.lastCheckpointId,run.checkpointId);pass('actual input traversal activates and saves 240m checkpoint',{checkpoint:run.checkpointId});
 await page.evaluate(()=>{const t=window.__test;t.dislodge();for(let i=0;i<20;i++)t.step(0);});
 assert.equal(await page.evaluate(()=>window.__test.sim.state),'DANGER');pass('departure starts real grace window');
@@ -17,7 +17,7 @@ assert.equal(await page.evaluate(()=>window.__test.sim.state),'KING_EJECTED');co
 await page.evaluate(()=>{const t=window.__test;for(let i=0;i<80;i++)t.step(0);t.failMenu();});
 assert.equal(await page.evaluate(()=>window.__test.sim.state),'FAIL_MENU');assert.deepEqual(await page.evaluate(()=>({coins:window.__test.session.run.runCoins,d:window.__test.session.run.furthestX,time:window.__test.session.run.elapsedMs})),frozen);pass('1.2s ejection / economy, distance and gameplay time frozen');
 await page.screenshot({path:'evidence/stage2-failure-desktop.png'});
-const runId=run.runId;
+const runId=run.runId;const checkpointX=await page.evaluate(()=>window.__test.sim.layout.checkpointXs[0]);
 await page.getByRole('button',{name:'ROYAL RESCUE — FREE',exact:true}).click();
 const rescue=await page.evaluate(()=>{const t=window.__test;t.setPaused(true);return {state:t.sim.state,run:t.session.run,overlaps:t.overlaps(),vx:t.sim.ufo.velocity.x,vy:t.sim.king.velocity.y};});
 assert.equal(rescue.state,'REVIVE_ANIMATION');assert.equal(rescue.run.freeRescueUsed,true);assert.equal(rescue.overlaps,0);assert.equal(rescue.vx,0);assert.equal(rescue.vy,0);
@@ -31,21 +31,21 @@ assert(protection.ms>1300&&protection.ms<=1500);assert(protection.contact>0);ass
 await page.evaluate(()=>{localStorage.setItem('ddtk-permanent-wallet-test','1234');});
 const cycle=[];
 for(let i=0;i<30;i++){
- const x=[0,180,330,576,780,850,1000,1150][i%8];
+ const positions=await page.evaluate(()=>{const l=window.__test.sim.layout;return[0,l.sections[0].center,l.sections[0].end+100,l.checkpointXs[0],l.sections[1].center,l.sections[1].end-10,l.sections[2].center,l.finish-120];});const x=positions[i%8];
  await page.evaluate(x=>{const t=window.__test;t.setPaused(true);t.dislodge(x);for(let j=0;j<130;j++)t.step(0);t.failMenu();},x);
  assert.equal(await page.getByRole('button',{name:'ROYAL RESCUE — FREE',exact:true}).count(),0);
  const state=await page.evaluate(()=>({state:window.__test.sim.state,coins:window.__test.session.run.runCoins}));assert.equal(state.state,'FAIL_MENU');
  const retry=await page.evaluate(()=>{const t=window.__test;[...document.querySelectorAll('#actions button')].find(b=>b.textContent==='RETRY CHECKPOINT').click();t.setPaused(true);return {state:t.sim.state,x:t.sim.ufo.position.x,vx:t.sim.ufo.velocity.x,vy:t.sim.king.velocity.y,overlap:t.overlaps(),run:structuredClone(t.session.run)};});
- assert.equal(retry.state,'RUNNING');assert.equal(retry.x,576);assert.equal(retry.vx,0);assert.equal(retry.vy,0);assert.equal(retry.overlap,0);assert.equal(retry.run.freeRescueUsed,true);assert.equal(retry.run.runCoins,Math.floor(state.coins*.8));assert.equal(retry.run.runId,runId);
+ assert.equal(retry.state,'RUNNING');assert.equal(retry.x,checkpointX);assert.equal(retry.vx,0);assert.equal(retry.vy,0);assert.equal(retry.overlap,0);assert.equal(retry.run.freeRescueUsed,true);assert.equal(retry.run.runCoins,Math.floor(state.coins*.8));assert.equal(retry.run.runId,runId);
  const survival=await page.evaluate(()=>{const t=window.__test;for(let j=0;j<90;j++)t.step(0);return {state:t.sim.state,claim:t.session.claim('L01-p01',5)};});assert.equal(survival.state,'RUNNING');assert.equal(survival.claim,false);
  cycle.push({cycle:i+1,deathX:x,checkpointX:retry.x,retries:retry.run.retries,runCoins:retry.run.runCoins});
 }
 assert.equal(await page.evaluate(()=>localStorage.getItem('ddtk-permanent-wallet-test')),'1234');pass('30 failures/retries, no overlap or soft-lock; rescue stays used; no duplicate pickups',{cycles:cycle});
 await page.reload();await page.waitForFunction(()=>window.__test?.dislodge);assert.equal(await page.evaluate(()=>window.__test.session.run.retries),30);assert.equal(await page.evaluate(()=>window.__test.session.run.freeRescueUsed),true);pass('30 retries survive refresh');
 // Corrupt primary, retaining independently validated backup.
-await page.evaluate(key=>{addEventListener('pagehide',e=>e.stopImmediatePropagation(),true);localStorage.setItem(key,'{broken');},KEY);await page.reload();await page.waitForFunction(()=>window.__test?.dislodge);assert.equal(await page.evaluate(()=>window.__test.session.run.freeRescueUsed),true);assert.equal(await page.evaluate(()=>window.__test.session.run.retries),30);pass('damaged primary restores valid backup without refunding rescue');
+await page.evaluate(key=>{for(const type of ['blur','pagehide','visibilitychange'])addEventListener(type,e=>e.stopImmediatePropagation(),true);localStorage.setItem(key,'{broken');},KEY);await page.reload();await page.waitForFunction(()=>window.__test?.dislodge);assert.equal(await page.evaluate(()=>window.__test.session.run.freeRescueUsed),true);assert.equal(await page.evaluate(()=>window.__test.session.run.retries),30);pass('damaged primary restores valid backup without refunding rescue');
 // Crash after staging commit, before main key: newer staging wins.
-await page.evaluate(key=>{addEventListener('pagehide',e=>e.stopImmediatePropagation(),true);const v=JSON.parse(localStorage.getItem(key));v.revision+=1;v.retries=31;localStorage.setItem(key+'-staging',JSON.stringify(v));},KEY);await page.reload();await page.waitForFunction(()=>window.__test?.dislodge);assert.equal(await page.evaluate(()=>window.__test.session.run.retries),31);pass('interrupted atomic write recovers latest staging');
+await page.evaluate(key=>{for(const type of ['blur','pagehide','visibilitychange'])addEventListener(type,e=>e.stopImmediatePropagation(),true);const v=JSON.parse(localStorage.getItem(key));v.revision+=1;v.retries=31;localStorage.setItem(key+'-staging',JSON.stringify(v));},KEY);await page.reload();await page.waitForFunction(()=>window.__test?.dislodge);assert.equal(await page.evaluate(()=>window.__test.session.run.retries),31);pass('interrupted atomic write recovers latest staging');
 // Fail menu can be paused/refresh and always has free retry.
 await page.getByRole('button',{name:'CONTINUE',exact:true}).click();await page.evaluate(()=>{const t=window.__test;t.setPaused(true);t.dislodge(850);for(let i=0;i<130;i++)t.step(0);t.failMenu();});
 await page.reload();await page.waitForFunction(()=>window.__test?.dislodge);assert(await page.getByRole('button',{name:'RETRY CHECKPOINT',exact:true}).isVisible());assert.equal(await page.getByRole('button',{name:'ROYAL RESCUE — FREE',exact:true}).count(),0);pass('failed run reload stays on fail menu / free retry always visible');
@@ -55,6 +55,7 @@ await page.getByRole('button',{name:'RESTART LEVEL',exact:true}).click();await p
 // Storage write failure cannot consume or grant a rescue; checkpoint still works.
 await page.evaluate(()=>{const t=window.__test;t.setPaused(true);t.dislodge(330);for(let i=0;i<130;i++)t.step(0);t.failMenu();Storage.prototype.setItem=function(){throw new DOMException('quota','QuotaExceededError');};});
 await page.getByRole('button',{name:'ROYAL RESCUE — FREE',exact:true}).click();assert.equal(await page.evaluate(()=>window.__test.session.run.freeRescueUsed),false);assert.equal(await page.evaluate(()=>window.__test.sim.state),'FAIL_MENU');await page.getByRole('button',{name:'RETRY CHECKPOINT',exact:true}).click();assert.notEqual(await page.evaluate(()=>window.__test.sim.state),'FAIL_MENU');pass('storage failure: no uncommitted rescue / checkpoint remains playable');
+await context.close();
 // A fresh browser profile verifies normal rescue completion and a real 30s blur pause.
 const clean=await browser.newContext({viewport:{width:1280,height:720}});const normal=await clean.newPage();normal.on('pageerror',e=>errors.push(e.message));
 await normal.goto(url);await normal.waitForFunction(()=>window.__test?.dislodge);
@@ -72,9 +73,12 @@ assert.notEqual(await normal.evaluate(()=>window.__test.sim.state),'FAIL_MENU');
 const damaged=await browser.newContext();await damaged.addInitScript(key=>{for(const suffix of ['', '-staging','-backup'])localStorage.setItem(key+suffix,'broken');},KEY);
 const damagedPage=await damaged.newPage();damagedPage.on('pageerror',e=>errors.push(e.message));await damagedPage.goto(url);await damagedPage.waitForFunction(()=>window.__test?.dislodge);assert(await damagedPage.getByRole('button',{name:'START NEW RUN',exact:true}).isVisible());
 assert.equal(await damagedPage.evaluate(key=>localStorage.getItem(key),KEY),'broken');await damagedPage.getByRole('button',{name:'START NEW RUN',exact:true}).click();assert.equal(await damagedPage.evaluate(()=>window.__test.sim.state),'RUNNING');pass('all save copies corrupt: explicit reset, no silent overwrite');
+await damaged.close();
 // A stale tab must not overwrite the new run from a second tab, including on pagehide.
 const secondTab=await clean.newPage();await secondTab.goto(url);await secondTab.waitForFunction(()=>window.__test?.dislodge);const newId=await secondTab.evaluate(()=>{window.__test.reset();return window.__test.session.run.runId;});
+await normal.waitForFunction(({key,id})=>JSON.parse(localStorage.getItem(key)).runId===id,{key:KEY,id:newId});
 const stale=await normal.evaluate(key=>({saved:window.__test.session.save(),runId:JSON.parse(localStorage.getItem(key)).runId}),KEY);assert.equal(stale.saved,false);assert.equal(stale.runId,newId);pass('stale tab cannot overwrite a newly restarted run');
+await clean.close();
 const blocked=await browser.newContext();await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw new DOMException('blocked','SecurityError');}}));
 const blockedPage=await blocked.newPage();blockedPage.on('pageerror',e=>errors.push(e.message));await blockedPage.goto(url);await blockedPage.waitForFunction(()=>window.__test?.dislodge);await blockedPage.getByRole('button',{name:'START NEW RUN',exact:true}).click();assert.equal(await blockedPage.evaluate(()=>window.__test.sim.state),'RUNNING');pass('storage access denied at boot still allows free gameplay');
 assert.deepEqual(errors,[]);pass('no runtime exceptions',{errors});

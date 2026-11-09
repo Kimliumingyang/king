@@ -80,8 +80,8 @@
       "difficulty": 3,
       "parameters": {
         "clearancePx": [
-          185,
-          205
+          235,
+          255
         ],
         "tunnelLengthPx": 150
       },

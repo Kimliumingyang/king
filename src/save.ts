@@ -1,7 +1,8 @@
 import {cfg,level} from './physics';
+import {allLevels} from './terrain';
 export const SAVE_KEY='ddtk-stage2-run-v1';
 export interface RunState {
-  schemaVersion:1; revision:number; runId:string; attemptId:string; levelId:string; seed:number;
+  schemaVersion:1; pixelsPerMeter?:number; revision:number; runId:string; attemptId:string; levelId:string; seed:number;
   freeRescueUsed:boolean; extraRescueUsed:boolean; lastCheckpointId:number; checkpointId:number;
   claimedPickupIds:string[]; runCoins:number; retries:number; totalRescues:number;
   runUpgradeSnapshot:Record<string,number>; elapsedMs:number; furthestX:number; dangerCount:number;
@@ -9,15 +10,16 @@ export interface RunState {
 }
 const statuses=['active','failed','rescuing','complete'];
 export function validRun(v:any):v is RunState {
-  return !!v&&v.schemaVersion===1&&typeof v.runId==='string'&&v.runId.length>0&&typeof v.attemptId==='string'
-    &&v.levelId===level.id&&v.seed===level.seed&&typeof v.freeRescueUsed==='boolean'&&typeof v.extraRescueUsed==='boolean'
+  const savedLevel=allLevels.find(l=>l.id===v?.levelId);
+  return !!savedLevel&&!!v&&v.schemaVersion===1&&typeof v.runId==='string'&&v.runId.length>0&&typeof v.attemptId==='string'
+    &&v.seed===savedLevel.seed&&typeof v.freeRescueUsed==='boolean'&&typeof v.extraRescueUsed==='boolean'
     &&statuses.includes(v.status)&&Array.isArray(v.claimedPickupIds)&&v.claimedPickupIds.every((id:any)=>typeof id==='string')
     &&['revision','lastCheckpointId','checkpointId','runCoins','retries','totalRescues','elapsedMs','furthestX','dangerCount','lastSavedAt'].every(k=>Number.isFinite(v[k])&&v[k]>=0)
-    &&Number.isFinite(v.failureX)&&Number.isInteger(v.checkpointId)&&v.checkpointId===v.lastCheckpointId&&v.checkpointId<=level.checkpointsMeters.length
+    &&Number.isFinite(v.failureX)&&Number.isInteger(v.checkpointId)&&v.checkpointId===v.lastCheckpointId&&v.checkpointId<=savedLevel.checkpointsMeters.length
     &&v.runUpgradeSnapshot&&Object.keys(cfg.upgrades).every(k=>Number.isInteger(v.runUpgradeSnapshot[k])&&v.runUpgradeSnapshot[k]>=0);
 }
 export function newRun():RunState {
-  return {schemaVersion:1,revision:0,runId:crypto.randomUUID(),attemptId:crypto.randomUUID(),levelId:level.id,seed:level.seed,
+  return {schemaVersion:1,pixelsPerMeter:cfg.pixelsPerMeter,revision:0,runId:crypto.randomUUID(),attemptId:crypto.randomUUID(),levelId:level.id,seed:level.seed,
     freeRescueUsed:false,extraRescueUsed:false,lastCheckpointId:0,checkpointId:0,claimedPickupIds:[],runCoins:0,retries:0,totalRescues:0,
     runUpgradeSnapshot:Object.fromEntries(Object.keys(cfg.upgrades).map(k=>[k,0])),elapsedMs:0,furthestX:0,dangerCount:0,status:'active',failureX:0,lastSavedAt:Date.now()};
 }
@@ -38,6 +40,12 @@ export class RunStore {
         run.freeRescueUsed ||=v.freeRescueUsed;run.extraRescueUsed ||=v.extraRescueUsed;
         run.claimedPickupIds=[...new Set([...run.claimedPickupIds,...v.claimedPickupIds])];
       }
+      const previousScale=run.pixelsPerMeter??2.4;
+      if(previousScale!==cfg.pixelsPerMeter){
+        run.furthestX=run.furthestX/previousScale*cfg.pixelsPerMeter;
+        run.failureX=run.failureX/previousScale*cfg.pixelsPerMeter;
+      }
+      run.pixelsPerMeter=cfg.pixelsPerMeter;
       return run;
     }catch {this.error='Browser storage is unavailable. Checkpoint retries still work; refresh recovery and Royal Rescue need storage.';return null;}
   }

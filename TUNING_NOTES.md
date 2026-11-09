@@ -6,3 +6,6 @@ Hover damping sign follows screen +y down: downward velocity increases upward su
 One deliberate prototype layout: 320px flat checkpoint space (420–740), start flat, gentle hills, a 28px dip, terminal safe flat. Terrain profiles sampled at 10px; segments are visible and physical. In full stage 3, replace prototype layout with general module factory and collision/recovery-space validation for all levels.
 
 Measured scripted route: 34.6s at target 35px/s. Design's 80–120s timing is unvalidated; keep original star timing unchanged and retune only with player testing.
+
+## Stage 3 supersedes prototype layout
+The general module factory replaces the L01-only coordinates above. Current physics/scale and collision clearance changes are documented precisely in QA_STAGE3.md; original data under design-spec remains unchanged. No change to once/run free rescue or always-free checkpoint policy.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "notes": "ALL PARAMETERS ARE INITIAL DESIGN TUNING VALUES; verify in gameplay. px @ 1280x720.",
-  "pixelsPerMeter": 2.4,
+  "pixelsPerMeter": 6,
   "physics": {
     "fixedStepHz": 60,
     "gravityY": 1.15,
@@ -16,8 +16,10 @@
       "maxPitchDeg": 32,
       "hoverHeightPx": 82,
       "hoverSpring": 0.00065,
-      "hoverDamping": 0.0014,
-      "pitchStabilizer": 0.0017
+      "hoverDamping": 0.006,
+      "pitchStabilizer": 0.0017,
+      "pitchTrimGain": 3,
+      "pitchTrimMaxTorque": 0.8
     },
     "king": {
       "widthPx": 112,
@@ -25,22 +27,25 @@
       "mass": 2.8,
       "friction": 0.45,
       "frictionStatic": 0.63,
-      "frictionAir": 0.008,
+      "frictionAir": 0,
       "ejectGraceMs": 650,
-      "edgeWarningThreshold": 0.78
+      "edgeWarningThreshold": 0.78,
+      "angularDrag": 0.06
     },
     "boost": {
       "durationSecAtFull": 2.8,
       "rechargeSec": 6,
       "heightBonusPx": 62,
-      "forceMultiplier": 1.4
+      "forceMultiplier": 1.4,
+      "heightRampPxPerSec": 62
     }
   },
   "docking": {
     "radiusPx": 74,
     "maxSpeedPxPerSec": 30,
     "maxAngleDeg": 9,
-    "holdMs": 1500
+    "holdMs": 1500,
+    "kingMaxAngularSpeedRadS": 1
   },
   "revive": {
     "freeRoyalRescuePerRun": 1,

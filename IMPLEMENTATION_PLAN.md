@@ -18,3 +18,6 @@ Idle 40s stable; slow traverse reaches dock with king; braking can eject; geomet
 
 ## Stage 2 delivery gate
 Implemented failure/rescue/checkpoint loop and validated recovery saves. See QA_STAGE2.md and evidence/stage2-results.json. No ad or formal final-art work. Stop after stage 2 delivery; stage 3 remains pending.
+
+## Stage 3 delivery gate
+L01–L05 passed before L06–L15 extension. All twelve physical modules and fifteen deterministic layouts now implemented; all routes have recorded zero-upgrade/no-rescue completion traces. See QA_STAGE3.md for scale/clearance tuning, migration, checks and remaining device limitations. Stage 4 economy remains pending.

@@ -1,0 +1,1011 @@
+[
+  {
+    "level": 1,
+    "id": "L01",
+    "state": "CLEAR",
+    "seconds": 86.36666666666666,
+    "kingIndependent": true,
+    "maxAngle": 8.511348158048904,
+    "maxSeesaw": 0,
+    "maxRisk": 0.26597962993902824,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 1,
+    "expectedCheckpoints": 1,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L01-gentle_hills-0",
+        "type": "gentle_hills",
+        "x": 200,
+        "end": 540,
+        "center": 370,
+        "params": {
+          "amplitudePx": 15.856794784311205,
+          "wavelengthPx": 242.75415108073503
+        },
+        "overlays": []
+      },
+      {
+        "id": "L01-sudden_dip-1",
+        "type": "sudden_dip",
+        "x": 1610,
+        "end": 1880,
+        "center": 1745,
+        "params": {
+          "depthPx": 32.159425082057716,
+          "entryRampPx": 65
+        },
+        "overlays": []
+      },
+      {
+        "id": "L01-gentle_hills-2",
+        "type": "gentle_hills",
+        "x": 2390,
+        "end": 2730,
+        "center": 2560,
+        "params": {
+          "amplitudePx": 16.711367700109257,
+          "wavelengthPx": 247.9719427768141
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 2,
+    "id": "L02",
+    "state": "CLEAR",
+    "seconds": 98.55,
+    "kingIndependent": true,
+    "maxAngle": 6.741306128511439,
+    "maxSeesaw": 0,
+    "maxRisk": 0.6294033511572739,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L02-rolling_waves-0",
+        "type": "rolling_waves",
+        "x": 200,
+        "end": 560,
+        "center": 380,
+        "params": {
+          "amplitudePx": 25.68582903407514,
+          "periods": 2
+        },
+        "overlays": []
+      },
+      {
+        "id": "L02-spring_mushroom-1",
+        "type": "spring_mushroom",
+        "x": 1535,
+        "end": 1815,
+        "center": 1675,
+        "params": {
+          "impulseMultiplier": 1.09816656577494,
+          "warningMs": 850
+        },
+        "overlays": []
+      },
+      {
+        "id": "L02-gentle_hills-2",
+        "type": "gentle_hills",
+        "x": 2810,
+        "end": 3150,
+        "center": 2980,
+        "params": {
+          "amplitudePx": 15.10924684247002,
+          "wavelengthPx": 235.83486308995634
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 3,
+    "id": "L03",
+    "state": "CLEAR",
+    "seconds": 110.2,
+    "kingIndependent": true,
+    "maxAngle": 7.567960150306139,
+    "maxSeesaw": 0,
+    "maxRisk": 0.4513462544325545,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L03-steep_ramp-0",
+        "type": "steep_ramp",
+        "x": 200,
+        "end": 460,
+        "center": 330,
+        "params": {
+          "slopeDeg": 14.968160271178931,
+          "landingFlatPx": 90
+        },
+        "overlays": []
+      },
+      {
+        "id": "L03-sudden_dip-1",
+        "type": "sudden_dip",
+        "x": 1750,
+        "end": 2020,
+        "center": 1885,
+        "params": {
+          "depthPx": 28.66194375893101,
+          "entryRampPx": 65
+        },
+        "overlays": []
+      },
+      {
+        "id": "L03-rolling_waves-2",
+        "type": "rolling_waves",
+        "x": 3210,
+        "end": 3570,
+        "center": 3390,
+        "params": {
+          "amplitudePx": 26.46760320737958,
+          "periods": 2
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 4,
+    "id": "L04",
+    "state": "CLEAR",
+    "seconds": 122.26666666666667,
+    "kingIndependent": true,
+    "maxAngle": 11.358313441124142,
+    "maxSeesaw": 0,
+    "maxRisk": 0.6727485745287112,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L04-spring_mushroom-0",
+        "type": "spring_mushroom",
+        "x": 200,
+        "end": 480,
+        "center": 340,
+        "params": {
+          "impulseMultiplier": 1.0931738894758747,
+          "warningMs": 850
+        },
+        "overlays": []
+      },
+      {
+        "id": "L04-rolling_waves-1",
+        "type": "rolling_waves",
+        "x": 1915,
+        "end": 2275,
+        "center": 2095,
+        "params": {
+          "amplitudePx": 27.850436959415674,
+          "periods": 2
+        },
+        "overlays": []
+      },
+      {
+        "id": "L04-gap_jump-2",
+        "type": "gap_jump",
+        "x": 3640,
+        "end": 3990,
+        "center": 3815,
+        "params": {
+          "gapWidthPx": 68.26251281797886,
+          "takeoffFlatPx": 95,
+          "landingFlatPx": 140
+        },
+        "overlays": [],
+        "gapStart": 3780.8687435910106,
+        "gapEnd": 3849.1312564089894
+      }
+    ]
+  },
+  {
+    "level": 5,
+    "id": "L05",
+    "state": "CLEAR",
+    "seconds": 135.13333333333333,
+    "kingIndependent": true,
+    "maxAngle": 10.400926598010244,
+    "maxSeesaw": 0,
+    "maxRisk": 0.35811353166463156,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L05-steep_ramp-0",
+        "type": "steep_ramp",
+        "x": 200,
+        "end": 460,
+        "center": 330,
+        "params": {
+          "slopeDeg": 15.00792315020226,
+          "landingFlatPx": 90
+        },
+        "overlays": []
+      },
+      {
+        "id": "L05-gap_jump-1",
+        "type": "gap_jump",
+        "x": 2130,
+        "end": 2480,
+        "center": 2305,
+        "params": {
+          "gapWidthPx": 67.0948697127169,
+          "takeoffFlatPx": 95,
+          "landingFlatPx": 140
+        },
+        "overlays": [],
+        "gapStart": 2271.4525651436416,
+        "gapEnd": 2338.5474348563584
+      },
+      {
+        "id": "L05-low_ceiling-2",
+        "type": "low_ceiling",
+        "x": 4110,
+        "end": 4410,
+        "center": 4260,
+        "params": {
+          "clearancePx": 238.19799010269344,
+          "tunnelLengthPx": 150
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 6,
+    "id": "L06",
+    "state": "CLEAR",
+    "seconds": 83.01666666666667,
+    "kingIndependent": true,
+    "maxAngle": 8.180700248468437,
+    "maxSeesaw": 0,
+    "maxRisk": 0.25564688276463865,
+    "maxOffMs": 0,
+    "bridgeFalls": 3,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L06-crumbling_bridge-0",
+        "type": "crumbling_bridge",
+        "x": 200,
+        "end": 590,
+        "center": 395,
+        "params": {
+          "segmentCount": 3,
+          "warningMs": 1000,
+          "collapseDelayMs": 1400
+        },
+        "overlays": [],
+        "gapStart": 320,
+        "gapEnd": 470
+      },
+      {
+        "id": "L06-sudden_dip-1",
+        "type": "sudden_dip",
+        "x": 2380,
+        "end": 2650,
+        "center": 2515,
+        "params": {
+          "depthPx": 31.197614279109985,
+          "entryRampPx": 65
+        },
+        "overlays": []
+      },
+      {
+        "id": "L06-crosswind-2",
+        "type": "crosswind",
+        "x": 4450,
+        "end": 4830,
+        "center": 4640,
+        "params": {
+          "windForceMax": 0.003,
+          "warningMs": 1000,
+          "durationSec": 2.3
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 7,
+    "id": "L07",
+    "state": "CLEAR",
+    "seconds": 100,
+    "kingIndependent": true,
+    "maxAngle": 6.112425290447489,
+    "maxSeesaw": 11.842806199828232,
+    "maxRisk": 0.19101329032648404,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L07-magnetic_pulse-0",
+        "type": "magnetic_pulse",
+        "x": 200,
+        "end": 560,
+        "center": 380,
+        "params": {
+          "pulseIntervalSec": 5.5,
+          "warningMs": 900,
+          "forceScaleMin": 0.82,
+          "forceScaleMax": 1.13
+        },
+        "overlays": []
+      },
+      {
+        "id": "L07-seesaw-1",
+        "type": "seesaw",
+        "x": 2565,
+        "end": 2885,
+        "center": 2725,
+        "params": {
+          "platformLengthPx": 170,
+          "maxRotationDeg": 17,
+          "angularDamping": 0.13
+        },
+        "overlays": [],
+        "gapStart": 2640,
+        "gapEnd": 2810
+      },
+      {
+        "id": "L07-steep_ramp-2",
+        "type": "steep_ramp",
+        "x": 4990,
+        "end": 5250,
+        "center": 5120,
+        "params": {
+          "slopeDeg": 15.047686029225588,
+          "landingFlatPx": 90
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 8,
+    "id": "L08",
+    "state": "CLEAR",
+    "seconds": 96.13333333333334,
+    "kingIndependent": true,
+    "maxAngle": 7.25705505862897,
+    "maxSeesaw": 0,
+    "maxRisk": 0.5150742200656885,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L08-moving_platform-0",
+        "type": "moving_platform",
+        "x": 200,
+        "end": 620,
+        "center": 410,
+        "params": {
+          "platformWidthPx": 180,
+          "horizontalRangePx": 65,
+          "verticalRangePx": 28,
+          "periodSec": 4.8
+        },
+        "overlays": [
+          "magnetic_pulse"
+        ],
+        "gapStart": 285,
+        "gapEnd": 535
+      },
+      {
+        "id": "L08-magnetic_pulse-1",
+        "type": "magnetic_pulse",
+        "x": 2755,
+        "end": 3115,
+        "center": 2935,
+        "params": {
+          "pulseIntervalSec": 5.5,
+          "warningMs": 900,
+          "forceScaleMin": 0.82,
+          "forceScaleMax": 1.13
+        },
+        "overlays": []
+      },
+      {
+        "id": "L08-rolling_waves-2",
+        "type": "rolling_waves",
+        "x": 5310,
+        "end": 5670,
+        "center": 5490,
+        "params": {
+          "amplitudePx": 25.89789772219956,
+          "periods": 2
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 9,
+    "id": "L09",
+    "state": "CLEAR",
+    "seconds": 110.45,
+    "kingIndependent": true,
+    "maxAngle": 4.531378633848825,
+    "maxSeesaw": 0,
+    "maxRisk": 0.15612208533779348,
+    "maxOffMs": 0,
+    "bridgeFalls": 3,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L09-low_ceiling-0",
+        "type": "low_ceiling",
+        "x": 200,
+        "end": 500,
+        "center": 350,
+        "params": {
+          "clearancePx": 237.41655312944204,
+          "tunnelLengthPx": 150
+        },
+        "overlays": []
+      },
+      {
+        "id": "L09-crumbling_bridge-1",
+        "type": "crumbling_bridge",
+        "x": 2950,
+        "end": 3340,
+        "center": 3145,
+        "params": {
+          "segmentCount": 3,
+          "warningMs": 1000,
+          "collapseDelayMs": 1400
+        },
+        "overlays": [],
+        "gapStart": 3070,
+        "gapEnd": 3220
+      },
+      {
+        "id": "L09-crosswind-2",
+        "type": "crosswind",
+        "x": 5710,
+        "end": 6090,
+        "center": 5900,
+        "params": {
+          "windForceMax": 0.003,
+          "warningMs": 1000,
+          "durationSec": 2.3
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 10,
+    "id": "L10",
+    "state": "CLEAR",
+    "seconds": 118.11666666666666,
+    "kingIndependent": true,
+    "maxAngle": 6.37183202106003,
+    "maxSeesaw": 8.961505055528251,
+    "maxRisk": 0.19911975065812593,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L10-seesaw-0",
+        "type": "seesaw",
+        "x": 200,
+        "end": 520,
+        "center": 360,
+        "params": {
+          "platformLengthPx": 170,
+          "maxRotationDeg": 17,
+          "angularDamping": 0.13
+        },
+        "overlays": [
+          "low_ceiling"
+        ],
+        "gapStart": 275,
+        "gapEnd": 445
+      },
+      {
+        "id": "L10-gap_jump-1",
+        "type": "gap_jump",
+        "x": 2474,
+        "end": 2824,
+        "center": 2649,
+        "params": {
+          "gapWidthPx": 65.5366517388029,
+          "takeoffFlatPx": 95,
+          "landingFlatPx": 140
+        },
+        "overlays": [],
+        "gapStart": 2616.2316741305985,
+        "gapEnd": 2681.7683258694015
+      },
+      {
+        "id": "L10-magnetic_pulse-2",
+        "type": "magnetic_pulse",
+        "x": 4778,
+        "end": 5138,
+        "center": 4958,
+        "params": {
+          "pulseIntervalSec": 5.5,
+          "warningMs": 900,
+          "forceScaleMin": 0.82,
+          "forceScaleMax": 1.13
+        },
+        "overlays": []
+      },
+      {
+        "id": "L10-spring_mushroom-3",
+        "type": "spring_mushroom",
+        "x": 6230,
+        "end": 6510,
+        "center": 6370,
+        "params": {
+          "impulseMultiplier": 1.0851265294253827,
+          "warningMs": 850
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 11,
+    "id": "L11",
+    "state": "CLEAR",
+    "seconds": 116.78333333333333,
+    "kingIndependent": true,
+    "maxAngle": 7.433215886142415,
+    "maxSeesaw": 0,
+    "maxRisk": 0.5114583776555366,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L11-crosswind-0",
+        "type": "crosswind",
+        "x": 200,
+        "end": 580,
+        "center": 390,
+        "params": {
+          "windForceMax": 0.003,
+          "warningMs": 1000,
+          "durationSec": 2.3
+        },
+        "overlays": []
+      },
+      {
+        "id": "L11-moving_platform-1",
+        "type": "moving_platform",
+        "x": 3355,
+        "end": 3775,
+        "center": 3565,
+        "params": {
+          "platformWidthPx": 180,
+          "horizontalRangePx": 65,
+          "verticalRangePx": 28,
+          "periodSec": 4.8
+        },
+        "overlays": [
+          "crosswind",
+          "magnetic_pulse"
+        ],
+        "gapStart": 3440,
+        "gapEnd": 3690
+      },
+      {
+        "id": "L11-rolling_waves-2",
+        "type": "rolling_waves",
+        "x": 6570,
+        "end": 6930,
+        "center": 6750,
+        "params": {
+          "amplitudePx": 26.00393206626177,
+          "periods": 2
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 12,
+    "id": "L12",
+    "state": "CLEAR",
+    "seconds": 135.06666666666666,
+    "kingIndependent": true,
+    "maxAngle": 8.64762351206059,
+    "maxSeesaw": 0,
+    "maxRisk": 0.3096428370670383,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L12-low_ceiling-0",
+        "type": "low_ceiling",
+        "x": 200,
+        "end": 500,
+        "center": 350,
+        "params": {
+          "clearancePx": 237.5490960595198,
+          "tunnelLengthPx": 150
+        },
+        "overlays": []
+      },
+      {
+        "id": "L12-magnetic_pulse-1",
+        "type": "magnetic_pulse",
+        "x": 2762,
+        "end": 3122,
+        "center": 2942,
+        "params": {
+          "pulseIntervalSec": 5.5,
+          "warningMs": 900,
+          "forceScaleMin": 0.82,
+          "forceScaleMax": 1.13
+        },
+        "overlays": []
+      },
+      {
+        "id": "L12-steep_ramp-2",
+        "type": "steep_ramp",
+        "x": 5354,
+        "end": 5614,
+        "center": 5484,
+        "params": {
+          "slopeDeg": 15.590696012647822,
+          "landingFlatPx": 90
+        },
+        "overlays": [
+          "magnetic_pulse"
+        ]
+      },
+      {
+        "id": "L12-sudden_dip-3",
+        "type": "sudden_dip",
+        "x": 7080,
+        "end": 7350,
+        "center": 7215,
+        "params": {
+          "depthPx": 33.03326800176874,
+          "entryRampPx": 65
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 13,
+    "id": "L13",
+    "state": "CLEAR",
+    "seconds": 135.06666666666666,
+    "kingIndependent": true,
+    "maxAngle": 6.184408779742381,
+    "maxSeesaw": 12.774608557234142,
+    "maxRisk": 0.4578658969885341,
+    "maxOffMs": 0,
+    "bridgeFalls": 3,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L13-crumbling_bridge-0",
+        "type": "crumbling_bridge",
+        "x": 200,
+        "end": 590,
+        "center": 395,
+        "params": {
+          "segmentCount": 3,
+          "warningMs": 1000,
+          "collapseDelayMs": 1400
+        },
+        "overlays": [],
+        "gapStart": 320,
+        "gapEnd": 470
+      },
+      {
+        "id": "L13-seesaw-1",
+        "type": "seesaw",
+        "x": 2906,
+        "end": 3226,
+        "center": 3066,
+        "params": {
+          "platformLengthPx": 170,
+          "maxRotationDeg": 17,
+          "angularDamping": 0.13
+        },
+        "overlays": [
+          "low_ceiling"
+        ],
+        "gapStart": 2981,
+        "gapEnd": 3151
+      },
+      {
+        "id": "L13-gap_jump-2",
+        "type": "gap_jump",
+        "x": 5636,
+        "end": 5986,
+        "center": 5811,
+        "params": {
+          "gapWidthPx": 65.83487333147787,
+          "takeoffFlatPx": 95,
+          "landingFlatPx": 140
+        },
+        "overlays": [],
+        "gapStart": 5778.082563334261,
+        "gapEnd": 5843.917436665739
+      },
+      {
+        "id": "L13-steep_ramp-3",
+        "type": "steep_ramp",
+        "x": 7510,
+        "end": 7770,
+        "center": 7640,
+        "params": {
+          "slopeDeg": 14.843799165519886,
+          "landingFlatPx": 90
+        },
+        "overlays": []
+      }
+    ]
+  },
+  {
+    "level": 14,
+    "id": "L14",
+    "state": "CLEAR",
+    "seconds": 161.3,
+    "kingIndependent": true,
+    "maxAngle": 7.289769930959743,
+    "maxSeesaw": 14.186747424065919,
+    "maxRisk": 0.9028096407445233,
+    "maxOffMs": 0,
+    "bridgeFalls": 0,
+    "checkpoint": 2,
+    "expectedCheckpoints": 2,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L14-moving_platform-0",
+        "type": "moving_platform",
+        "x": 200,
+        "end": 620,
+        "center": 410,
+        "params": {
+          "platformWidthPx": 180,
+          "horizontalRangePx": 65,
+          "verticalRangePx": 28,
+          "periodSec": 4.8
+        },
+        "overlays": [
+          "magnetic_pulse"
+        ],
+        "gapStart": 285,
+        "gapEnd": 535
+      },
+      {
+        "id": "L14-crosswind-1",
+        "type": "crosswind",
+        "x": 2102.5,
+        "end": 2482.5,
+        "center": 2292.5,
+        "params": {
+          "windForceMax": 0.003,
+          "warningMs": 1000,
+          "durationSec": 2.3
+        },
+        "overlays": []
+      },
+      {
+        "id": "L14-magnetic_pulse-2",
+        "type": "magnetic_pulse",
+        "x": 4015,
+        "end": 4375,
+        "center": 4195,
+        "params": {
+          "pulseIntervalSec": 5.5,
+          "warningMs": 900,
+          "forceScaleMin": 0.82,
+          "forceScaleMax": 1.13
+        },
+        "overlays": []
+      },
+      {
+        "id": "L14-low_ceiling-3",
+        "type": "low_ceiling",
+        "x": 5967.5,
+        "end": 6267.5,
+        "center": 6117.5,
+        "params": {
+          "clearancePx": 237.63745801290497,
+          "tunnelLengthPx": 150
+        },
+        "overlays": []
+      },
+      {
+        "id": "L14-seesaw-4",
+        "type": "seesaw",
+        "x": 7870,
+        "end": 8190,
+        "center": 8030,
+        "params": {
+          "platformLengthPx": 170,
+          "maxRotationDeg": 17,
+          "angularDamping": 0.13
+        },
+        "overlays": [],
+        "gapStart": 7945,
+        "gapEnd": 8115
+      }
+    ]
+  },
+  {
+    "level": 15,
+    "id": "L15",
+    "state": "CLEAR",
+    "seconds": 138.1,
+    "kingIndependent": true,
+    "maxAngle": 6.709188648861508,
+    "maxSeesaw": 0,
+    "maxRisk": 0.2999603936447157,
+    "maxOffMs": 100.00000000000001,
+    "bridgeFalls": 3,
+    "checkpoint": 3,
+    "expectedCheckpoints": 3,
+    "freeRescueUsed": false,
+    "retries": 0,
+    "layoutErrors": [],
+    "sections": [
+      {
+        "id": "L15-rolling_waves-0",
+        "type": "rolling_waves",
+        "x": 200,
+        "end": 560,
+        "center": 380,
+        "params": {
+          "amplitudePx": 26.145311191678047,
+          "periods": 2
+        },
+        "overlays": []
+      },
+      {
+        "id": "L15-crumbling_bridge-1",
+        "type": "crumbling_bridge",
+        "x": 2390,
+        "end": 2780,
+        "center": 2585,
+        "params": {
+          "segmentCount": 3,
+          "warningMs": 1000,
+          "collapseDelayMs": 1400
+        },
+        "overlays": [],
+        "gapStart": 2510,
+        "gapEnd": 2660
+      },
+      {
+        "id": "L15-magnetic_pulse-2",
+        "type": "magnetic_pulse",
+        "x": 3420,
+        "end": 3780,
+        "center": 3600,
+        "params": {
+          "pulseIntervalSec": 5.5,
+          "warningMs": 900,
+          "forceScaleMin": 0.82,
+          "forceScaleMax": 1.13
+        },
+        "overlays": []
+      },
+      {
+        "id": "L15-gap_jump-3",
+        "type": "gap_jump",
+        "x": 5036,
+        "end": 5386,
+        "center": 5211,
+        "params": {
+          "gapWidthPx": 68.47219628258608,
+          "takeoffFlatPx": 95,
+          "landingFlatPx": 140
+        },
+        "overlays": [],
+        "gapStart": 5176.763901858707,
+        "gapEnd": 5245.236098141293
+      },
+      {
+        "id": "L15-moving_platform-4",
+        "type": "moving_platform",
+        "x": 6830,
+        "end": 7250,
+        "center": 7040,
+        "params": {
+          "platformWidthPx": 180,
+          "horizontalRangePx": 65,
+          "verticalRangePx": 28,
+          "periodSec": 4.8
+        },
+        "overlays": [
+          "crosswind"
+        ],
+        "gapStart": 6915,
+        "gapEnd": 7165
+      },
+      {
+        "id": "L15-steep_ramp-5",
+        "type": "steep_ramp",
+        "x": 8350,
+        "end": 8610,
+        "center": 8480,
+        "params": {
+          "slopeDeg": 14.940837846579962,
+          "landingFlatPx": 90
+        },
+        "overlays": [
+          "magnetic_pulse"
+        ]
+      }
+    ]
+  }
+]

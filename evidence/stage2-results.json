@@ -37,210 +37,210 @@
       {
         "cycle": 1,
         "deathX": 0,
-        "checkpointX": 576,
+        "checkpointX": 1440,
         "retries": 1,
-        "runCoins": 8
-      },
-      {
-        "cycle": 2,
-        "deathX": 180,
-        "checkpointX": 576,
-        "retries": 2,
-        "runCoins": 6
-      },
-      {
-        "cycle": 3,
-        "deathX": 330,
-        "checkpointX": 576,
-        "retries": 3,
         "runCoins": 4
       },
       {
-        "cycle": 4,
-        "deathX": 576,
-        "checkpointX": 576,
-        "retries": 4,
+        "cycle": 2,
+        "deathX": 370,
+        "checkpointX": 1440,
+        "retries": 2,
         "runCoins": 3
       },
       {
-        "cycle": 5,
-        "deathX": 780,
-        "checkpointX": 576,
-        "retries": 5,
+        "cycle": 3,
+        "deathX": 640,
+        "checkpointX": 1440,
+        "retries": 3,
         "runCoins": 2
       },
       {
-        "cycle": 6,
-        "deathX": 850,
-        "checkpointX": 576,
-        "retries": 6,
+        "cycle": 4,
+        "deathX": 1440,
+        "checkpointX": 1440,
+        "retries": 4,
         "runCoins": 1
       },
       {
+        "cycle": 5,
+        "deathX": 1745,
+        "checkpointX": 1440,
+        "retries": 5,
+        "runCoins": 0
+      },
+      {
+        "cycle": 6,
+        "deathX": 1870,
+        "checkpointX": 1440,
+        "retries": 6,
+        "runCoins": 0
+      },
+      {
         "cycle": 7,
-        "deathX": 1000,
-        "checkpointX": 576,
+        "deathX": 2560,
+        "checkpointX": 1440,
         "retries": 7,
         "runCoins": 0
       },
       {
         "cycle": 8,
-        "deathX": 1150,
-        "checkpointX": 576,
+        "deathX": 2880,
+        "checkpointX": 1440,
         "retries": 8,
         "runCoins": 0
       },
       {
         "cycle": 9,
         "deathX": 0,
-        "checkpointX": 576,
+        "checkpointX": 1440,
         "retries": 9,
         "runCoins": 0
       },
       {
         "cycle": 10,
-        "deathX": 180,
-        "checkpointX": 576,
+        "deathX": 370,
+        "checkpointX": 1440,
         "retries": 10,
         "runCoins": 0
       },
       {
         "cycle": 11,
-        "deathX": 330,
-        "checkpointX": 576,
+        "deathX": 640,
+        "checkpointX": 1440,
         "retries": 11,
         "runCoins": 0
       },
       {
         "cycle": 12,
-        "deathX": 576,
-        "checkpointX": 576,
+        "deathX": 1440,
+        "checkpointX": 1440,
         "retries": 12,
         "runCoins": 0
       },
       {
         "cycle": 13,
-        "deathX": 780,
-        "checkpointX": 576,
+        "deathX": 1745,
+        "checkpointX": 1440,
         "retries": 13,
         "runCoins": 0
       },
       {
         "cycle": 14,
-        "deathX": 850,
-        "checkpointX": 576,
+        "deathX": 1870,
+        "checkpointX": 1440,
         "retries": 14,
         "runCoins": 0
       },
       {
         "cycle": 15,
-        "deathX": 1000,
-        "checkpointX": 576,
+        "deathX": 2560,
+        "checkpointX": 1440,
         "retries": 15,
         "runCoins": 0
       },
       {
         "cycle": 16,
-        "deathX": 1150,
-        "checkpointX": 576,
+        "deathX": 2880,
+        "checkpointX": 1440,
         "retries": 16,
         "runCoins": 0
       },
       {
         "cycle": 17,
         "deathX": 0,
-        "checkpointX": 576,
+        "checkpointX": 1440,
         "retries": 17,
         "runCoins": 0
       },
       {
         "cycle": 18,
-        "deathX": 180,
-        "checkpointX": 576,
+        "deathX": 370,
+        "checkpointX": 1440,
         "retries": 18,
         "runCoins": 0
       },
       {
         "cycle": 19,
-        "deathX": 330,
-        "checkpointX": 576,
+        "deathX": 640,
+        "checkpointX": 1440,
         "retries": 19,
         "runCoins": 0
       },
       {
         "cycle": 20,
-        "deathX": 576,
-        "checkpointX": 576,
+        "deathX": 1440,
+        "checkpointX": 1440,
         "retries": 20,
         "runCoins": 0
       },
       {
         "cycle": 21,
-        "deathX": 780,
-        "checkpointX": 576,
+        "deathX": 1745,
+        "checkpointX": 1440,
         "retries": 21,
         "runCoins": 0
       },
       {
         "cycle": 22,
-        "deathX": 850,
-        "checkpointX": 576,
+        "deathX": 1870,
+        "checkpointX": 1440,
         "retries": 22,
         "runCoins": 0
       },
       {
         "cycle": 23,
-        "deathX": 1000,
-        "checkpointX": 576,
+        "deathX": 2560,
+        "checkpointX": 1440,
         "retries": 23,
         "runCoins": 0
       },
       {
         "cycle": 24,
-        "deathX": 1150,
-        "checkpointX": 576,
+        "deathX": 2880,
+        "checkpointX": 1440,
         "retries": 24,
         "runCoins": 0
       },
       {
         "cycle": 25,
         "deathX": 0,
-        "checkpointX": 576,
+        "checkpointX": 1440,
         "retries": 25,
         "runCoins": 0
       },
       {
         "cycle": 26,
-        "deathX": 180,
-        "checkpointX": 576,
+        "deathX": 370,
+        "checkpointX": 1440,
         "retries": 26,
         "runCoins": 0
       },
       {
         "cycle": 27,
-        "deathX": 330,
-        "checkpointX": 576,
+        "deathX": 640,
+        "checkpointX": 1440,
         "retries": 27,
         "runCoins": 0
       },
       {
         "cycle": 28,
-        "deathX": 576,
-        "checkpointX": 576,
+        "deathX": 1440,
+        "checkpointX": 1440,
         "retries": 28,
         "runCoins": 0
       },
       {
         "cycle": 29,
-        "deathX": 780,
-        "checkpointX": 576,
+        "deathX": 1745,
+        "checkpointX": 1440,
         "retries": 29,
         "runCoins": 0
       },
       {
         "cycle": 30,
-        "deathX": 850,
-        "checkpointX": 576,
+        "deathX": 1870,
+        "checkpointX": 1440,
         "retries": 30,
         "runCoins": 0
       }

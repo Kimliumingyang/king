@@ -27,7 +27,7 @@
       "timeSilverSec": 135,
       "humorEventIntensity": 0.33499999999999996,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L02",
@@ -55,7 +55,7 @@
       "timeSilverSec": 146,
       "humorEventIntensity": 0.37,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L03",
@@ -83,7 +83,7 @@
       "timeSilverSec": 157,
       "humorEventIntensity": 0.405,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L04",
@@ -111,7 +111,7 @@
       "timeSilverSec": 168,
       "humorEventIntensity": 0.44,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L05",
@@ -139,7 +139,7 @@
       "timeSilverSec": 179,
       "humorEventIntensity": 0.475,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L06",
@@ -167,7 +167,7 @@
       "timeSilverSec": 190,
       "humorEventIntensity": 0.51,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L07",
@@ -195,7 +195,7 @@
       "timeSilverSec": 201,
       "humorEventIntensity": 0.545,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L08",
@@ -223,7 +223,7 @@
       "timeSilverSec": 212,
       "humorEventIntensity": 0.5800000000000001,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L09",
@@ -251,7 +251,7 @@
       "timeSilverSec": 223,
       "humorEventIntensity": 0.615,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L10",
@@ -280,7 +280,7 @@
       "timeSilverSec": 243,
       "humorEventIntensity": 0.65,
       "hazardRecoveryMeters": 18,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L11",
@@ -308,7 +308,7 @@
       "timeSilverSec": 245,
       "humorEventIntensity": 0.685,
       "hazardRecoveryMeters": 14,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L12",
@@ -337,7 +337,7 @@
       "timeSilverSec": 265,
       "humorEventIntensity": 0.72,
       "hazardRecoveryMeters": 14,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L13",
@@ -366,7 +366,7 @@
       "timeSilverSec": 276,
       "humorEventIntensity": 0.7550000000000001,
       "hazardRecoveryMeters": 14,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L14",
@@ -396,7 +396,7 @@
       "timeSilverSec": 295,
       "humorEventIntensity": 0.77,
       "hazardRecoveryMeters": 14,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     },
     {
       "id": "L15",
@@ -428,7 +428,7 @@
       "timeSilverSec": 315,
       "humorEventIntensity": 0.77,
       "hazardRecoveryMeters": 14,
-      "qaStatus": "UNTESTED - must validate with real physics"
+      "qaStatus": "AUTOMATED PASS v0.3.0: zero-upgrade, zero-rescue stable dock; human/device QA pending"
     }
   ]
 }

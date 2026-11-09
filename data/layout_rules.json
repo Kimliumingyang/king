@@ -1,0 +1,70 @@
+{
+  "version": 3,
+  "groundY": 540,
+  "samplePx": 10,
+  "startFlatPx": 200,
+  "checkpointFlatPx": 340,
+  "recoveryPx": 220,
+  "lateRecoveryPx": 180,
+  "warningDistancePx": 500,
+  "combos": {
+    "L08": [
+      {
+        "on": "moving_platform",
+        "effect": "magnetic_pulse"
+      }
+    ],
+    "L10": [
+      {
+        "on": "seesaw",
+        "effect": "low_ceiling"
+      }
+    ],
+    "L11": [
+      {
+        "on": "moving_platform",
+        "effect": "crosswind"
+      },
+      {
+        "on": "moving_platform",
+        "effect": "magnetic_pulse"
+      }
+    ],
+    "L12": [
+      {
+        "on": "steep_ramp",
+        "effect": "magnetic_pulse"
+      }
+    ],
+    "L13": [
+      {
+        "on": "seesaw",
+        "effect": "low_ceiling"
+      }
+    ],
+    "L14": [
+      {
+        "on": "moving_platform",
+        "effect": "magnetic_pulse"
+      }
+    ],
+    "L15": [
+      {
+        "on": "steep_ramp",
+        "effect": "magnetic_pulse"
+      },
+      {
+        "on": "moving_platform",
+        "effect": "crosswind"
+      }
+    ]
+  },
+  "dynamic": {
+    "bridgeSpanPx": 150,
+    "magneticActiveMs": 1400,
+    "windRestMs": 4500,
+    "windForceScale": 0.12,
+    "hoverReactionScale": 0.5,
+    "probeRangePx": 260
+  }
+}

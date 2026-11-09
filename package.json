@@ -1,13 +1,15 @@
 {
   "name": "dont-drop-the-king-prototype",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
     "test": "node tests/physics.mjs",
-    "test:revive": "node tests/revive.mjs"
+    "test:revive": "node tests/revive.mjs",
+    "test:levels": "node tests/levels.mjs",
+    "test:terrain": "node tests/terrain-qa.mjs"
   },
   "dependencies": {
     "phaser": "3.90.0"
